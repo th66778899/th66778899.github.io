@@ -1,8 +1,7 @@
 ---
 title: 第一篇博客
 date: 2021-10-26 12:31:44 
-categories: 
-- java
+
 tags:
 - 日常
 index_img: /img/sunrise.jpg
@@ -75,7 +74,7 @@ master分支和 dev 分支 merge 问题
 
 同一个文件 两分支内容不一致,先后更改 666 git分支的使用 https://zhuanlan.zhihu.com/p/137855358
 
-leetcode账号:
+
 
 [About - Nyima's Blog (gitee.io)](https://nyimac.gitee.io/about/)
 

@@ -45,6 +45,149 @@ Users result = usersMapper.selectOneByExample(userExample);
 MD5Utils.getMD5(password);
 ```
 
+> 将密码通过md5加密存入数据库
+>
+> 登陆时,将用户输入的密码进行MD5加密,与数据库中的值进行比较
+
+### 4.mybatis分页插件
+
+> 原生分页
+>
+> 按价格排序
+>
+> 第一页按价格升序,之后第二页价格排序的结果和之前那一页商品价格没有完全对应上
+>
+> 前一页和后一页的商品价格没有对应上
+
+### 5.模糊查询
+
+```sql
+/*mapper.xml文件中要这样写*/
+
+<if test="paramsMap.keywords != null">
+                and i.item_name like '%${paramsMap.keywords}$%'
+</if>
+```
+
+mapper.xml 多条件查询
+
+```XML
+		order by
+        <!--k: 默认,代表默认排序,根据name 
+        c: 根据销量排序
+        p: 根据价格排序
+        -->
+	&quot; &quot; 
+	< 转义'' 符号 , 有可能报错/>
+		<choose>
+                
+          <when test="paramsMap.sort == &quot;c&quot;">
+              i.sell_counts desc
+          </when>
+             <when test="paramsMap.sort == &quot;p&quot;">
+                tempSpec.priceDiscount asc
+           </when>
+           <otherwise>
+               i.item_name asc
+           </otherwise>
+     </choose>
+	<!--
+      <choose>
+                
+          <when test="paramsMap.sort == 'c'">
+              i.sell_counts desc
+          </when>
+             <when test="paramsMap.sort == 'p'">
+                tempSpec.priceDiscount asc
+           </when>
+           <otherwise>
+               i.item_name asc
+           </otherwise>
+     </choose> -->
+```
+
+
+
+### 6. xml文件 " 号的转义
+
+> xml文件中 "" 转义
+
+```XML
+<when test="paramsMap.sort == &quot;c&quot;">
+    i.sell_counts desc
+</when>
+```
+
+> 这样写会报错
+>
+> java.lang.NumberFormatException: For input string: "k"
+
+
+
+```XML
+<when test="paramsMap.sort == 'c' ">
+    i.sell_counts desc
+</when>
+```
+
+> 模糊查询时的书写 用$符号取值 而不是 # 号
+
+```XML
+<if test="paramsMap.keywords != null and paramsMap.keywords != '' ">
+   and i.item_name like '%${paramsMap.keywords}%'
+</if>
+```
+
+
+
+
+
+> mybatis-pagehelper
+
+1. 引入分页插件依赖
+
+	```XML
+	<!--mybatis-pagehelper 实现分页 -->
+	<dependency>
+	<groupId>com.github.pagehelper</groupId>
+	<artifactId>pagehelper-spring-boot-starter</artifactId>
+	<version>1.2.12</version>
+	</dependency>
+	```
+
+2. 配置application.yml配置文件
+
+	```YML
+	pagehelper:
+		helperDialect: mysql
+		supportMethodsArguments: true
+	```
+
+3. 用分页插件，在查询前使用分页插件，原理：统一拦截sql，为其提供分页功能
+
+	```JAVA
+	/**
+	* page: 第几页
+	* pageSize: 每页显示条数
+	*/
+	PageHelper.startPage(page, pageSize);
+	```
+
+4. 页数据封装到 PagedGridResult.java 传给前端
+
+	```JAVA
+	PageInfo<?> pageList = new PageInfo<>(list);
+	PagedGridResult grid = new PagedGridResult();
+	grid.setPage(page);
+	grid.setRows(list);
+	grid.setTotal(pageList.getPages());
+	grid.setRecords(pageList.getTotal());
+	```
+
+	
+
+
+
 ## 跨域
 
 ![image-20211029230023380](learnJava.assets/image-20211029230023380.png)
@@ -181,6 +324,34 @@ log4j.appender.file.File=/workspaces/logs/foodie-api/mylog.log
 
 
 
+## BaseController
+
+> 定义分页中每页显示数据的大小
+>
+> 其它Controller继承BaseController即可
+
+
+
+
+
+
+
+
+
+## 涉及到金额
+
+> 使用分为单位 9.98元   998分
+>
+> int类型
+
+
+
+
+
+
+
+
+
 ## sql语句
 
 ```sql
@@ -193,4 +364,30 @@ varchar类型变量的使用
 
 
 ## Git使用
+
+
+
+
+
+## 购物车功能
+
+1. 购物车存储形式 - Cookie
+	- 无需登录,无需查库,保存在浏览器端
+	- 优点：性能好,访问快,没有和数据库交互
+	- 缺点1：换电脑购物车数据会丢失
+	- 缺点2：电脑被其他人登录,不安全
+2. 购物车存储形式-Session
+	- 用户登录后,购物车数据放入用户会话
+	- 优点：初期性能较好,访问快
+	- 缺点1：session基于内存,用户量庞大影响服务器性能
+	- 缺点2：只能存在当前会话,不适用集群与分布式系统
+3. 购物车存储形式-数据库
+	- 用户登录后,购物车数据存入数据库
+	- 优点：数据持久化，可在任何地点任何时间访问
+	- 缺点：频繁读写数据库,造成数据库压力
+4. 购物车存储形式 - Redis
+	- 用户登录后，购物车数据存入redis缓存
+	- 优点1：数据持久化，可在任何地点任何时间访问
+	- 优点2：频繁读写基于缓存,不会造成数据库压力
+	- 优点3：适合使用集群和分布式系统,可扩展性强 
 

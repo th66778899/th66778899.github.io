@@ -391,3 +391,17 @@ varchar类型变量的使用
 	- 优点2：频繁读写基于缓存,不会造成数据库压力
 	- 优点3：适合使用集群和分布式系统,可扩展性强 
 
+## 正则表达式
+
+校验手机号
+
+```JAVA
+public static boolean checkMobileIsOk(String mobile) {
+        String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(mobile);
+        boolean isMatch = m.matches();
+        return isMatch;
+}
+```
+

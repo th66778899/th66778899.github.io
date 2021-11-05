@@ -225,12 +225,216 @@ insert into SC values('07' , '03' , 98);
 ​	查询" 01 "课程比" 02 "课程成绩高的学生的信息及课程分数
 
 ```SQL
-
+select
+	t1.SId as `学生id`,
+	t1.score as `课程01分数`,
+	t2.score as `课程02分数`
+from (select SId ,score from sc where sc.CId='01')as t1 , (select SId ,score from sc where sc.CId='02') as t2
+where t1.SId=t2.SId
+and   t1.score>t2.score
 ```
 
 
 
 1.1 查询同时存在" 01 "课程和" 02 "课程的情况
+
+```SQL
+select
+	t1.SId as `学生id`,
+	t1.score as `课程01分数`,
+	t2.score as `课程02分数`
+from (select SId ,score from sc where sc.CId='01')as t1 , (select SId ,score from sc where sc.CId='02') as t2
+where t1.SId=t2.SId
+
+```
+
 1.2 查询存在" 01 "课程但可能不存在" 02 "课程的情况(不存在时显示为 null )
+
+```sql
+SELECT
+	t1.SId AS `学生id`,
+	t1.score AS `课程01分数`,
+	t2.score AS `课程02分数` 
+FROM
+	( SELECT SId, score FROM sc WHERE sc.CId = '01' ) AS t1
+	LEFT JOIN 
+	( SELECT SId, score FROM sc WHERE sc.CId = '02' ) AS t2 
+ON 
+	t1.SId = T2.SId
+```
+
+
+
 1.3 查询不存在" 01 "课程但存在" 02 "课程的情况
+
+```SQL
+SELECT
+	SId,
+	CId as `课程序号`,
+	score AS `02课程成绩`
+FROM
+	sc 
+WHERE 
+	sc.SId Not in (SELECT SId FROM sc WHERE sc.CId = 01)
+	and sc.CId = 02
+```
+
+### 2.
+
+查询平均成绩大于等于 60 分的同学的学生编号和学生姓名和平均成绩
+
+```SQL
+SELECT
+	student.*,
+	avgScore 
+FROM
+	student
+	INNER JOIN (	
+	SELECT
+		sc.SId,
+		AVG( sc.score ) AS avgScore 
+	FROM
+		sc 
+	GROUP BY
+		sc.SId 
+	HAVING
+		AVG( sc.score ) >= 60 
+	) AS t1 
+WHERE
+	t1.SId = student.SId
+```
+
+### 3.查询在 SC 表存在成绩的学生信息
+
+```SQL
+SELECT
+ DISTINCT student.* 
+FROM
+	student, sc
+WHERE
+	student.SId = sc.SId
+```
+
+或
+
+```SQL
+SELECT
+ student.* 
+FROM
+	student
+WHERE
+	student.SId in (SELECT SId FROM sc)
+	
+```
+
+### 4.
+
+查询所有同学的学生编号、学生姓名、选课总数、所有课程的总成绩(没成绩的显示为null)  
+
+```SQL
+SELECT
+	student.*,
+	sco.courseSum,
+	sco.scoreSum 
+FROM
+	student
+	INNER JOIN (
+	SELECT
+		sc.SId,
+		COUNT( sc.CId ) AS courseSum,
+		SUM( sc.score ) AS scoreSum 
+	FROM
+		sc 
+	GROUP BY
+		sc.SId 
+	) AS sco 
+WHERE
+	student.SId = sco.SId                                         
+```
+
+4.1 查有成绩的学生信息
+
+```SQL
+SELECT
+	student.* 
+FROM
+	student 
+WHERE
+	EXISTS (SELECT sc.SId FROM sc WHERE sc.SId = student.SId) 
+
+```
+
+### 5.查询「李」姓老师的数量 
+
+```SQL
+SELECT
+	COUNT(*)
+FROM
+	teacher
+WHERE 
+	teacher.Tname LIKE '李%'
+```
+
+### 6.查询学过「张三」老师授课的同学的信息 
+
+```SQL
+SELECT 
+	student.*
+FROM
+	student, sc, course, teacher
+WHERE
+	student.SId = sc.SId
+AND
+	sc.CId = course.CId
+AND
+	course.TId = teacher.TId
+AND
+	teacher.Tname = '张三'
+
+```
+
+### 7.查询没有学全所有课程的同学的信息 
+
+```SQL
+SELECT DISTINCT
+	student.* 
+FROM
+	( SELECT student.SId, course.CId FROM student, course ) AS t1
+	LEFT JOIN ( SELECT sc.SId, sc.CId FROM sc ) AS t2 ON t1.SId = t2.SId 
+	AND t1.CId = t2.CId,
+	student 
+WHERE
+	t2.SId IS NULL 
+	AND t1.SId = student.SId
+```
+
+### 8.
+
+查询至少有一门课与学号为" 01 "的同学所学相同的同学的信息
+
+```SQL
+SELECT
+	DISTINCT student.*
+FROM
+	student, sc
+WHERE
+	student.SId = sc.SId
+	and
+	sc.CId in (SELECT CId FROM sc WHERE sc.SId = '01')
+	and
+	student.SId != '01'
+```
+
+### 9.
+
+查询和" 01 "号的同学学习的课程完全相同的其他同学的信息 
+
+```SQL
+select DISTINCT student.*
+from (
+select student.SId,t.CId
+from student ,(select sc.CId from sc where sc.SId='01') as t) as t1 LEFT JOIN sc on t1.SId=sc.SId and t1.CId=sc.CId,student
+where sc.SId is null 
+and   t1.SId=student.SId
+```
 

@@ -59,7 +59,31 @@ MD5Utils.getMD5(password);
 >
 > 前一页和后一页的商品价格没有对应上
 
-### 5.模糊查询
+### 5.分页插件的bug
+
+> mybatis-pagehelper 分页插件不支持嵌套结果映射
+>
+> 由于嵌套结果方式会导致结果集被折叠,因此分页查询的结果在折叠后总数会减少,所以无法保证分页结果数量正确
+
+1.解决
+
+	>查询所有id之后,将pageSize个数的 id 传递给后端,由后端查询数据,返回给前端
+
+ 2.解决
+
+> mybatis自己内部解决,嵌套
+>
+> 将一整个sql 进行拆分,拆分为多个sql进行查询
+>
+> 修改mapper.xml文件中的sql语句
+
+
+
+> 在 OrdersMapperCustom.xml 中有第2种解决方案
+
+
+
+### 6.模糊查询
 
 ```sql
 /*mapper.xml文件中要这样写*/
@@ -108,7 +132,7 @@ mapper.xml 多条件查询
 
 
 
-### 6. xml文件 " 号的转义
+### 7. xml文件 " 号的转义
 
 > xml文件中 "" 转义
 
@@ -462,8 +486,147 @@ import org.n3r.idworker.Sid; 导入的Sid
 >  * 延时任务(队列)
 >  * 10:12 下单的,未付款订单 , 11:12分检查,如果当前状态还是10, 则直接关闭订单即可
 
+
+
+
+
+
+
 ## Sql语句
 
 查询名字重复的数据
 
 删除名字重复的数据
+
+
+
+
+
+
+
+## 参数校验
+
+### Hibernate Validator校验参数
+
+https://www.jianshu.com/p/a1e8a8908ec1
+
+#### 1.实体类上加上相关注解,标识参数校验的规则
+
+```JAVA
+package com.tho.pojo.bo.center;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.*;
+import java.util.Date;
+
+@Data
+@ApiModel(value="用户对象", description="从客户端，由用户传入的数据封装在此entity中")
+public class CenterUserBO {
+
+    @ApiModelProperty(value="用户名", name="username", example="json", required = false)
+    private String username;
+    @ApiModelProperty(value="密码", name="password", example="123456", required = false)
+    private String password;
+    @ApiModelProperty(value="确认密码", name="confirmPassword", example="123456", required = false)
+    private String confirmPassword;
+
+
+    @NotBlank(message = "用户昵称不能为空")
+    @Length(max = 12, message = "用户昵称不能超过12位")
+    @ApiModelProperty(value="用户昵称", name="nickname", example="杰森", required = false)
+    private String nickname;
+
+    @Length(max = 12, message = "用户真实姓名不能超过12位")
+    @ApiModelProperty(value="真实姓名", name="realname", example="杰森", required = false)
+    private String realname;
+
+    @Pattern(regexp = "^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\\d{8})$", message = "手机号格式不正确")
+    @ApiModelProperty(value="手机号", name="mobile", example="13999999999", required = false)
+    private String mobile;
+
+    @Email
+    @ApiModelProperty(value="邮箱地址", name="email", example="imooc@imooc.com", required = false)
+    private String email;
+
+    @Min(value = 0, message = "性别选择不正确")
+    @Max(value = 2, message = "性别选择不正确")
+    @ApiModelProperty(value="性别", name="sex", example="0:女 1:男 2:保密", required = false)
+    private Integer sex;
+    @ApiModelProperty(value="生日", name="birthday", example="1900-01-01", required = false)
+    private Date birthday;
+}
+```
+
+#### 2.Controller中加入相关注解
+
+>@Valid 加到 @RequestBody 注解的实体类
+>
+> 加上 BindingResult result 参数
+>
+>getErrors 方法获取 错误信息
+>
+>判断BindingResult是否保存错误的校验信息,如果有,直接return
+>        if (result.hasErrors()) {
+>            Map<String, String> errors = getErrors(result);
+>            return CommonJsonResult.errorMap(errors);
+>        }
+>
+>前端做好错误信息提示
+
+```JAVA
+@ApiOperation(value = "获取用户信息", notes = "获取用户信息", httpMethod = "Post ")
+    @PostMapping("/update")
+    public CommonJsonResult update(
+            @ApiParam(name = "userId", value = "用户id", required = true)
+            @RequestParam String userId,
+            @RequestBody  @Valid CenterUserBO centerUserBO,
+            BindingResult result,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        // 判断BindingResult是否保存错误的校验信息,如果有,直接return
+        if (result.hasErrors()) {
+            Map<String, String> errors = getErrors(result);
+            return CommonJsonResult.errorMap(errors);
+        }
+
+
+
+        Users userResult = centerUserService.updateUserInfo(userId, centerUserBO);
+        Users users1 = setNullPropertyValue(userResult);
+        // 设置cookie
+        CookieUtils.setCookie(request, response, "user",
+                JsonUtils.objectToJson(users1), true);
+
+
+        // todo 后续要改,要增加令牌token,会整合进redis,分布式会话
+        return CommonJsonResult.ok();
+    }
+    /**
+    * @Author tho
+    * @Date 2021/11/6 15:54
+    * @param result
+    * @Return Map<String,String>
+    * @Description: 获取hibernate.validator 校验的错误
+    */
+    private Map<String, String> getErrors(BindingResult result) {
+        HashMap<String, String> map = new HashMap<>();
+        List<FieldError> errorList = result.getFieldErrors();
+        for (FieldError error : errorList) {
+            String errorField = error.getField();
+            String errorMsg = error.getDefaultMessage();
+            map.put(errorField, errorMsg);
+        }
+        return map;
+
+    }
+```
+
+
+
+## 商家发货需要通过浏览器发起请求
+
+>添加一个按钮,进行商家发货

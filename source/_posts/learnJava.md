@@ -59,6 +59,27 @@ MD5Utils.getMD5(password);
 >
 > 前一页和后一页的商品价格没有对应上
 
+
+
+> controller方法 里的参数 默认值
+>
+> 分页时,默认开始页从0开始 还是从1开始
+
+```java
+@ApiParam(name = "page", value = "当前评价页数", required = false, defaultValue = "0")
+@RequestParam Integer page,
+@ApiParam(name = "pageSize", value = "每页评价个数", required = false, defaultValue = "10")
+@RequestParam Integer pageSize
+```
+
+
+
+
+
+
+
+
+
 ### 5.分页插件的bug
 
 > mybatis-pagehelper 分页插件不支持嵌套结果映射

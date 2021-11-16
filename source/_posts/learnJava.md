@@ -651,3 +651,55 @@ public class CenterUserBO {
 ## 商家发货需要通过浏览器发起请求
 
 >添加一个按钮,进行商家发货
+
+
+
+
+
+## Http Https 不同域之间访问
+
+> 安全->不安全 不安全->安全
+
+
+
+
+
+## 多环境部署
+
+> 开发环境 dev
+>
+> 测试环境 test
+>
+> 生产环境 prod
+
+
+
+> profile 提供多环境支持
+>
+> application.yml 配置文件
+>
+> application-{name}.yml 环境配置(挂件)
+>
+> 激活多环境 spring.profiles.active:{name}
+>
+> 三个配置文件:
+>
+> application.yml
+>
+> application-dev.yml
+>
+> application-prod.xml
+
+- 通过application.yml里的配置来决定要选择的环境
+
+```java
+spring:
+  profiles:
+    active: prod # springboot 多环境配置
+```
+
+## 使用RedisTemplate
+
+> 直接使用RedisTemplate 设置的key会出现一些前缀
+>
+> 使用封装了RedisTemplate的工具类不会出现前缀

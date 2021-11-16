@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/10/29/learnJava/learnJava.assets/image-20211029230023380.png">
 <meta property="article:published_time" content="2021-10-29T15:19:42.000Z">
-<meta property="article:modified_time" content="2021-11-07T15:26:50.018Z">
+<meta property="article:modified_time" content="2021-11-16T14:17:37.853Z">
 <meta property="article:author" content="tho">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary_large_image">
@@ -207,7 +207,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      36 分钟
+      38 分钟
     </span>
   
 
@@ -483,6 +483,33 @@
 
 <h2 id="商家发货需要通过浏览器发起请求"><a href="#商家发货需要通过浏览器发起请求" class="headerlink" title="商家发货需要通过浏览器发起请求"></a>商家发货需要通过浏览器发起请求</h2><blockquote>
 <p>添加一个按钮,进行商家发货</p>
+</blockquote>
+<h2 id="Http-Https-不同域之间访问"><a href="#Http-Https-不同域之间访问" class="headerlink" title="Http Https 不同域之间访问"></a>Http Https 不同域之间访问</h2><blockquote>
+<p>安全-&gt;不安全 不安全-&gt;安全</p>
+</blockquote>
+<h2 id="多环境部署"><a href="#多环境部署" class="headerlink" title="多环境部署"></a>多环境部署</h2><blockquote>
+<p>开发环境 dev</p>
+<p>测试环境 test</p>
+<p>生产环境 prod</p>
+</blockquote>
+<blockquote>
+<p>profile 提供多环境支持</p>
+<p>application.yml 配置文件</p>
+<p>application-{name}.yml 环境配置(挂件)</p>
+<p>激活多环境 spring.profiles.active:{name}</p>
+<p>三个配置文件:</p>
+<p>application.yml</p>
+<p>application-dev.yml</p>
+<p>application-prod.xml</p>
+</blockquote>
+<ul>
+<li>通过application.yml里的配置来决定要选择的环境</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">spring:<br>  profiles:<br>    active: prod # springboot 多环境配置<br></code></pre></td></tr></table></figure>
+
+<h2 id="使用RedisTemplate"><a href="#使用RedisTemplate" class="headerlink" title="使用RedisTemplate"></a>使用RedisTemplate</h2><blockquote>
+<p>直接使用RedisTemplate 设置的key会出现一些前缀</p>
+<p>使用封装了RedisTemplate的工具类不会出现前缀</p>
 </blockquote>
 
             </div>

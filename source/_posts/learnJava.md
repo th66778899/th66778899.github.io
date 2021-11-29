@@ -703,3 +703,15 @@ spring:
 > 直接使用RedisTemplate 设置的key会出现一些前缀
 >
 > 使用封装了RedisTemplate的工具类不会出现前缀
+
+
+
+## mysql远程连接
+
+> 配置了mysql.user表中的 user-host字段也无法远程连接
+>
+> root - 192.168.198.100
+>
+> root - localhost
+>
+> host字段为  localhost 优先级高于其它的设置,只能由localhost才能进行连接

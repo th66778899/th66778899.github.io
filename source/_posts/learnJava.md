@@ -703,3 +703,35 @@ spring:
 > 直接使用RedisTemplate 设置的key会出现一些前缀
 >
 > 使用封装了RedisTemplate的工具类不会出现前缀
+
+
+
+## Git使用
+
+git详解:https://www.cnblogs.com/zhangxiaoyong/p/6000084.html#_label15
+
+git代码冲突 需要先git pull 
+
+> 问题 git pull 会不会覆盖本地代码
+>
+> git stash 命令
+
+
+
+## 事务
+
+批量执行sql操作,如果sql报错了，会不会回滚数据库的操作
+
+
+
+
+
+## ArrayList
+
+```java
+List<List<Integer>> res = new ArrayList<>();
+List<Integer> path = new ArrayList<>();
+res.add(new ArrayList(path)); // 可以
+res.add(path);				  // 不行
+```
+

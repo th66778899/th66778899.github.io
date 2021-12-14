@@ -715,3 +715,128 @@ spring:
 > root - localhost
 >
 > host字段为  localhost 优先级高于其它的设置,只能由localhost才能进行连接
+
+
+
+## maven依赖
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <!--   排除spring-boot-starter-logging -->
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+    </exclusions>
+		
+</dependency>
+```
+
+通过以上方式想要排除 spring-boot-starter-logging 依赖 ,但是通过maven查看继承树,该依赖仍然存在,同时引入log4j2的包会报异常,log4j2和 spring-boot-starter-logging 里的依赖有冲突
+
+> 解决办法
+>
+> 将 spring-boot-starter-logging 里的内容清空,让 spring-boot-starter-logging  成为一个空壳依赖即可
+
+```xml
+<!--    排除 spring-boot-starter-logging -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-logging</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>*</groupId>
+            <artifactId>*</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
+## @Transactional注解
+
+> 该注解什么时候提交事务
+
+```java
+// 使用了该注解, 该方法有 synchronized 关键字,前一个线程进入该方法,执行完数据库操作,因为事务的存在,数据库不会进行更新,第一个线程释放此方法的锁,第二个线程进入方法,也执行了数据库操作,数据库操作都保存到了事务里,之后事务进行了提交,商品库存变为负数,之后其它线程校验库存时因为库存已经是负数,都会抛出异常,事务回滚,数据库不会发生变动
+
+// 解决办法：给事务也加上锁,只有当事务提交之后,锁才会释放
+@Transactional(rollbackFor = Exception.class)
+    public synchronized Integer createOrder() throws Exception{
+        Product product = null;
+
+        // lock.lock();
+        // try {
+            // TransactionStatus transaction1 = platformTransactionManager.getTransaction(transactionDefinition);
+            product = productMapper.selectByPrimaryKey(purchaseProductId);
+            if (product==null){
+                // platformTransactionManager.rollback(transaction1);
+                throw new Exception("购买商品："+purchaseProductId+"不存在");
+            }
+
+            //商品当前库存
+            Integer currentCount = product.getCount();
+            System.out.println(Thread.currentThread().getName()+"库存数："+currentCount);
+            //校验库存
+            if (purchaseProductNum > currentCount){
+                // platformTransactionManager.rollback(transaction1);
+                throw new Exception("商品"+purchaseProductId+"仅剩"+currentCount+"件，无法购买");
+            }
+            // 使用数据库的update行锁解决超卖问题
+            productMapper.updateProductCount(purchaseProductNum,"xxx",new Date(),product.getId());
+            // platformTransactionManager.commit(transaction1);
+        // }finally {
+            // lock.unlock();
+        // }
+
+        // TransactionStatus transaction = platformTransactionManager.getTransaction(transactionDefinition);
+        Order order = new Order();
+        order.setOrderAmount(product.getPrice().multiply(new BigDecimal(purchaseProductNum)));
+        order.setOrderStatus(1);//待处理
+        order.setReceiverName("xxx");
+        order.setReceiverMobile("13311112222");
+        order.setCreateTime(new Date());
+        order.setCreateUser("xxx");
+        order.setUpdateTime(new Date());
+        order.setUpdateUser("xxx");
+        orderMapper.insertSelective(order);
+
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrderId(order.getId());
+        orderItem.setProductId(product.getId());
+        orderItem.setPurchasePrice(product.getPrice());
+        orderItem.setPurchaseNum(purchaseProductNum);
+        orderItem.setCreateUser("xxx");
+        orderItem.setCreateTime(new Date());
+        orderItem.setUpdateTime(new Date());
+        orderItem.setUpdateUser("xxx");
+        orderItemMapper.insertSelective(orderItem);
+        // platformTransactionManager.commit(transaction);
+        return order.getId();
+    }
+```
+
+```java
+
+// Spring 默认的回滚,不加rollbackFor 属性,会在抛出运行时异常时回滚,只有制定了异常类型,才会在主动抛出不是运行时异常时进行回滚
+   @Transactional(rollbackFor = Exception.class)
+    public String singleLock() throws Exception {
+        log.info("我进入了方法！");
+        DistributeLock distributeLock = distributeLockMapper.selectDistributeLock("demo");
+        if (distributeLock==null) {
+            throw new Exception("分布式锁找不到");
+        }
+        log.info("我进入了锁！");
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "我已经执行完成！";
+    }
+```
+
+
+

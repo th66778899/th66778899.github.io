@@ -235,7 +235,7 @@ mapper.xml 多条件查询
 
 ## 跨域
 
-![image-20211029230023380](learnJava.assets/image-20211029230023380.png)
+![image-20211029230023380](/img/learnJava.assets/image-20211029230023380.png)
 
 前端端口 8080 到 后端端口8088 不一致 , 会产生跨域问题 ,
 

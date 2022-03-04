@@ -7,13 +7,15 @@ tags:
 index_img: /img/sunrise.jpg
 ---
 
+Hexo基本使用
 
-
-
+<!--more-->
 
 Hexo多台电脑写博客：https://www.dazhuanlan.com/frank87/topics/1040043
 
-<!--more-->
+Hexo官方文档：https://hexo.io/zh-cn/docs/
+
+Fluid主题：https://github.com/fluid-dev/hexo-theme-fluid
 
 ##### 2021.10.22
 
@@ -38,19 +40,11 @@ git remote add origin git@github.com:th66778899/Algorithms4th.git
 
 之后再进行 `git add . git push -m '' git push -u origin master `没有问题,成功上传项目到github
 
-具体原因之后还需要再学习git使用
-
 ssh默认不支持rsa了 https://silenwang.github.io/2021/10/11/ssh默认不支持rsa了/
 
 配置多个git账号 : https://blog.csdn.net/q13554515812/article/details/83506172
 
-gradle使用
-
 git基本使用 https://zhuanlan.zhihu.com/p/30044692
-
-ssh-keygen -t rsa -C "[2391415158@qq.com](mailto:2391415158@qq.com)"
-
-ssh-keygen -t rsa -f ~/.ssh/id_rsa_github -C "[2391415158@qq.com](mailto:2391415158@qq.com)"
 
 ssh -T [git@github.com](mailto:git@github.com) -i ~/.ssh/id_rsa_github
 
@@ -64,17 +58,13 @@ $ git push fatal: The current branch dev has no upstream branch. To push the cur
 git push --set-upstream origin dev
 ```
 
-=======
-
 dev 和 master分支 `git checkout master | git checkout dev`
 
 会导致对应分支下的文件发生覆盖问题
 
 master分支和 dev 分支 merge 问题
 
-同一个文件 两分支内容不一致,先后更改 666 git分支的使用 https://zhuanlan.zhihu.com/p/137855358
-
-
+ git分支的使用 https://zhuanlan.zhihu.com/p/137855358
 
 [About - Nyima's Blog (gitee.io)](https://nyimac.gitee.io/about/)
 

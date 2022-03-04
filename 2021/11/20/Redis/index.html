@@ -1,0 +1,819 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/mario.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="Redis">
+  <meta name="author" content="tho">
+  <meta name="keywords" content="">
+  <meta name="description" content="Redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis">
+<meta property="og:url" content="http://example.com/2021/11/20/Redis/index.html">
+<meta property="og:site_name" content="Tho668&#39;s Blogs">
+<meta property="og:description" content="Redis">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-11-20T04:24:50.000Z">
+<meta property="article:modified_time" content="2022-03-04T13:58:18.022Z">
+<meta property="article:author" content="tho">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary_large_image">
+  
+  <title>Redis - Tho668&#39;s Blogs</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tho668</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/galaxy.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Redis">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-11-20 12:24" pubdate>
+        November 20, 2021 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      26k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      81 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Redis</h1>
+            
+            <div class="markdown-body">
+              <p>Redis</p>
+<span id="more"></span>
+
+<h1 id="一、Redis基础"><a href="#一、Redis基础" class="headerlink" title="一、Redis基础"></a>一、Redis基础</h1><p>Nosql常见分类</p>
+<ul>
+<li>键值对数据库  Redis,Memcache</li>
+<li>列存储数据库  Hbase,Cassandra</li>
+<li>文档型数据库  MongoDB,CouchDB</li>
+<li>图形数据库     Neo4j,FlockDB</li>
+</ul>
+<blockquote>
+<p>分布式缓存 </p>
+<ul>
+<li>提示读取速度性能</li>
+<li>分布式计算领域</li>
+<li>为数据库降低查询压力</li>
+<li>跨服务器缓存</li>
+<li>内存式缓存</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Redis </p>
+<ul>
+<li>分布式缓存中间件</li>
+<li>key-value 存储</li>
+<li>提供海量数据存储访问,读取更快,非关系型,分布式,开源,水平扩展</li>
+</ul>
+</blockquote>
+<h2 id="1-1、缓存方案对比"><a href="#1-1、缓存方案对比" class="headerlink" title="1.1、缓存方案对比"></a>1.1、缓存方案对比</h2><blockquote>
+<p>Ehcache </p>
+<ul>
+<li>基于java开发,基于jvm缓存 简单，轻巧，方便</li>
+<li>集群,分布式不支持</li>
+</ul>
+<p>Memcache</p>
+<ul>
+<li>简单的 key-value存储</li>
+<li>内存使用率较高</li>
+<li>多核，多线程</li>
+<li>无法容灾,无法持久化</li>
+</ul>
+<p>Redis</p>
+<ul>
+<li>丰富的数据结构</li>
+<li>持久化</li>
+<li>主从同步,故障转移,内存数据库</li>
+<li>单线程</li>
+</ul>
+</blockquote>
+<h2 id="1-2、Redis环境配置"><a href="#1-2、Redis环境配置" class="headerlink" title="1.2、Redis环境配置"></a>1.2、Redis环境配置</h2><p>（Linux环境)</p>
+<ol>
+<li><p>官网下载redis安装包 <code>redis-6.2.6.tar.gz</code></p>
+</li>
+<li><p>建立 <code>/usr/local/redis</code> 文件夹并进入</p>
+<p> <code>tar zxvf /root/workspace/software/redis-6.2.6.tar.gz -C ./</code></p>
+</li>
+<li><p>进入 <code>redis-6.2.6</code> 文件夹</p>
+<p> 执行命令 <code>make &amp;&amp; make install</code></p>
+</li>
+<li><p>将配置文件由  /usr/local/redis/redis-6.2.6  拷贝一份到  <code>/usr/local/redis</code> 下</p>
+</li>
+<li><p>修改配置文件</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs JAVA">bind <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> 改为 bind <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span> 								# 保证外网能够访问本地redis<br>#requirepass foobared 改为   requirepass <span class="hljs-number">123456</span> # redis访问时密码<br>daemonize no 改为 daemonize yes 								# 保证redis后台运行 <br>dir ./ 改为  dir /usr/local/redis/workspace 		# 指定Redis工作目录<br></code></pre></td></tr></table></figure></li>
+<li><p>redis开机自启动</p>
+<p> 拷贝 <code>/usr/local/redis/redis-6.2.6/utils</code>目录下  <code>redis_init_script</code> 到 /etc/init.d</p>
+<p> 脚本内容为</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs JAVA">#!/bin/sh<br>#<br># Simple Redis init.d script conceived to work on Linux systems<br># as it does use of the /proc filesystem.<br><br>### BEGIN INIT INFO<br># Provides:     redis_6379<br># Default-Start:        <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span><br># Default-Stop:         <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">6</span><br># Short-Description:    Redis data structure server<br># Description:          Redis data structure server. See https:<span class="hljs-comment">//redis.io</span><br>### END INIT INFO<br><br>#chkconfig <span class="hljs-number">22345</span> <span class="hljs-number">10</span> <span class="hljs-number">90</span><br>#description: Start and Stop redis<br><br>REDISPORT=<span class="hljs-number">6379</span><br>EXEC=/usr/local/bin/redis-server<br>CLIEXEC=/usr/local/bin/redis-cli<br><br>PIDFILE=/<span class="hljs-keyword">var</span>/run/redis_$&#123;REDISPORT&#125;.pid<br>CONF=<span class="hljs-string">&quot;/usr/local/redis/redis.conf&quot;</span>  # 要改为配置文件所在位置<br><br><span class="hljs-keyword">case</span> <span class="hljs-string">&quot;$1&quot;</span> in<br>    start)<br>        <span class="hljs-keyword">if</span> [ -f $PIDFILE ]<br>        then<br>                echo <span class="hljs-string">&quot;$PIDFILE exists, process is already running or crashed&quot;</span><br>        <span class="hljs-keyword">else</span><br>                echo <span class="hljs-string">&quot;Starting Redis server...&quot;</span><br>                $EXEC $CONF<br>        fi<br>        ;;<br>    stop)<br>        <span class="hljs-keyword">if</span> [ ! -f $PIDFILE ]<br>        then<br>                echo <span class="hljs-string">&quot;$PIDFILE does not exist, process is not running&quot;</span><br>        <span class="hljs-keyword">else</span><br>                PID=$(cat $PIDFILE)<br>                echo <span class="hljs-string">&quot;Stopping ...&quot;</span><br>                $CLIEXEC -p $REDISPORT shutdown<br>                <span class="hljs-keyword">while</span> [ -x /proc/$&#123;PID&#125; ]<br>                <span class="hljs-keyword">do</span><br>                    echo <span class="hljs-string">&quot;Waiting for Redis to shutdown ...&quot;</span><br>                    sleep <span class="hljs-number">1</span><br>                done<br>                echo <span class="hljs-string">&quot;Redis stopped&quot;</span><br>        fi<br>        ;;<br>    *)<br>        echo <span class="hljs-string">&quot;Please use start or stop as first argument&quot;</span><br>        ;;<br>esac<br><br></code></pre></td></tr></table></figure>
+
+<p> 8.<code>ps -ef | grep redis</code> 查看redis启动情况</p>
+<p> 9.redis_init_script 启动脚本中加入密码 41行代码</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs JAVA">#!/bin/sh<br>#<br># Simple Redis init.d script conceived to work on Linux systems<br># as it does use of the /proc filesystem.<br><br>### BEGIN INIT INFO<br># Provides:     redis_6379<br># Default-Start:        <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span><br># Default-Stop:         <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">6</span><br># Short-Description:    Redis data structure server<br># Description:          Redis data structure server. See https:<span class="hljs-comment">//redis.io</span><br>### END INIT INFO<br><br>#chkconfig <span class="hljs-number">22345</span> <span class="hljs-number">10</span> <span class="hljs-number">90</span><br>#description: Start and Stop redis<br><br>REDISPORT=<span class="hljs-number">6379</span><br>EXEC=/usr/local/bin/redis-server<br>CLIEXEC=/usr/local/bin/redis-cli<br><br>PIDFILE=/<span class="hljs-keyword">var</span>/run/redis_$&#123;REDISPORT&#125;.pid<br>CONF=<span class="hljs-string">&quot;/usr/local/redis/redis.conf&quot;</span><br><br><span class="hljs-keyword">case</span> <span class="hljs-string">&quot;$1&quot;</span> in<br>    start)<br>        <span class="hljs-keyword">if</span> [ -f $PIDFILE ]<br>        then<br>                echo <span class="hljs-string">&quot;$PIDFILE exists, process is already running or crashed&quot;</span><br>        <span class="hljs-keyword">else</span><br>                echo <span class="hljs-string">&quot;Starting Redis server...&quot;</span><br>                $EXEC $CONF<br>        fi<br>        ;;<br>    stop)<br>        <span class="hljs-keyword">if</span> [ ! -f $PIDFILE ]<br>        then<br>                echo <span class="hljs-string">&quot;$PIDFILE does not exist, process is not running&quot;</span><br>        <span class="hljs-keyword">else</span><br>                PID=$(cat $PIDFILE)<br>                echo <span class="hljs-string">&quot;Stopping ...&quot;</span><br>                $CLIEXEC -a <span class="hljs-string">&quot;123456&quot;</span> -p $REDISPORT shutdown # 加入redis密码 -a <span class="hljs-string">&quot;123465&quot;</span><br>                <span class="hljs-keyword">while</span> [ -x /proc/$&#123;PID&#125; ]<br>                <span class="hljs-keyword">do</span><br>                    echo <span class="hljs-string">&quot;Waiting for Redis to shutdown ...&quot;</span><br>                    sleep <span class="hljs-number">1</span><br>                done<br>                echo <span class="hljs-string">&quot;Redis stopped&quot;</span><br>        fi<br>        ;;<br>    *)<br>        echo <span class="hljs-string">&quot;Please use start or stop as first argument&quot;</span><br>        ;;<br>esac<br><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在<code>/etc/init.d</code> 目录下 通过   可以停止redis服务  </p>
+<p><code>./redis_init_script start</code> 启动redis</p>
+<p><code>./redis_init_script stop</code> 关闭redis</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="1-3、Redis基本数据类型"><a href="#1-3、Redis基本数据类型" class="headerlink" title="1.3、Redis基本数据类型"></a>1.3、Redis基本数据类型</h2><h3 id="1、String"><a href="#1、String" class="headerlink" title="1、String"></a>1、String</h3><blockquote>
+<p>String 键值对</p>
+<p>Redis 默认16个库，默认使用0号库</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java">get/set/del  查/改/删<br>set key value <span class="hljs-comment">// 会覆盖存在的值</span><br>setnx key value <span class="hljs-comment">// 不会覆盖存在的值</span><br>set key value ex time <span class="hljs-comment">// 设置过期时间数据</span><br>expire age <span class="hljs-number">30</span> <span class="hljs-comment">// 30s过期时间</span><br>ttl - time to leave <span class="hljs-comment">// 查看过期时间  </span><br>  <br>append key : 合并/追加字符串<br>strlen key：字符串长度<br><br><br>incr <span class="hljs-comment">// 累加 incrby</span><br>decr <span class="hljs-comment">// 累减 decrby</span><br>getrange <span class="hljs-comment">// 截取数据 end = -1 表示截取到最后</span><br>setrange <span class="hljs-comment">// 从start位置开始替换数据</span><br>mset  <span class="hljs-comment">// 连续设值</span><br>mget  <span class="hljs-comment">// 连续取值</span><br>msetnx  <span class="hljs-comment">// 连续设值,如果存在则不设置</span><br>  <br>select index <span class="hljs-comment">// 选择数据库</span><br>flushdb <span class="hljs-comment">// 清除本库内容</span><br>flushall <span class="hljs-comment">// 清除所有库内容 </span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2、Hash"><a href="#2、Hash" class="headerlink" title="2、Hash"></a>2、Hash</h3><blockquote>
+<p>hash</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; <span class="hljs-function">hset user name <span class="hljs-title">tho</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; hget user name</span><br><span class="hljs-function">&quot;tho&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; hmset user age 19 sex &quot;man&quot;</span><br><span class="hljs-function">OK</span><br><span class="hljs-function">127.0.0.1:6379&gt; hmget user name age</span><br><span class="hljs-function">1) &quot;tho&quot;</span><br><span class="hljs-function">2) &quot;19&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; hgetall user</span><br><span class="hljs-function">1) &quot;name&quot;</span><br><span class="hljs-function">2) &quot;tho&quot;</span><br><span class="hljs-function">3) &quot;age&quot;</span><br><span class="hljs-function">4) &quot;19&quot;</span><br><span class="hljs-function">5) &quot;sex&quot;</span><br><span class="hljs-function">6) &quot;man&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; hlen <span class="hljs-title">user</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 3</span><br><span class="hljs-function">127.0.0.1:6379&gt; hkeys user</span><br><span class="hljs-function">1) &quot;name&quot;</span><br><span class="hljs-function">2) &quot;age&quot;</span><br><span class="hljs-function">3) &quot;sex&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; hvals user</span><br><span class="hljs-function">1) &quot;tho&quot;</span><br><span class="hljs-function">2) &quot;19&quot;</span><br><span class="hljs-function">3) &quot;man&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; hincrby user age 6</span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 25</span><br><span class="hljs-function">127.0.0.1:6379&gt; hincrby user age 6</span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 31</span><br><span class="hljs-function">127.0.0.1:6379&gt; hincrby user age 6</span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 37</span><br><span class="hljs-function">127.0.0.1:6379&gt; hincrbyfloat user age 0.6</span><br><span class="hljs-function">&quot;37.6&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; hincrbyfloat user age 0.6</span><br><span class="hljs-function">&quot;38.2&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; hincrbyfloat user age 0.6</span><br><span class="hljs-function">&quot;38.8&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; hexists user <span class="hljs-title">age</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; hdel user <span class="hljs-title">age</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; hdel user <span class="hljs-title">name</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; hgetall user</span><br><span class="hljs-function">1) &quot;sex&quot;</span><br><span class="hljs-function">2) &quot;man&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; hdel user <span class="hljs-title">sex</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; hgetall <span class="hljs-title">user</span></span><br><span class="hljs-function"><span class="hljs-params">(empty array)</span></span><br><span class="hljs-function"></span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3、List"><a href="#3、List" class="headerlink" title="3、List"></a>3、List</h3><blockquote>
+<p>list</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; <span class="hljs-function">lpush list1 pig pow sheep <span class="hljs-title">duck</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 4</span><br><span class="hljs-function">127.0.0.1:6379&gt; lrange list1 0 -1</span><br><span class="hljs-function">1) &quot;duck&quot;</span><br><span class="hljs-function">2) &quot;sheep&quot;</span><br><span class="hljs-function">3) &quot;pow&quot;</span><br><span class="hljs-function">4) &quot;pig&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; rpush list2 pig pow sheep <span class="hljs-title">duck</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 4</span><br><span class="hljs-function">127.0.0.1:6379&gt; lrange list2 0 -1</span><br><span class="hljs-function">1) &quot;pig&quot;</span><br><span class="hljs-function">2) &quot;pow&quot;</span><br><span class="hljs-function">3) &quot;sheep&quot;</span><br><span class="hljs-function">4) &quot;duck&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; lpop list1</span><br><span class="hljs-function">&quot;duck&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; lrange list1 0 -1</span><br><span class="hljs-function">1) &quot;sheep&quot;</span><br><span class="hljs-function">2) &quot;pow&quot;</span><br><span class="hljs-function">3) &quot;pig&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; rpop list1</span><br><span class="hljs-function">&quot;pig&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; lrange list1 0 -1</span><br><span class="hljs-function">1) &quot;sheep&quot;</span><br><span class="hljs-function">2) &quot;pow&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; llen <span class="hljs-title">list1</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 2</span><br><span class="hljs-function">127.0.0.1:6379&gt; llen <span class="hljs-title">list2</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 4</span><br><span class="hljs-function">127.0.0.1:6379&gt; rpop list2</span><br><span class="hljs-function">&quot;duck&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; lindex list1 0</span><br><span class="hljs-function">&quot;sheep&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; lindex list1 1</span><br><span class="hljs-function">&quot;pow&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; lset list1 0 123556</span><br><span class="hljs-function">OK</span><br><span class="hljs-function">127.0.0.1:6379&gt; lrange list1 0 -1</span><br><span class="hljs-function">1) &quot;123556&quot;</span><br><span class="hljs-function">2) &quot;pow&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; linsert list1 before pow 999</span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 3</span><br><span class="hljs-function">127.0.0.1:6379&gt; lrange list1 0 -1</span><br><span class="hljs-function">1) &quot;123556&quot;</span><br><span class="hljs-function">2) &quot;999&quot;</span><br><span class="hljs-function">3) &quot;pow&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; linsert list1 after pow 999</span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 4</span><br><span class="hljs-function">127.0.0.1:6379&gt; lrange list1 0 -1</span><br><span class="hljs-function">1) &quot;123556&quot;</span><br><span class="hljs-function">2) &quot;999&quot;</span><br><span class="hljs-function">3) &quot;pow&quot;</span><br><span class="hljs-function">4) &quot;999&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; lrem list1 2 999</span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 2</span><br><span class="hljs-function">127.0.0.1:6379&gt; lrange list1 0 -1</span><br><span class="hljs-function">1) &quot;123556&quot;</span><br><span class="hljs-function">2) &quot;pow&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; ltrim list1 1 -1</span><br><span class="hljs-function">OK</span><br><span class="hljs-function">127.0.0.1:6379&gt; lrange list1 0 -1</span><br><span class="hljs-function">1) &quot;pow&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; del <span class="hljs-title">list2</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; lrange list2 0 -1</span><br><span class="hljs-function"><span class="hljs-params">(empty array)</span></span><br><span class="hljs-function">127.0.0.1:6379&gt; keys *</span><br><span class="hljs-function">1) &quot;list1&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4、Set"><a href="#4、Set" class="headerlink" title="4、Set"></a>4、Set</h3><blockquote>
+<p>set不重复  集合</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; <span class="hljs-function">sadd set duck pig cow sheep pig <span class="hljs-title">cow</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 4</span><br><span class="hljs-function">127.0.0.1:6379&gt; smembers set</span><br><span class="hljs-function">1) &quot;sheep&quot;</span><br><span class="hljs-function">2) &quot;cow&quot;</span><br><span class="hljs-function">3) &quot;duck&quot;</span><br><span class="hljs-function">4) &quot;pig&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; scard <span class="hljs-title">set</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 4</span><br><span class="hljs-function">127.0.0.1:6379&gt; sismember set <span class="hljs-title">pig</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; sismember set <span class="hljs-title">pi</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 0</span><br><span class="hljs-function">127.0.0.1:6379&gt; srem set <span class="hljs-title">duck</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; smembers set</span><br><span class="hljs-function">1) &quot;cow&quot;</span><br><span class="hljs-function">2) &quot;pig&quot;</span><br><span class="hljs-function">3) &quot;sheep&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; spop set </span><br><span class="hljs-function">&quot;cow&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; spop set </span><br><span class="hljs-function">&quot;pig&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; sadd set <span class="hljs-title">cow</span> </span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; sadd set <span class="hljs-title">pig</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; sadd set1 1 2 3 4 5 6 7 8 9</span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 9</span><br><span class="hljs-function">127.0.0.1:6379&gt; smembers set1</span><br><span class="hljs-function">1) &quot;1&quot;</span><br><span class="hljs-function">2) &quot;2&quot;</span><br><span class="hljs-function">3) &quot;3&quot;</span><br><span class="hljs-function">4) &quot;4&quot;</span><br><span class="hljs-function">5) &quot;5&quot;</span><br><span class="hljs-function">6) &quot;6&quot;</span><br><span class="hljs-function">7) &quot;7&quot;</span><br><span class="hljs-function">8) &quot;8&quot;</span><br><span class="hljs-function">9) &quot;9&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; srandmember set1 3</span><br><span class="hljs-function">1) &quot;5&quot;</span><br><span class="hljs-function">2) &quot;6&quot;</span><br><span class="hljs-function">3) &quot;8&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; srandmember set1 3</span><br><span class="hljs-function">1) &quot;5&quot;</span><br><span class="hljs-function">2) &quot;9&quot;</span><br><span class="hljs-function">3) &quot;4&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; srandmember set1 3</span><br><span class="hljs-function">1) &quot;9&quot;</span><br><span class="hljs-function">2) &quot;3&quot;</span><br><span class="hljs-function">3) &quot;1&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; srandmember set1 3</span><br><span class="hljs-function">1) &quot;7&quot;</span><br><span class="hljs-function">2) &quot;4&quot;</span><br><span class="hljs-function">3) &quot;8&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; srandmember set1 3</span><br><span class="hljs-function">1) &quot;2&quot;</span><br><span class="hljs-function">2) &quot;1&quot;</span><br><span class="hljs-function">3) &quot;4&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt;  sadd set2 2 1 3 7 9 11 13 15  </span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 8</span><br><span class="hljs-function">127.0.0.1:6379&gt; smove set1 set2 6</span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; smembers set1</span><br><span class="hljs-function">1) &quot;1&quot;</span><br><span class="hljs-function">2) &quot;2&quot;</span><br><span class="hljs-function">3) &quot;3&quot;</span><br><span class="hljs-function">4) &quot;4&quot;</span><br><span class="hljs-function">5) &quot;5&quot;</span><br><span class="hljs-function">6) &quot;7&quot;</span><br><span class="hljs-function">7) &quot;8&quot;</span><br><span class="hljs-function">8) &quot;9&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; smembers set2</span><br><span class="hljs-function">1) &quot;1&quot;</span><br><span class="hljs-function">2) &quot;2&quot;</span><br><span class="hljs-function">3) &quot;3&quot;</span><br><span class="hljs-function">4) &quot;6&quot;</span><br><span class="hljs-function">5) &quot;7&quot;</span><br><span class="hljs-function">6) &quot;9&quot;</span><br><span class="hljs-function">7) &quot;11&quot;</span><br><span class="hljs-function">8) &quot;13&quot;</span><br><span class="hljs-function">9) &quot;15&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; sdiff set1 set2</span><br><span class="hljs-function">1) &quot;4&quot;</span><br><span class="hljs-function">2) &quot;5&quot;</span><br><span class="hljs-function">3) &quot;8&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; sinter set1 set2</span><br><span class="hljs-function">1) &quot;1&quot;</span><br><span class="hljs-function">2) &quot;2&quot;</span><br><span class="hljs-function">3) &quot;3&quot;</span><br><span class="hljs-function">4) &quot;7&quot;</span><br><span class="hljs-function">5) &quot;9&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; sunion set1 set2</span><br><span class="hljs-function"> 1) &quot;1&quot;</span><br><span class="hljs-function"> 2) &quot;2&quot;</span><br><span class="hljs-function"> 3) &quot;3&quot;</span><br><span class="hljs-function"> 4) &quot;4&quot;</span><br><span class="hljs-function"> 5) &quot;5&quot;</span><br><span class="hljs-function"> 6) &quot;6&quot;</span><br><span class="hljs-function"> 7) &quot;7&quot;</span><br><span class="hljs-function"> 8) &quot;8&quot;</span><br><span class="hljs-function"> 9) &quot;9&quot;</span><br><span class="hljs-function">10) &quot;11&quot;</span><br><span class="hljs-function">11) &quot;13&quot;</span><br><span class="hljs-function">12) &quot;15&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5、Zset"><a href="#5、Zset" class="headerlink" title="5、Zset"></a>5、Zset</h3><blockquote>
+<p>Zset 有序的set sorted set</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; zadd zset <span class="hljs-number">10</span> duck <span class="hljs-number">20</span> pig <span class="hljs-number">30</span> chicken <span class="hljs-number">40</span> beef <span class="hljs-number">50</span> sheep<br>(integer) <span class="hljs-number">5</span><br><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; zrange zset <span class="hljs-number">0</span> -<span class="hljs-number">1</span><br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;duck&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;pig&quot;</span><br><span class="hljs-number">3</span>) <span class="hljs-string">&quot;chicken&quot;</span><br><span class="hljs-number">4</span>) <span class="hljs-string">&quot;beef&quot;</span><br><span class="hljs-number">5</span>) <span class="hljs-string">&quot;sheep&quot;</span><br><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; zrange zset <span class="hljs-number">0</span> -<span class="hljs-number">1</span> withscores<br> <span class="hljs-number">1</span>) <span class="hljs-string">&quot;duck&quot;</span><br> <span class="hljs-number">2</span>) <span class="hljs-string">&quot;10&quot;</span><br> <span class="hljs-number">3</span>) <span class="hljs-string">&quot;pig&quot;</span><br> <span class="hljs-number">4</span>) <span class="hljs-string">&quot;20&quot;</span><br> <span class="hljs-number">5</span>) <span class="hljs-string">&quot;chicken&quot;</span><br> <span class="hljs-number">6</span>) <span class="hljs-string">&quot;30&quot;</span><br> <span class="hljs-number">7</span>) <span class="hljs-string">&quot;beef&quot;</span><br> <span class="hljs-number">8</span>) <span class="hljs-string">&quot;40&quot;</span><br> <span class="hljs-number">9</span>) <span class="hljs-string">&quot;sheep&quot;</span><br><span class="hljs-number">10</span>) <span class="hljs-string">&quot;50&quot;</span><br><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; zadd zset <span class="hljs-number">25</span> abc <span class="hljs-number">35</span> xyz<br>(integer) <span class="hljs-number">2</span><br><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; zrange zset <span class="hljs-number">0</span> -<span class="hljs-number">1</span> withscores<br> <span class="hljs-number">1</span>) <span class="hljs-string">&quot;duck&quot;</span><br> <span class="hljs-number">2</span>) <span class="hljs-string">&quot;10&quot;</span><br> <span class="hljs-number">3</span>) <span class="hljs-string">&quot;pig&quot;</span><br> <span class="hljs-number">4</span>) <span class="hljs-string">&quot;20&quot;</span><br> <span class="hljs-number">5</span>) <span class="hljs-string">&quot;abc&quot;</span><br> <span class="hljs-number">6</span>) <span class="hljs-string">&quot;25&quot;</span><br> <span class="hljs-number">7</span>) <span class="hljs-string">&quot;chicken&quot;</span><br> <span class="hljs-number">8</span>) <span class="hljs-string">&quot;30&quot;</span><br> <span class="hljs-number">9</span>) <span class="hljs-string">&quot;xyz&quot;</span><br><span class="hljs-number">10</span>) <span class="hljs-string">&quot;35&quot;</span><br><span class="hljs-number">11</span>) <span class="hljs-string">&quot;beef&quot;</span><br><span class="hljs-number">12</span>) <span class="hljs-string">&quot;40&quot;</span><br><span class="hljs-number">13</span>) <span class="hljs-string">&quot;sheep&quot;</span><br><span class="hljs-number">14</span>) <span class="hljs-string">&quot;50&quot;</span><br><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; <span class="hljs-function">rank zset <span class="hljs-title">beef</span></span><br><span class="hljs-function"><span class="hljs-params">(error)</span> ERR unknown command `rank`, with args beginning with: `zset`, `beef`, </span><br><span class="hljs-function">127.0.0.1:6379&gt; zrank zset <span class="hljs-title">beef</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 5</span><br><span class="hljs-function">127.0.0.1:6379&gt; zrange zset 0 -1 withscores</span><br><span class="hljs-function"> 1) &quot;duck&quot;</span><br><span class="hljs-function"> 2) &quot;10&quot;</span><br><span class="hljs-function"> 3) &quot;pig&quot;</span><br><span class="hljs-function"> 4) &quot;20&quot;</span><br><span class="hljs-function"> 5) &quot;abc&quot;</span><br><span class="hljs-function"> 6) &quot;25&quot;</span><br><span class="hljs-function"> 7) &quot;chicken&quot;</span><br><span class="hljs-function"> 8) &quot;30&quot;</span><br><span class="hljs-function"> 9) &quot;xyz&quot;</span><br><span class="hljs-function">10) &quot;35&quot;</span><br><span class="hljs-function">11) &quot;beef&quot;</span><br><span class="hljs-function">12) &quot;40&quot;</span><br><span class="hljs-function">13) &quot;sheep&quot;</span><br><span class="hljs-function">14) &quot;50&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; zrange zset 0 -1 </span><br><span class="hljs-function">1) &quot;duck&quot;</span><br><span class="hljs-function">2) &quot;pig&quot;</span><br><span class="hljs-function">3) &quot;abc&quot;</span><br><span class="hljs-function">4) &quot;chicken&quot;</span><br><span class="hljs-function">5) &quot;xyz&quot;</span><br><span class="hljs-function">6) &quot;beef&quot;</span><br><span class="hljs-function">7) &quot;sheep&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; zscore zset beef</span><br><span class="hljs-function">&quot;40&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; zcard <span class="hljs-title">zset</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 7</span><br><span class="hljs-function">127.0.0.1:6379&gt; zcount zset 20 40</span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 5</span><br><span class="hljs-function">127.0.0.1:6379&gt;  </span><br><span class="hljs-function">127.0.0.1:6379&gt; zrangebyscore 20 40</span><br><span class="hljs-function"><span class="hljs-params">(error)</span> ERR wrong number of arguments <span class="hljs-keyword">for</span> &#x27;zrangebyscore&#x27; command</span><br><span class="hljs-function">127.0.0.1:6379&gt; zrangebyscore zset 20 40</span><br><span class="hljs-function">1) &quot;pig&quot;</span><br><span class="hljs-function">2) &quot;abc&quot;</span><br><span class="hljs-function">3) &quot;chicken&quot;</span><br><span class="hljs-function">4) &quot;xyz&quot;</span><br><span class="hljs-function">5) &quot;beef&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; zrangebyscore zset 20 40 withscores</span><br><span class="hljs-function"> 1) &quot;pig&quot;</span><br><span class="hljs-function"> 2) &quot;20&quot;</span><br><span class="hljs-function"> 3) &quot;abc&quot;</span><br><span class="hljs-function"> 4) &quot;25&quot;</span><br><span class="hljs-function"> 5) &quot;chicken&quot;</span><br><span class="hljs-function"> 6) &quot;30&quot;</span><br><span class="hljs-function"> 7) &quot;xyz&quot;</span><br><span class="hljs-function"> 8) &quot;35&quot;</span><br><span class="hljs-function"> 9) &quot;beef&quot;</span><br><span class="hljs-function">10) &quot;40&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; zrangebyscore zset 20 <span class="hljs-params">(<span class="hljs-number">40</span> withscores</span></span><br><span class="hljs-params"><span class="hljs-function"><span class="hljs-number">1</span>)</span> &quot;pig&quot;</span><br><span class="hljs-function">2) &quot;20&quot;</span><br><span class="hljs-function">3) &quot;abc&quot;</span><br><span class="hljs-function">4) &quot;25&quot;</span><br><span class="hljs-function">5) &quot;chicken&quot;</span><br><span class="hljs-function">6) &quot;30&quot;</span><br><span class="hljs-function">7) &quot;xyz&quot;</span><br><span class="hljs-function">8) &quot;35&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; zrangebyscore <span class="hljs-title">zset</span> <span class="hljs-params">(<span class="hljs-number">20</span> (<span class="hljs-number">40</span> withscores</span></span><br><span class="hljs-params"><span class="hljs-function"><span class="hljs-number">1</span>)</span> &quot;abc&quot;</span><br><span class="hljs-function">2) &quot;25&quot;</span><br><span class="hljs-function">3) &quot;chicken&quot;</span><br><span class="hljs-function">4) &quot;30&quot;</span><br><span class="hljs-function">5) &quot;xyz&quot;</span><br><span class="hljs-function">6) &quot;35&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; zrangebyscore zset 20 40 limit 1 2 </span><br><span class="hljs-function">1) &quot;abc&quot;</span><br><span class="hljs-function">2) &quot;chicken&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; zrangebyscore zset 20 40 limit 2 2 </span><br><span class="hljs-function">1) &quot;chicken&quot;</span><br><span class="hljs-function">2) &quot;xyz&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; zrangebyscore zset 20 40 limit 3 2 </span><br><span class="hljs-function">1) &quot;xyz&quot;</span><br><span class="hljs-function">2) &quot;beef&quot;</span><br><span class="hljs-function">127.0.0.1:6379&gt; zrem zset <span class="hljs-title">pig</span></span><br><span class="hljs-function"><span class="hljs-params">(integer)</span> 1</span><br><span class="hljs-function">127.0.0.1:6379&gt; zrange zset 0 -1 </span><br><span class="hljs-function">1) &quot;duck&quot;</span><br><span class="hljs-function">2) &quot;abc&quot;</span><br><span class="hljs-function">3) &quot;chicken&quot;</span><br><span class="hljs-function">4) &quot;xyz&quot;</span><br><span class="hljs-function">5) &quot;beef&quot;</span><br><span class="hljs-function">6) &quot;sheep&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="二、Redis使用"><a href="#二、Redis使用" class="headerlink" title="二、Redis使用"></a>二、Redis使用</h1><h2 id="2-1、Springboot整合Redis"><a href="#2-1、Springboot整合Redis" class="headerlink" title="2.1、Springboot整合Redis"></a>2.1、Springboot整合Redis</h2><p>pom.xml 依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!--redis依赖--&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>      <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>maven - 要使用install命令进行安装</p>
+</blockquote>
+<blockquote>
+<p>redisTemplate 简单使用</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.controller;<br><br><br><span class="hljs-keyword">import</span> com.tho.utils.RedisOperator;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.GetMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.PostMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RestController;<br><span class="hljs-keyword">import</span> springfox.documentation.annotations.ApiIgnore;<br><br><span class="hljs-meta">@ApiIgnore</span><br><span class="hljs-meta">@RestController</span><br><span class="hljs-meta">@RequestMapping(&quot;redis&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedisController</span> </span>&#123;<br><br>    <span class="hljs-comment">// 配置显示日志</span><br>    <span class="hljs-comment">// final static Logger logger = LoggerFactory.getLogger(RedisController.class);</span><br><br>    <span class="hljs-comment">/*@Autowired</span><br><span class="hljs-comment">    private RedisTemplate redisTemplate;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    @Autowired</span><br><span class="hljs-comment">    private StringRedisTemplate stringRedisTemplate;*/</span><br>  <br>		<span class="hljs-comment">// RedisOperator 是一个redis工具类</span><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> RedisOperator redisOperator;<br>  	<br>    <span class="hljs-meta">@PostMapping(&quot;/set&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">set</span><span class="hljs-params">(String key, String value)</span></span>&#123;<br><br>        <span class="hljs-comment">// redisTemplate.opsForValue().set(key, value);</span><br>        redisOperator.set(key, value);<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;yes&quot;</span>;<br>    &#125;<br><br>    <span class="hljs-meta">@GetMapping(&quot;/get&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">get</span><span class="hljs-params">(String key)</span></span>&#123;<br>        <span class="hljs-comment">/* Object o = redisTemplate.opsForValue().get(key); */</span><br>        String s = redisOperator.get(key);<br>        <span class="hljs-keyword">return</span> s;<br>    &#125;<br><br>    <span class="hljs-meta">@PostMapping(&quot;/del&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">del</span><span class="hljs-params">(String key)</span></span>&#123;<br>        <span class="hljs-comment">// Boolean delete = redisTemplate.delete(key);</span><br>        Boolean del = redisOperator.del(key);<br><br>        <span class="hljs-keyword">return</span> del;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="2-2、RedisTemplate"><a href="#2-2、RedisTemplate" class="headerlink" title="2.2、RedisTemplate"></a>2.2、RedisTemplate</h2><blockquote>
+<p>问题</p>
+</blockquote>
+<ul>
+<li><p>直接使用redisTemplate 进行操作redis 查看其在redis所设置的值可以看到redis里面的值都有前缀,是因为默认采用的序列化方式是 <code>org.springframework.data.redis.serializer.JdkSerializationRedisSerializer</code></p>
+</li>
+<li><p>将序列化的方式改为 <code>org.springframework.data.redis.serializer.StringRedisSerializer</code> 会自动去掉<code>\xac\xed\x00\x05t\x00</code>前缀</p>
+</li>
+</ul>
+<blockquote>
+<p>解决</p>
+</blockquote>
+<p>方案一：使用 <code>StringRedisTemplate</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Autowired</span><br><span class="hljs-keyword">private</span> StringRedisTemplate stringRedisTemplate;<br></code></pre></td></tr></table></figure>
+
+<p>方案二：修改默认的序列化方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-meta">@Autowired</span><br><span class="hljs-keyword">private</span> RedisTemplate redisTemplate;<br><span class="hljs-meta">@Autowired(required = false)</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setRedisTemplate</span><span class="hljs-params">(RedisTemplate redisTemplate)</span> </span>&#123;<br>    RedisSerializer stringSerializer = <span class="hljs-keyword">new</span> StringRedisSerializer();<br>    redisTemplate.setKeySerializer(stringSerializer);<br>    redisTemplate.setValueSerializer(stringSerializer);<br>    redisTemplate.setHashKeySerializer(stringSerializer);<br>    redisTemplate.setHashValueSerializer(stringSerializer);<br>    <span class="hljs-keyword">this</span>.redisTemplate = redisTemplate;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>方案三：使用封装了<code>redisTemplate</code> 的 RedisOperator 工具类 (存储的键值对没有了前缀)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-keyword">package</span> com.tho.utils;<br><br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.data.redis.core.StringRedisTemplate;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Component;<br><br><span class="hljs-keyword">import</span> java.util.Map;<br><span class="hljs-keyword">import</span> java.util.Set;<br><span class="hljs-keyword">import</span> java.util.concurrent.TimeUnit;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Title</span>: Redis 工具类</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> 慕课网</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedisOperator</span> </span>&#123;<br>	<br><span class="hljs-comment">//	@Autowired</span><br><span class="hljs-comment">//    private RedisTemplate&lt;String, Object&gt; redisTemplate;</span><br>	<br>	<span class="hljs-meta">@Autowired</span><br>	<span class="hljs-keyword">private</span> StringRedisTemplate redisTemplate;<br>	<br>	<span class="hljs-comment">// Key（键），简单的key-value操作</span><br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：TTL key，以秒为单位，返回给定 key的剩余生存时间(TTL, time to live)。</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">ttl</span><span class="hljs-params">(String key)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> redisTemplate.getExpire(key);<br>	&#125;<br>	<br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：expire 设置过期时间，单位秒</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">expire</span><span class="hljs-params">(String key, <span class="hljs-keyword">long</span> timeout)</span> </span>&#123;<br>		redisTemplate.expire(key, timeout, TimeUnit.SECONDS);<br>	&#125;<br>	<br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：INCR key，增加key一次</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">incr</span><span class="hljs-params">(String key, <span class="hljs-keyword">long</span> delta)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> redisTemplate.opsForValue().increment(key, delta);<br>	&#125;<br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：KEYS pattern，查找所有符合给定模式 pattern的 key</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> Set&lt;String&gt; <span class="hljs-title">keys</span><span class="hljs-params">(String pattern)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> redisTemplate.keys(pattern);<br>	&#125;<br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：DEL key，删除一个key</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> Boolean <span class="hljs-title">del</span><span class="hljs-params">(String key)</span> </span>&#123;<br>		Boolean delete = redisTemplate.delete(key);<br>		<span class="hljs-keyword">return</span> delete;<br>	&#125;<br><br>	<span class="hljs-comment">// String（字符串）</span><br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：SET key value，设置一个key-value（将字符串值 value关联到 key）</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> value</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">set</span><span class="hljs-params">(String key, String value)</span> </span>&#123;<br>		redisTemplate.opsForValue().set(key, value);<br>	&#125;<br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：SET key value EX seconds，设置key-value和超时时间（秒）</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> value</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> timeout</span><br><span class="hljs-comment">	 *            （以秒为单位）</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">set</span><span class="hljs-params">(String key, String value, <span class="hljs-keyword">long</span> timeout)</span> </span>&#123;<br>		redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);<br>	&#125;<br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：GET key，返回 key所关联的字符串值。</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@return</span> value</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">get</span><span class="hljs-params">(String key)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> (String)redisTemplate.opsForValue().get(key);<br>	&#125;<br><br>	<span class="hljs-comment">// Hash（哈希表）</span><br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：HSET key field value，将哈希表 key中的域 field的值设为 value</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> field</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> value</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">hset</span><span class="hljs-params">(String key, String field, Object value)</span> </span>&#123;<br>		redisTemplate.opsForHash().put(key, field, value);<br>	&#125;<br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：HGET key field，返回哈希表 key中给定域 field的值</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> field</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">hget</span><span class="hljs-params">(String key, String field)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> (String) redisTemplate.opsForHash().get(key, field);<br>	&#125;<br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：HDEL key field [field ...]，删除哈希表 key 中的一个或多个指定域，不存在的域将被忽略。</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> fields</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">hdel</span><span class="hljs-params">(String key, Object... fields)</span> </span>&#123;<br>		redisTemplate.opsForHash().delete(key, fields);<br>	&#125;<br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：HGETALL key，返回哈希表 key中，所有的域和值。</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> Map&lt;Object, Object&gt; <span class="hljs-title">hgetall</span><span class="hljs-params">(String key)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> redisTemplate.opsForHash().entries(key);<br>	&#125;<br><br>	<span class="hljs-comment">// List（列表）</span><br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：LPUSH key value，将一个值 value插入到列表 key的表头</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> value</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@return</span> 执行 LPUSH命令后，列表的长度。</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">lpush</span><span class="hljs-params">(String key, String value)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> redisTemplate.opsForList().leftPush(key, value);<br>	&#125;<br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：LPOP key，移除并返回列表 key的头元素。</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@return</span> 列表key的头元素。</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">lpop</span><span class="hljs-params">(String key)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> (String)redisTemplate.opsForList().leftPop(key);<br>	&#125;<br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 实现命令：RPUSH key value，将一个值 value插入到列表 key的表尾(最右边)。</span><br><span class="hljs-comment">	 * </span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> value</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@return</span> 执行 LPUSH命令后，列表的长度。</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">rpush</span><span class="hljs-params">(String key, String value)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> redisTemplate.opsForList().rightPush(key, value);<br>	&#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-3、使用Redis保存购物车"><a href="#2-3、使用Redis保存购物车" class="headerlink" title="2.3、使用Redis保存购物车"></a>2.3、使用Redis保存购物车</h2><blockquote>
+<p>cookie中的购物车和redis中的购物车</p>
+<p>两者内保存信息的不同要合理处理,以redis中的购物车信息为主</p>
+</blockquote>
+<h2 id="2-4、发布于订阅"><a href="#2-4、发布于订阅" class="headerlink" title="2.4、发布于订阅"></a>2.4、发布于订阅</h2><p>publisher -&gt; subscriber</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs JAVA">订阅者：<br>  SUBSCRIBE food tho-bigdata tho-backend tho -frontend<br>Reading messages... (press Ctrl-C to quit)<br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;subscribe&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;food&quot;</span><br><span class="hljs-number">3</span>) (integer) <span class="hljs-number">1</span><br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;subscribe&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;tho-bigdata&quot;</span><br><span class="hljs-number">3</span>) (integer) <span class="hljs-number">2</span><br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;subscribe&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;tho-backend&quot;</span><br><span class="hljs-number">3</span>) (integer) <span class="hljs-number">3</span><br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;subscribe&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;tho&quot;</span><br><span class="hljs-number">3</span>) (integer) <span class="hljs-number">4</span><br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;subscribe&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;-frontend&quot;</span><br><span class="hljs-number">3</span>) (integer) <span class="hljs-number">5</span><br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;message&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;tho-bigdata&quot;</span><br><span class="hljs-number">3</span>) <span class="hljs-string">&quot;javaversion&quot;</span><br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;message&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;food&quot;</span><br><span class="hljs-number">3</span>) <span class="hljs-string">&quot;chaobing&quot;</span><br>发布者：<br>  <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; PUBLISH tho-<span class="hljs-function">bigdata <span class="hljs-title">javaversion</span></span><br><span class="hljs-function">	<span class="hljs-params">(integer)</span> 2</span><br><span class="hljs-function">	127.0.0.1:6379&gt; PUBLISH food <span class="hljs-title">chaobing</span></span><br><span class="hljs-function">	<span class="hljs-params">(integer)</span> 2</span><br><span class="hljs-function">	127.0.0.1:6379&gt; </span><br><span class="hljs-function"></span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>批量订阅</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; PSUBSCRIBE tho*<br>Reading messages... (press Ctrl-C to quit)<br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;psubscribe&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;tho*&quot;</span><br><span class="hljs-number">3</span>) (integer) <span class="hljs-number">1</span><br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;pmessage&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;tho*&quot;</span><br><span class="hljs-number">3</span>) <span class="hljs-string">&quot;thox&quot;</span><br><span class="hljs-number">4</span>) <span class="hljs-string">&quot;chaobing&quot;</span><br><br></code></pre></td></tr></table></figure>
+
+<h2 id="2-5、Redis持久化"><a href="#2-5、Redis持久化" class="headerlink" title="2.5、Redis持久化"></a>2.5、Redis持久化</h2><h3 id="1、RDB"><a href="#1、RDB" class="headerlink" title="1、RDB"></a>1、RDB</h3><blockquote>
+<p>redis.conf 配置文件</p>
+<p>rdb适合使用大数据量的数据库备份</p>
+<p>最后一次保存出现问题会导致数据的完整性出现问题</p>
+<p>全量备份模式</p>
+</blockquote>
+<h3 id="2、AOF"><a href="#2、AOF" class="headerlink" title="2、AOF"></a>2、AOF</h3><blockquote>
+<p>以日志形式进行追加</p>
+<p>flushall 误操作可以删除aof文件中的相关语句</p>
+<p>重启redis</p>
+</blockquote>
+<h2 id="2-6、Vmware-克隆虚拟机"><a href="#2-6、Vmware-克隆虚拟机" class="headerlink" title="2.6、Vmware 克隆虚拟机"></a>2.6、Vmware 克隆虚拟机</h2><blockquote>
+<p>要修改克隆机的静态ip,使得克隆机可以通过Xshell 访问</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/29e3f4f3cbe7">https://www.jianshu.com/p/29e3f4f3cbe7</a></p>
+<h2 id="2-7、Redis主从复制"><a href="#2-7、Redis主从复制" class="headerlink" title="2.7、Redis主从复制"></a>2.7、Redis主从复制</h2><blockquote>
+<p>单机redis 并发量 10w +</p>
+</blockquote>
+<blockquote>
+<p>读写分离 - 主从复制</p>
+<p>master节点将数据写入自己磁盘,将磁盘内数据传输到slave节点,slave节点读取数据库数据,进行复制</p>
+<p>第一次同步 全量复制 之后 增量复制</p>
+<p>Redis Master</p>
+<p>(数据复制 RDB)</p>
+<p>Redis Slave</p>
+</blockquote>
+<ul>
+<li>搭建redis主从复制</li>
+</ul>
+<blockquote>
+<p>info replication 展示redis信息</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs shell">127.0.0.1:6379&gt; info replication<br><span class="hljs-meta">#</span><span class="bash"> Replication</span><br>role:master<br>connected_slaves:0<br>master_failover_state:no-failover<br>master_replid:4a8892cdb96c411b16e19891fb40bb658d8bd2db<br>master_replid2:0000000000000000000000000000000000000000<br>master_repl_offset:0<br>second_repl_offset:-1<br>repl_backlog_active:0<br>repl_backlog_size:1048576<br>repl_backlog_first_byte_offset:0<br>repl_backlog_histlen:0<br><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>只需要修改从节点的配置文件 redis.conf</p>
+<p>重启redis</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"># redis 主从复制配置<br># replicaof &lt;masterip&gt; &lt;masterport&gt;<br>replicaof <span class="hljs-number">192.168</span><span class="hljs-number">.198</span><span class="hljs-number">.100</span> <span class="hljs-number">6379</span><br># redis暴露在外网有风险,最好设置密码<br>masterauth <span class="hljs-number">123456</span><br># 从节点只能读,不能写<br>replica-read-only yes<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>主节点的数据以及数据变更都会同步到从节点</p>
+<p>且从节点不能写入</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">6379</span>&gt; info replication<br># Replication<br>role:master<br>connected_slaves:<span class="hljs-number">2</span><br>slave0:ip=<span class="hljs-number">192.168</span><span class="hljs-number">.198</span><span class="hljs-number">.102</span>,port=<span class="hljs-number">6379</span>,state=online,offset=<span class="hljs-number">596</span>,lag=<span class="hljs-number">1</span><br>slave1:ip=<span class="hljs-number">192.168</span><span class="hljs-number">.198</span><span class="hljs-number">.101</span>,port=<span class="hljs-number">6379</span>,state=online,offset=<span class="hljs-number">596</span>,lag=<span class="hljs-number">0</span><br>master_failover_state:no-failover<br>master_replid:5957efff30070c8a728c5a86ff9067353bad417e<br>master_replid2:<span class="hljs-number">0000000000000000000000000000000000000000</span><br>master_repl_offset:<span class="hljs-number">596</span><br>second_repl_offset:-<span class="hljs-number">1</span><br>repl_backlog_active:<span class="hljs-number">1</span><br>repl_backlog_size:<span class="hljs-number">1048576</span><br>repl_backlog_first_byte_offset:<span class="hljs-number">1</span><br>repl_backlog_histlen:<span class="hljs-number">596</span><br><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>主节点 从节点 关闭 重启 其主从关系不会改变,主节点会自动成为主节点</p>
+</blockquote>
+<h2 id="2-8、无磁盘化复制"><a href="#2-8、无磁盘化复制" class="headerlink" title="2.8、无磁盘化复制"></a>2.8、无磁盘化复制</h2><blockquote>
+<p>不需要使用磁盘,利用socket 来完成复制,磁盘速度低,网络带宽较高</p>
+</blockquote>
+<h2 id="2-9、Redis缓存过期机制"><a href="#2-9、Redis缓存过期机制" class="headerlink" title="2.9、Redis缓存过期机制"></a>2.9、Redis缓存过期机制</h2><ul>
+<li><p>(主动) 定期删除</p>
+<p>  定时检查key,expire已符合key过期的要去,删去key</p>
+</li>
+<li><p>(被动) 惰性删除</p>
+<p>  key被访问到,该key过期的话,删除该key,内存会被一直占用</p>
+</li>
+</ul>
+<blockquote>
+<p>内存淘汰管理机制</p>
+</blockquote>
+<ul>
+<li>MEMORY MANAGEMENT</li>
+<li>maxmemory 当内存使用率已经到达设定值,则开始清理缓存</li>
+</ul>
+<blockquote>
+<p>缓存更新策略</p>
+<ul>
+<li>noeviction：旧缓存永不过期,新缓存设置不了,返回错误</li>
+<li>allkeys-lru：清除最少用的旧缓存,然后保存新的缓存(推荐使用)</li>
+<li>allkeys-random：在所有的缓存中随机删除(不推荐)</li>
+<li>volatile-lru：在那些设置了expire过期时间的缓存中,清除最少使用的旧缓存,然后保存新的缓存</li>
+<li>volatile-random：在那些设置了expire过期时间的缓存中,随机删除缓存</li>
+<li>volatile-ttl：在那些设置了expire过期时间的缓存中,删除即将过期的</li>
+</ul>
+</blockquote>
+<h1 id="三、Redis集群"><a href="#三、Redis集群" class="headerlink" title="三、Redis集群"></a>三、Redis集群</h1><h2 id="3-1、Redis哨兵"><a href="#3-1、Redis哨兵" class="headerlink" title="3.1、Redis哨兵"></a>3.1、Redis哨兵</h2><blockquote>
+<p>Sentinel(哨兵) 是用于监控Redis集群中Master状态的工具,是Redis高可用解决方案,哨兵可以监视一个或者多个Redis master服务,以及这些Master服务的所有从服务;当某个master服务器宕机后,会把这个master下的某个从服务升级为master来代替已宕机的master继续工作</p>
+</blockquote>
+<p>1.配置Redis哨兵,sentinel.conf 配置文件修改</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs java"># 关闭保护模式<br>&lt; <span class="hljs-keyword">protected</span>-mode no<br>&gt; # <span class="hljs-keyword">protected</span>-mode no<br># 开启守护进程,后台运行<br>&lt; daemonize yes<br>---<br>&gt; daemonize no<br># sentinel机制的日志目录<br>&lt; logfile /usr/local/redis/sentinel/redis-sentinel.log<br>---<br>&gt; logfile <span class="hljs-string">&quot;&quot;</span><br># sentinel 工作目录<br>&lt; dir /usr/local/redis/sentinel<br>---<br>&gt; dir /tmp<br># sentine机制设定主节点 最后的参数<span class="hljs-number">2</span>代表启动几个哨兵<br>&lt; sentinel monitor tho_master <span class="hljs-number">192.168</span><span class="hljs-number">.198</span><span class="hljs-number">.100</span> <span class="hljs-number">6379</span> <span class="hljs-number">2</span><br>---<br>&gt; sentinel monitor mymaster <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-number">6379</span> <span class="hljs-number">2</span><br># 设置sentinel机制的密码 <br>&lt; sentinel auth-pass tho_master <span class="hljs-number">123456</span><br>---<br>&gt; <br><br>&lt; <br># sentinel机制下 主节点失效的判断时间<br>&lt; sentinel down-after-milliseconds tho_master <span class="hljs-number">10000</span><br>---<br>&gt; sentinel down-after-milliseconds mymaster <span class="hljs-number">30000</span><br><br>&lt; # 主从节点并行同步的数量<br>&lt; sentinel parallel-syncs tho_master <span class="hljs-number">1</span><br>---<br>&gt; sentinel parallel-syncs mymaster <span class="hljs-number">1</span><br><br>&lt; # 主节点宕机,主从切换的时间<br>&lt; sentinel failover-timeout tho_master <span class="hljs-number">180000</span><br>---<br>&gt; sentinel failover-timeout mymaster <span class="hljs-number">180000</span><br><br></code></pre></td></tr></table></figure>
+
+<p>使用 <code>scp sentinel.conf root@192.168.198.101:/usr/local/redis</code> 将主节点配置好的sentinel配置文件传输给从节点</p>
+<p>2.创建redis-sentinel日志文件夹</p>
+<p>3.使用命令 <code>redis-sentinel sentinel.conf</code> 启动redis哨兵</p>
+<h2 id="3-2、Redis原master节点恢复"><a href="#3-2、Redis原master节点恢复" class="headerlink" title="3.2、Redis原master节点恢复"></a>3.2、Redis原master节点恢复</h2><blockquote>
+<p>原master节点恢复后,会自动变成slave,但是其同步状态有问题  <code>master_link_status:down</code></p>
+<p>可能是因为只设置了 两个从节点中redis.conf中的 <code>masterauth</code> ,这是用于同步master中的数据,但是一开始原master节点是不受影响的,当原master转换为slave后,由于其没有设置masterauth,所以不能从新的master同步数据,随之导致<code>info replication</code> 的时候,同步状态为down,所以只需要修改<code>redis.conf</code> 中的<code>masterauth</code> 为 <code>123456</code> 及redis设置的密码即可</p>
+</blockquote>
+<blockquote>
+<p>一般master数据无法同步给slave的检查方案如下</p>
+<ol>
+<li>网络通信问题,要保证互相ping通,内网互通</li>
+<li>关闭防火墙,对应的端口打开(虚拟机建议永久关闭防火墙,云服务器的话要保证内网互通)</li>
+<li>统一所有的密码,不要漏了某个节点没有设置</li>
+</ol>
+</blockquote>
+<h2 id="3-3、Redis哨兵信息查看"><a href="#3-3、Redis哨兵信息查看" class="headerlink" title="3.3、Redis哨兵信息查看"></a>3.3、Redis哨兵信息查看</h2><blockquote>
+<p>查看Redis哨兵详细信息</p>
+<p><code>[root@centos_7_100 init.d]# redis-cli -p 26379 127.0.0.1:26379&gt; sentinel master tho_master</code></p>
+<p>查看redis哨兵 从节点信息</p>
+<p><code>127.0.0.1:26379&gt; sentinel slaves tho_master</code></p>
+<p>查看 redis 哨兵 哨兵的信息</p>
+<p><code>127.0.0.1:26379&gt; sentinel sentinels tho_master</code></p>
+</blockquote>
+<blockquote>
+<p>哨兵部署约定</p>
+<ul>
+<li>哨兵节点至少要有至少三个或者奇数个节点</li>
+<li>哨兵分布式部署在不同的计算机节点(部署在一台服务器上的不同端口,如果该服务器宕机,所有的哨兵全部下线)</li>
+<li>一组哨兵只监听一组主从</li>
+</ul>
+</blockquote>
+<h2 id="3-4、Springboot集成Redis哨兵"><a href="#3-4、Springboot集成Redis哨兵" class="headerlink" title="3.4、Springboot集成Redis哨兵"></a>3.4、Springboot集成Redis哨兵</h2><blockquote>
+<p>修改配置文件</p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># redis 配置</span><br>  <span class="hljs-attr">redis:</span><br>      <span class="hljs-comment"># redis单机单实例</span><br><span class="hljs-comment">#    host: 192.168.198.100</span><br><span class="hljs-comment">#    password: 123456</span><br><span class="hljs-comment">#    port: 6379</span><br><span class="hljs-comment">#    database: 0</span><br>    <span class="hljs-comment"># redis 哨兵配置</span><br>    <span class="hljs-attr">database:</span> <span class="hljs-number">0</span><br>    <span class="hljs-attr">password:</span> <span class="hljs-number">123456</span><br>    <span class="hljs-attr">sentinel:</span><br>      <span class="hljs-attr">master:</span> <span class="hljs-string">tho_master</span><br>      <span class="hljs-attr">nodes:</span> <span class="hljs-number">192.168</span><span class="hljs-number">.198</span><span class="hljs-number">.100</span><span class="hljs-string">:26379,192.168.198.101:26379,192.168.198.102:26379</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="3-5、Redis集群"><a href="#3-5、Redis集群" class="headerlink" title="3.5、Redis集群"></a>3.5、Redis集群</h2><blockquote>
+<p>主从复制以及哨兵,它们可以提高读的并发,但是单个master节点容量有限,数据达到一定程度会有瓶颈,这个时候通过水平扩展为多master-slave成为集群</p>
+</blockquote>
+<h3 id="1、Redis-cluster"><a href="#1、Redis-cluster" class="headerlink" title="1、Redis-cluster"></a>1、Redis-cluster</h3><blockquote>
+<p>可以支撑多个master-slave,支持海量数据,实现高可用与高并发</p>
+<p>哨兵模式也是一种集群,它能够提高读请求的并发,但是容错方面可能会有一些问题,比如master同步数据给slave的时候,其实是异步复制,这个时候master宕机了,那么slave上的数据就没有master上的新,数据同步需要时间,1-2s左右的数据会丢失。master节点恢复转换成slave后,新数据则丢失</p>
+</blockquote>
+<ul>
+<li><p>集群特点</p>
+<blockquote>
+<ol>
+<li>每个节点知道彼此之间的关系,也会知道自己的角色,当然它们也会知道自己处于一个集群当中,它们彼此之间可以交互和通信,比如ping,pong。这些关系会保存到某个配置文件中,每个节点都有,这个在搭建的时候会进行配置,</li>
+<li>客户端要和集群建立连接的话,只需要和其中一个建立关系就行</li>
+<li>某个节点挂了,也是通过超过半数的节点来进行检测，客观下线后主从切换,和之前的哨兵模式是一样的道理</li>
+<li>Redis中存在很多的插槽,又可以称之为槽节点,用于存储数据</li>
+</ol>
+</blockquote>
+</li>
+<li><p>集群容错</p>
+<blockquote>
+<p>构建redis集群，至少需要3个节点作为master，以此组成一个高可用的集群,此外每个master都需要配置6个节点,这也是最经典的redis集群，也可以称之为三主三从,容错性更佳</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="2、集群搭建"><a href="#2、集群搭建" class="headerlink" title="2、集群搭建"></a>2、集群搭建</h3><ol>
+<li><p>修改各个服务器redis配置文件</p>
+<p>redis.conf</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"># 开启集群模式<br>cluster-enabled yes<br># 每一个节点需要一个配置文件,需要<span class="hljs-number">6</span>份,每个处于集群的节点角色需要告知其它所有节点,彼此知道,这个文件用于存储集群模式下的集群状态等信息,这个文件是由redis自己维护的,重新创建集群 删掉该文件即可<br>cluster-config-file nodes-<span class="hljs-number">100.</span>conf<br># 超时时间,超时则认为master宕机,随后主备切换<br>cluster-node-timeout <span class="hljs-number">5000</span><br># 开启AOF<br>appendonly yes<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>启动6个redis实例</li>
+</ol>
+<blockquote>
+<p>如果启动过程出错，把rdb等文件删除清空</p>
+</blockquote>
+<ol start="3">
+<li>创建集群</li>
+</ol>
+<blockquote>
+<p>redis3.x版本 需要使用redis-trib.rb 来构建集群</p>
+<p>新版redis试域redis-cli 来构建集群</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"># 创建集群 主从节点比例为 <span class="hljs-number">1</span> : <span class="hljs-number">1</span>  <span class="hljs-number">1</span>-<span class="hljs-number">3</span>节点为主 <span class="hljs-number">4</span>-<span class="hljs-number">6</span>节点为从<br>redis-cli -a <span class="hljs-number">123456</span> --cluster create ip1:port1 ip2:port2 ip3:port3 ip4:port4 ip5:port5 ip6:port6 --cluster-replicates <span class="hljs-number">1</span><br># 要进行密码验证<br>-a &lt;password&gt;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>slots: 槽 用于存储数据,主节点有,从节点没有</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>检查集群信息</p>
+<p>  <code>redis-cli -a 123456 --cluster check 192.168.198.100:6379</code> </p>
+</li>
+</ul>
+<h2 id="3-6、Slot槽节点"><a href="#3-6、Slot槽节点" class="headerlink" title="3.6、Slot槽节点"></a>3.6、Slot槽节点</h2><blockquote>
+<p>将槽节点平分给master节点    槽总数:16384</p>
+<p>内存槽 - Slot槽节点 </p>
+</blockquote>
+<h1 id="四、Redis缓存穿透"><a href="#四、Redis缓存穿透" class="headerlink" title="四、Redis缓存穿透"></a>四、Redis缓存穿透</h1><h2 id="4-1、Redis缓存穿透"><a href="#4-1、Redis缓存穿透" class="headerlink" title="4.1、Redis缓存穿透"></a>4.1、Redis缓存穿透</h2><blockquote>
+<p>数据库中不存在的记录,大量请求数据库会造成数据库很大压力</p>
+<p>即使是不存在数据库中的记录,也保存到redis中,保护数据库</p>
+<p>问题：某个key 在未来是可能用到的 ,redis也有该key的数据，不修改代码的情况下,该key的值不会更新(缓存一致性)</p>
+</blockquote>
+<blockquote>
+<p>要查询的key在redis中不存在,在数据库中也不存在,此时非法用户进行攻击,大量请求会打在数据库上，造成宕机，影响整个系统的运行，这种现象成为缓存穿透</p>
+<p>解决方案：把空的数据也缓存起来，比如空字符串，空对象，空数组或者 list</p>
+</blockquote>
+<h2 id="4-2、布隆过滤器"><a href="#4-2、布隆过滤器" class="headerlink" title="4.2、布隆过滤器"></a>4.2、布隆过滤器</h2><blockquote>
+<ul>
+<li><p>误判率 &lt;-&gt; 数组的大小 两者取舍</p>
+</li>
+<li><p>无法删除数据 </p>
+</li>
+</ul>
+</blockquote>
+<h2 id="4-3、缓存雪崩"><a href="#4-3、缓存雪崩" class="headerlink" title="4.3、缓存雪崩"></a>4.3、缓存雪崩</h2><blockquote>
+<p>大面积的缓存超过过期时间,全部失效</p>
+</blockquote>
+<p>==雪崩预防==</p>
+<ul>
+<li>设置key永不过期</li>
+<li>过期时间错开</li>
+<li>多缓存结合</li>
+<li>采购第三方redis数据库服务器</li>
+</ul>
+<h1 id="五、批量查询优化"><a href="#五、批量查询优化" class="headerlink" title="五、批量查询优化"></a>五、批量查询优化</h1><h2 id="5-1、multiget优化"><a href="#5-1、multiget优化" class="headerlink" title="5.1、multiget优化"></a>5.1、multiget优化</h2><blockquote>
+<p>循环批量查找</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-meta">@Test</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">testRedis</span><span class="hljs-params">()</span> </span>&#123;<br>      ArrayList&lt;String&gt; result = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>      ArrayList&lt;String&gt; params = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;()&#123;&#123;<br>          add(<span class="hljs-string">&quot;a&quot;</span>);<br>          add(<span class="hljs-string">&quot;b&quot;</span>);<br>          add(<span class="hljs-string">&quot;c&quot;</span>);<br>      &#125;&#125;;<br>      <span class="hljs-keyword">for</span> (String param : params) &#123;<br>          result.add(redisOperator.get(param));<br>      &#125;<br>      <span class="hljs-keyword">for</span> (String s : result) &#123;<br>          System.out.println(s);<br>      &#125;<br><br><br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>批量查询 同 mget</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">testRedis</span><span class="hljs-params">()</span> </span>&#123;<br>      <span class="hljs-comment">// ArrayList&lt;String&gt; result = new ArrayList&lt;&gt;();</span><br>      ArrayList&lt;String&gt; params = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;()&#123;&#123;<br>          add(<span class="hljs-string">&quot;a&quot;</span>);<br>          add(<span class="hljs-string">&quot;b&quot;</span>);<br>          add(<span class="hljs-string">&quot;c&quot;</span>);<br>      &#125;&#125;;<br>      <span class="hljs-comment">/*for (String param : params) &#123;</span><br><span class="hljs-comment">          result.add(redisOperator.get(param));</span><br><span class="hljs-comment">      &#125;*/</span><br>      List&lt;String&gt; strings = redisOperator.mGet(params);<br>      <span class="hljs-keyword">for</span> (String s : strings) &#123;<br>          System.out.println(s);<br>      &#125;<br><br><br>  &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="5-2、pipeline批量查询优化"><a href="#5-2、pipeline批量查询优化" class="headerlink" title="5.2、pipeline批量查询优化"></a>5.2、pipeline批量查询优化</h2><blockquote>
+<p>无需因为循环多次请求连接</p>
+<p>pipeline 可以获取更多的键值类型</p>
+<p>pipeline可以做更多的操作</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-comment">// 工具类内的方法</span><br><span class="hljs-comment">/**</span><br><span class="hljs-comment">	* <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment">	* <span class="hljs-doctag">@Date</span> 2021/11/21 13:52</span><br><span class="hljs-comment">	* <span class="hljs-doctag">@param</span> keys</span><br><span class="hljs-comment">	* <span class="hljs-doctag">@Return</span> List&lt;String&gt;</span><br><span class="hljs-comment">	* <span class="hljs-doctag">@Description</span>: 通过pipeline管道批量查询key</span><br><span class="hljs-comment">	*/</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> List&lt;Object&gt; <span class="hljs-title">pipelineBatchGet</span><span class="hljs-params">(List&lt;String&gt; keys)</span> </span>&#123;<br><br>		List&lt;Object&gt; result = redisTemplate.executePipelined(<span class="hljs-keyword">new</span> RedisCallback&lt;String&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">doInRedis</span><span class="hljs-params">(RedisConnection connection)</span> <span class="hljs-keyword">throws</span> DataAccessException </span>&#123;<br>				StringRedisConnection src = (StringRedisConnection)connection;<br>				<span class="hljs-keyword">for</span> (String key : keys) &#123;<br>					src.get(key);<br>				&#125;<br><br>				<span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>			&#125;<br>		&#125;);<br>		<span class="hljs-keyword">return</span> result;<br>	&#125;<br></code></pre></td></tr></table></figure>
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Redis/">Redis</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Redis/">Redis</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章可随意转载
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/11/30/Kafka/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Kafka</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/11/15/ElasticSearchAdvanced/">
+                        <span class="hidden-mobile">ElasticSearch</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

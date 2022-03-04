@@ -1,0 +1,741 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/mario.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="SpringCloud基础组件
+分布式锁相关">
+  <meta name="author" content="tho">
+  <meta name="keywords" content="">
+  <meta name="description" content="SpringCloud基础组件 分布式锁相关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式锁">
+<meta property="og:url" content="http://example.com/2021/12/26/Zookeeper/index.html">
+<meta property="og:site_name" content="Tho668&#39;s Blogs">
+<meta property="og:description" content="SpringCloud基础组件 分布式锁相关">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/12/26/Zookeeper/Zookeeper.assets/image-20211214163728776.png">
+<meta property="og:image" content="http://example.com/2021/12/26/Zookeeper/Zookeeper.assets/image-20211214163747172.png">
+<meta property="og:image" content="http://example.com/2021/12/26/Zookeeper/Zookeeper.assets/image-20211214221713182.png">
+<meta property="og:image" content="http://example.com/2021/12/26/Zookeeper/Zookeeper.assets/image-20211219171825749.png">
+<meta property="og:image" content="http://example.com/2021/12/26/Zookeeper/Zookeeper.assets/image-20211221115756739.png">
+<meta property="article:published_time" content="2021-12-26T04:18:26.000Z">
+<meta property="article:modified_time" content="2022-03-04T14:25:30.054Z">
+<meta property="article:author" content="tho">
+<meta property="article:tag" content="分布式锁">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2021/12/26/Zookeeper/Zookeeper.assets/image-20211214163728776.png">
+  
+  <title>分布式锁 - Tho668&#39;s Blogs</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tho668</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/galaxy.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="分布式锁">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-12-26 12:18" pubdate>
+        December 26, 2021 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      24k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      74 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">分布式锁</h1>
+            
+            <div class="markdown-body">
+              <p>SpringCloud基础组件</p>
+<p>分布式锁相关</p>
+<span id="more"></span>
+
+<h1 id="一、分布式锁"><a href="#一、分布式锁" class="headerlink" title="一、分布式锁"></a>一、分布式锁</h1><h2 id="2-1、超卖问题"><a href="#2-1、超卖问题" class="headerlink" title="2.1、超卖问题"></a>2.1、超卖问题</h2><h3 id="1-超卖现象一"><a href="#1-超卖现象一" class="headerlink" title="1.超卖现象一"></a>1.超卖现象一</h3><p>==某商品库存10件，结果卖出了15件==</p>
+<blockquote>
+<p>超卖现象:解决办法</p>
+<ul>
+<li>扣减库存不在程序中进行,而是通过数据库</li>
+<li>向数据库传递库存增量，扣减1个库存，增量为 -1</li>
+<li>在数据库 update 语句计算库存，通过update 行锁解决并发</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>不使用java语句进行商品数量的扣减,而是使用sql的更新语句来进行库存的扣减</p>
+<ul>
+<li>计算好库存,更新物品库存 (会产生超卖问题)</li>
+</ul>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-operator">&lt;</span>update id<span class="hljs-operator">=</span>&quot;updateProductCount&quot;<span class="hljs-operator">&gt;</span><br>      update product<br>      <span class="hljs-keyword">set</span> count <span class="hljs-operator">=</span> count <span class="hljs-operator">-</span> #&#123;purchaseProductNum,jdbcType<span class="hljs-operator">=</span><span class="hljs-type">INTEGER</span>&#125;,<br>      update_user <span class="hljs-operator">=</span> #&#123;updateUser,jdbcType<span class="hljs-operator">=</span><span class="hljs-type">VARCHAR</span>&#125;,<br>       update_time <span class="hljs-operator">=</span> #&#123;updateTime,jdbcType<span class="hljs-operator">=</span><span class="hljs-type">TIME</span>&#125;<br>      <span class="hljs-keyword">where</span> id <span class="hljs-operator">=</span> #&#123;id,jdbcType<span class="hljs-operator">=</span><span class="hljs-type">INTEGER</span>&#125;<br>    <span class="hljs-operator">&lt;</span><span class="hljs-operator">/</span>update<span class="hljs-operator">&gt;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>最终问题:商品库存可能成为负值</p>
+</blockquote>
+<h3 id="2-超卖现象二"><a href="#2-超卖现象二" class="headerlink" title="2.超卖现象二"></a>2.超卖现象二</h3><p>==商品库存减为了负数==</p>
+<blockquote>
+<p>产生原因：并发校验库存,造成库存充足的假想,update更新库存,导致库存成为负数</p>
+</blockquote>
+<blockquote>
+<p>解决办法一：更新了库存之后,进行库存的校验,如果库存为负数,抛出异常,回滚事务,放弃此线程本次操作</p>
+<p>解决办法二：校验库存,扣减库存统一加锁,使之成为原子性操作,并发时,线程只有获得锁才能校验,扣减库存,扣减库存后释放锁，确保库存不会扣除负数</p>
+</blockquote>
+<h2 id="2-2、使用锁解决超卖现象"><a href="#2-2、使用锁解决超卖现象" class="headerlink" title="2.2、使用锁解决超卖现象"></a>2.2、使用锁解决超卖现象</h2><h3 id="1-使用Synchronized锁"><a href="#1-使用Synchronized锁" class="headerlink" title="1.使用Synchronized锁"></a>1.使用Synchronized锁</h3><blockquote>
+<p>方式一：给方法加上Synchronized 关键字</p>
+<p>方式二：使用Synchronized 代码块</p>
+</blockquote>
+<h4 id="方式一-Synchronized-关键字"><a href="#方式一-Synchronized-关键字" class="headerlink" title="方式一:Synchronized 关键字"></a>方式一:Synchronized 关键字</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Transactional(rollbackFor = Exception.class)</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> Integer <span class="hljs-title">createOrder</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception</span>&#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>问题：库存只有1个，最后却生成了两笔订单,最终商品库存变为-1</p>
+<p>@Transactional 注解,第一个线程执行完商品的库存扣减,事务没有提交,数据库没有更新,紧接着第二个线程进来,查询商品库存,仍旧是1,还可以生成订单,最后两个库存扣减sql作为同一个事务,进行提交,商品库存减为负数</p>
+</blockquote>
+<h4 id="方式一-解决办法"><a href="#方式一-解决办法" class="headerlink" title="方式一:解决办法"></a>方式一:解决办法</h4><blockquote>
+<p>使用synchronized锁包裹事务,只有当事务提交之后,锁才会释放,交给下一个线程来执行方法中的内容</p>
+<p>成功解决问题</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Autowired</span><br><span class="hljs-keyword">private</span> PlatformTransactionManager platformTransactionManager;<br><span class="hljs-meta">@Autowired</span><br><span class="hljs-keyword">private</span> TransactionDefinition transactionDefinition;<br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> Integer <span class="hljs-title">createOrder</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception</span>&#123;<br>  			Product product = <span class="hljs-keyword">null</span>;<br>  			<span class="hljs-comment">// 定义一个事务</span><br>        TransactionStatus transaction = platformTransactionManager.getTransaction(transactionDefinition);<br>        <span class="hljs-comment">// 具体的业务流程</span><br>  			product = productMapper.selectByPrimaryKey(purchaseProductId);<br>            <span class="hljs-keyword">if</span> (product==<span class="hljs-keyword">null</span>)&#123;<br>              	<span class="hljs-comment">// 事务回滚</span><br>                platformTransactionManager.rollback(transaction);<br>                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Exception(<span class="hljs-string">&quot;购买商品：&quot;</span>+purchaseProductId+<span class="hljs-string">&quot;不存在&quot;</span>);<br>            &#125;<br>  			<span class="hljs-comment">//校验库存</span><br>        <span class="hljs-keyword">if</span> (purchaseProductNum &gt; currentCount)&#123;<br>         		 <span class="hljs-comment">// 事务的回滚</span><br>     	       platformTransactionManager.rollback(transaction);<br>             <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Exception(<span class="hljs-string">&quot;商品&quot;</span>+purchaseProductId+<span class="hljs-string">&quot;仅剩&quot;</span>+currentCount+<span class="hljs-string">&quot;件，无法购买&quot;</span>);<br>        &#125;<br>  			<span class="hljs-comment">// 提交事务</span><br>        platformTransactionManager.commit(transaction);<br>        <span class="hljs-keyword">return</span> order.getId();<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="方式二：Synchronized块"><a href="#方式二：Synchronized块" class="headerlink" title="方式二：Synchronized块"></a>方式二：Synchronized块</h4><blockquote>
+<p>对象锁：每一个对象有一个其自身的对象锁</p>
+<p>类锁：只有一个，该类实例化的所有对象共有一个类锁</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 第一种写法(对象锁)</span><br><span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>) &#123;<br>            <br>&#125;<br><span class="hljs-comment">// 放在方法内部,该类由spring创建,单例模式,获得了该对象的锁才能执行其中的方法</span><br><br><span class="hljs-comment">// 第二种写法(对象锁)</span><br>Object object = <span class="hljs-keyword">new</span> Object();<br><span class="hljs-keyword">synchronized</span> (object) &#123;<br><br>&#125;<br><br><span class="hljs-comment">// 第三种写法(类锁)</span><br><span class="hljs-comment">// 避免事务的嵌套</span><br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>) &#123;<br>          	<span class="hljs-comment">// 创建事务</span><br>            TransactionStatus transaction1 = platformTransactionManager.getTransaction(transactionDefinition);<br>            product = productMapper.selectByPrimaryKey(purchaseProductId);<br>            <span class="hljs-keyword">if</span> (product==<span class="hljs-keyword">null</span>)&#123;<br>                platformTransactionManager.rollback(transaction1);<br>                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Exception(<span class="hljs-string">&quot;购买商品：&quot;</span>+purchaseProductId+<span class="hljs-string">&quot;不存在&quot;</span>);<br>            &#125;<br><br>            <span class="hljs-comment">//商品当前库存</span><br>            Integer currentCount = product.getCount();<br>            System.out.println(Thread.currentThread().getName()+<span class="hljs-string">&quot;库存数：&quot;</span>+currentCount);<br>            <span class="hljs-comment">//校验库存</span><br>            <span class="hljs-keyword">if</span> (purchaseProductNum &gt; currentCount)&#123;<br>                platformTransactionManager.rollback(transaction1);<br>                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Exception(<span class="hljs-string">&quot;商品&quot;</span>+purchaseProductId+<span class="hljs-string">&quot;仅剩&quot;</span>+currentCount+<span class="hljs-string">&quot;件，无法购买&quot;</span>);<br>            &#125;<br>            <span class="hljs-comment">// 使用数据库的update行锁解决超卖问题</span><br>            productMapper.updateProductCount(purchaseProductNum,<span class="hljs-string">&quot;xxx&quot;</span>,<span class="hljs-keyword">new</span> Date(),product.getId());<br>            platformTransactionManager.commit(transaction1);<br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-使用ReentrantLock锁"><a href="#2-使用ReentrantLock锁" class="headerlink" title="2.使用ReentrantLock锁"></a>2.使用ReentrantLock锁</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> Lock lock = <span class="hljs-keyword">new</span> ReentrantLock();<br><span class="hljs-function"><span class="hljs-keyword">public</span> Integer <span class="hljs-title">createOrder</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception</span>&#123;<br>        Product product = <span class="hljs-keyword">null</span>;<br>				<span class="hljs-comment">// 加锁操作 , 当代码中有异常抛出时,要释放锁,否则异常抛出后,程序执行结束,但是锁还没有被释放,会导致之后的线程永远也拿不到锁</span><br>        lock.lock();<br>        <span class="hljs-keyword">try</span> &#123;<br>            TransactionStatus transaction1 = platformTransactionManager.getTransaction(transactionDefinition);<br>            product = productMapper.selectByPrimaryKey(purchaseProductId);<br>            <span class="hljs-keyword">if</span> (product==<span class="hljs-keyword">null</span>)&#123;<br>                platformTransactionManager.rollback(transaction1);<br>                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Exception(<span class="hljs-string">&quot;购买商品：&quot;</span>+purchaseProductId+<span class="hljs-string">&quot;不存在&quot;</span>);<br>            &#125;<br><br>            <span class="hljs-comment">//商品当前库存</span><br>            Integer currentCount = product.getCount();<br>            System.out.println(Thread.currentThread().getName()+<span class="hljs-string">&quot;库存数：&quot;</span>+currentCount);<br>            <span class="hljs-comment">//校验库存</span><br>            <span class="hljs-keyword">if</span> (purchaseProductNum &gt; currentCount)&#123;<br>                platformTransactionManager.rollback(transaction1);<br>                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Exception(<span class="hljs-string">&quot;商品&quot;</span>+purchaseProductId+<span class="hljs-string">&quot;仅剩&quot;</span>+currentCount+<span class="hljs-string">&quot;件，无法购买&quot;</span>);<br>            &#125;<br>            <span class="hljs-comment">// 使用数据库的update行锁解决超卖问题</span><br>            productMapper.updateProductCount(purchaseProductNum,<span class="hljs-string">&quot;xxx&quot;</span>,<span class="hljs-keyword">new</span> Date(),product.getId());<br>            platformTransactionManager.commit(transaction1);<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>          	<span class="hljs-comment">// 解锁</span><br>            lock.unlock();<br>        &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-3、单体应用锁局限性"><a href="#2-3、单体应用锁局限性" class="headerlink" title="2.3、单体应用锁局限性"></a>2.3、单体应用锁局限性</h2><p>通过之前的并发编程的学习，对JAVA中的锁有了深刻的理解。前面内容中讲到的锁都是有JDK官方提供的锁的解决方案，也就是说这些锁只能在一个JVM进程内有效，我们把这种锁叫做<strong>单体应用锁</strong></p>
+<blockquote>
+<p>如上图所示，在整个系统架构中，存在两个Tomcat，每个Tomcat是一个JVM。在进行秒杀业务的时候，由于大家都在抢购秒杀商品，大量的请求同时到达系统，通过Nginx分发到两个Tomcat上。我们通过一个极端的案例场景，可以更好地理解单体应用锁的局限性。假如，秒杀商品的数量只有1个，这时，这些大量的请求当中，只有一个请求可以成功的抢到这个商品，这就需要在扣减库存的方法上加锁，扣减库存的动作只能一个一个去执行，而不能同时去执行，如果同时执行，这1个商品可能同时被多个人抢到，从而产生超卖现象。加锁之后，扣减库存的动作一个一个去执行，凡是将库存扣减为负数的，都抛出异常，提示该用户没有抢到商品。通过加锁看似解决了秒杀的问题，但是事实上真                    的是这样吗？</p>
+<p>我们看到系统中存在两个Tomcat，我们加的锁是JDK提供的锁，这种锁只能在一个JVM下起作用，也就是在一个Tomcat内是没有问题的。当存在两个或两个以上的Tomcat时，大量的并发请求分散到不同的Tomcat上，在每一个Tomcat中都可以防止并发的产生，但是在多个Tomcat之间，每个Tomcat中获得锁的这个请求，又产生了并发，从而产生超卖现象。这也就是<strong>单体应用锁的局限性，它只能在一个JVM内加锁，而不能从这个应用层面去加锁。</strong></p>
+<p>那么这个问题如何解决呢？这就需要使用分布式锁了，在整个应用层面去加锁。什么是分布式锁呢？我们怎么去使用分布式锁呢？</p>
+</blockquote>
+<h3 id="1-分布式锁"><a href="#1-分布式锁" class="headerlink" title="1.分布式锁"></a>1.分布式锁</h3><blockquote>
+<p>在说分布式锁之前，我们看一看单体应用锁的特点，单体应用锁是在一个JVM进程内有效，无法跨JVM、跨进程。那么分布式锁的定义就出来了，分布式锁就是可以跨越多个JVM、跨越多个进程的锁，这种锁就叫做分布式锁。</p>
+</blockquote>
+<p><img src="Zookeeper.assets/image-20211214163728776.png" srcset="/img/loading.gif" lazyload alt="image-20211214163728776"></p>
+<blockquote>
+<p>在上图中，由于Tomcat是由Java启动的，所以每个Tomcat可以看成一个JVM，JVM内部的锁是无法跨越多个进程的。所以，我们要实现分布式锁，我们只能在这些JVM之外去寻找，通过其他的组件来实现分布式锁。系统的架构如图所示</p>
+</blockquote>
+<p><img src="Zookeeper.assets/image-20211214163747172.png" srcset="/img/loading.gif" lazyload alt="image-20211214163747172"></p>
+<blockquote>
+<p>两个Tomcat通过第三方的组件实现跨JVM、跨进程的分布式锁。这就是分布式锁的解决思路，找到所有JVM可以共同访问的第三方组件，通过第三方组件实现分布式锁。</p>
+</blockquote>
+<h3 id="2-分布式锁解决方案"><a href="#2-分布式锁解决方案" class="headerlink" title="2.分布式锁解决方案"></a>2.分布式锁解决方案</h3><p>分布式锁都是通过第三方组件来实现的，目前比较流行的分布式锁的解决方案有：</p>
+<ul>
+<li>数据库，通过数据库可以实现分布式锁，但是在高并发的情况下对数据库压力较大，所以很少使用。</li>
+<li>Redis，借助Redis也可以实现分布式锁，而且Redis的Java客户端种类很多，使用的方法也不尽相同。</li>
+<li>Zookeeper，Zookeeper也可以实现分布式锁，同样Zookeeper也存在多个Java客户端，使用方法也不相同。</li>
+</ul>
+<h2 id="2-4、基于数据库实现分布式锁"><a href="#2-4、基于数据库实现分布式锁" class="headerlink" title="2.4、基于数据库实现分布式锁"></a>2.4、基于数据库实现分布式锁</h2><h3 id="1-步骤"><a href="#1-步骤" class="headerlink" title="1.步骤"></a>1.步骤</h3><ul>
+<li>多个线程,多个进程访问共同组件数据库</li>
+<li>通过select … for update 访问同一条数据</li>
+<li>for update 锁定某一行数据,其它线程只能等待</li>
+</ul>
+<blockquote>
+<p>两线程同时对一行数据加锁,两线程会争抢锁,抢到了锁的线程才能执行下去</p>
+</blockquote>
+<h3 id="2-优缺点"><a href="#2-优缺点" class="headerlink" title="2.优缺点"></a>2.优缺点</h3><ul>
+<li>优点：简单方便,易于理解，易于操作</li>
+<li>缺点：并发量大时，对数据库压力较大</li>
+<li>建议：作为锁的数据库和业务数据库分开</li>
+</ul>
+<h2 id="2-5、基于Redis的Setnx实现分布式锁"><a href="#2-5、基于Redis的Setnx实现分布式锁" class="headerlink" title="2.5、基于Redis的Setnx实现分布式锁"></a>2.5、基于Redis的Setnx实现分布式锁</h2><h3 id="1-实现原理"><a href="#1-实现原理" class="headerlink" title="1.实现原理"></a>1.实现原理</h3><blockquote>
+<ul>
+<li>Redis是单线程执行,即使多线程的请求,最终还是单线程顺序执行,借助Redis这个特性,其相关语句的操作都是原子性的</li>
+<li>利用NX的原子性,多个线程并发时，只有一个线程可以设置成功</li>
+<li>设置成功即获得锁，可以执行后续的业务处理</li>
+<li>如果出现了异常，过了锁的有效期，锁自动释放</li>
+</ul>
+</blockquote>
+<ul>
+<li>获取锁的Redis命令</li>
+<li>SET resource_name my_random_value NX PX 30000<ul>
+<li>resource_name ： 资源名称，可根据不同的业务区分不同的锁</li>
+<li>my_random_value: 随机值,每个线程的随机值都不相同，用于释放锁时的校验</li>
+<li>NX ： key不存时设置成功,key存在则设置失败</li>
+<li>PX：自动失效时间,出现异常情况，锁可以过期失效(也就是自动释放锁)</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-释放锁"><a href="#2-释放锁" class="headerlink" title="2.释放锁"></a>2.释放锁</h3><blockquote>
+<ul>
+<li>使用redis的delete命令</li>
+<li>释放锁校验之前设置的随机数,相同才能释放</li>
+<li>释放锁的LUA脚本</li>
+</ul>
+</blockquote>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">if</span> redis.call(<span class="hljs-string">&quot;get&quot;</span>, KEYS[<span class="hljs-number">1</span>]) == ARGV[<span class="hljs-number">1</span>] <span class="hljs-keyword">then</span><br>  <span class="hljs-keyword">return</span> redis.call(<span class="hljs-string">&quot;del&quot;</span>, KEYS[<span class="hljs-number">1</span>])<br><span class="hljs-keyword">else</span><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="Zookeeper.assets/image-20211214221713182.png" srcset="/img/loading.gif" lazyload alt="image-20211214221713182"></p>
+<h3 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3.代码实现"></a>3.代码实现</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Autowired</span><br><span class="hljs-keyword">private</span> RedisTemplate redisTemplate;<br><br><span class="hljs-meta">@RequestMapping(&quot;redisLock&quot;)</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">redisLock</span><span class="hljs-params">()</span> </span>&#123;<br>    log.info(<span class="hljs-string">&quot;我进入了方法&quot;</span>);<br>    String key = <span class="hljs-string">&quot;redisKey&quot;</span>;<br>    String value = UUID.randomUUID().toString();<br>    RedisCallback&lt;Boolean&gt; redisCallback = connection -&gt; &#123;<br>        <span class="hljs-comment">// 设置NX</span><br>        RedisStringCommands.SetOption setOption = RedisStringCommands.SetOption.ifAbsent();<br>        <span class="hljs-comment">// 过期时间</span><br>        Expiration expiration = Expiration.seconds(<span class="hljs-number">30</span>);<br>        <span class="hljs-comment">// 序列化key</span><br>        <span class="hljs-keyword">byte</span>[] redisKey = redisTemplate.getKeySerializer().serialize(key);<br>        <span class="hljs-comment">// 序列化value</span><br>        <span class="hljs-keyword">byte</span>[] redisValue = redisTemplate.getValueSerializer().serialize(value);<br>        <span class="hljs-comment">// 执行setNx操作</span><br>        Boolean result = connection.set(redisKey, redisValue, expiration, setOption);<br>        <span class="hljs-keyword">return</span> result;<br><br>    &#125;;<br>    Boolean lock = (Boolean) redisTemplate.execute(redisCallback);<br>    <span class="hljs-keyword">if</span> (lock) &#123;<br>        log.info(<span class="hljs-string">&quot;我获得了锁&quot;</span>);<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">// 执行业务代码</span><br>          <br>          <br>            Thread.sleep(<span class="hljs-number">15000</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            <span class="hljs-comment">// 释放redis分布式锁</span><br>            String script = <span class="hljs-string">&quot;if redis.call(\&quot;get\&quot;, KEYS[1]) == ARGV[1] then\n&quot;</span> +<br>                    <span class="hljs-string">&quot;  return redis.call(\&quot;del\&quot;, KEYS[1])\n&quot;</span> +<br>                    <span class="hljs-string">&quot;else\n&quot;</span> +<br>                    <span class="hljs-string">&quot;  return 0\n&quot;</span> +<br>                    <span class="hljs-string">&quot;end&quot;</span>;<br>            RedisScript&lt;Boolean&gt; redisScript = RedisScript.of(script, Boolean.class);<br>            List&lt;String&gt; keys = Arrays.asList(key);<br>            Boolean result = (Boolean)redisTemplate.execute(redisScript, keys, value);<br>            log.info(<span class="hljs-string">&quot;释放锁的结果&quot;</span> + result);<br>        &#125;<br>    &#125;<br>    log.info(<span class="hljs-string">&quot;方法执行完成&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;方法执行完成&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-6、分布式锁解决定时任务重复问题"><a href="#2-6、分布式锁解决定时任务重复问题" class="headerlink" title="2.6、分布式锁解决定时任务重复问题"></a>2.6、分布式锁解决定时任务重复问题</h2><h3 id="1、原理"><a href="#1、原理" class="headerlink" title="1、原理"></a>1、原理</h3><blockquote>
+<p>定时任务执行之前先获取分布式锁,获得了分布式锁的任务才会执行定时任务</p>
+</blockquote>
+<h3 id="2、Redis分布式锁封装"><a href="#2、Redis分布式锁封装" class="headerlink" title="2、Redis分布式锁封装"></a>2、Redis分布式锁封装</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.example.distributelock.lock;<br><br><span class="hljs-keyword">import</span> lombok.extern.slf4j.Slf4j;<br><span class="hljs-keyword">import</span> org.springframework.data.redis.connection.RedisStringCommands;<br><span class="hljs-keyword">import</span> org.springframework.data.redis.core.RedisCallback;<br><span class="hljs-keyword">import</span> org.springframework.data.redis.core.RedisTemplate;<br><span class="hljs-keyword">import</span> org.springframework.data.redis.core.script.RedisScript;<br><span class="hljs-keyword">import</span> org.springframework.data.redis.core.types.Expiration;<br><br><span class="hljs-keyword">import</span> java.util.Arrays;<br><span class="hljs-keyword">import</span> java.util.List;<br><span class="hljs-keyword">import</span> java.util.UUID;<br><br><span class="hljs-meta">@Slf4j</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedisLock</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">AutoCloseable</span> </span>&#123;<br><br>    <span class="hljs-keyword">private</span> RedisTemplate redisTemplate;<br>    <span class="hljs-keyword">private</span> String key;<br>    <span class="hljs-keyword">private</span> String value;<br>    <span class="hljs-comment">//单位：秒</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> expireTime;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">RedisLock</span><span class="hljs-params">(RedisTemplate redisTemplate,String key,<span class="hljs-keyword">int</span> expireTime)</span></span>&#123;<br>        <span class="hljs-keyword">this</span>.redisTemplate = redisTemplate;<br>        <span class="hljs-keyword">this</span>.key = key;<br>        <span class="hljs-keyword">this</span>.expireTime=expireTime;<br>        <span class="hljs-keyword">this</span>.value = UUID.randomUUID().toString();<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 获取分布式锁</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">getLock</span><span class="hljs-params">()</span></span>&#123;<br>        RedisCallback&lt;Boolean&gt; redisCallback = connection -&gt; &#123;<br>            <span class="hljs-comment">//设置NX</span><br>            RedisStringCommands.SetOption setOption = RedisStringCommands.SetOption.ifAbsent();<br>            <span class="hljs-comment">//设置过期时间</span><br>            Expiration expiration = Expiration.seconds(expireTime);<br>            <span class="hljs-comment">//序列化key</span><br>            <span class="hljs-keyword">byte</span>[] redisKey = redisTemplate.getKeySerializer().serialize(key);<br>            <span class="hljs-comment">//序列化value</span><br>            <span class="hljs-keyword">byte</span>[] redisValue = redisTemplate.getValueSerializer().serialize(value);<br>            <span class="hljs-comment">//执行setnx操作</span><br>            Boolean result = connection.set(redisKey, redisValue, expiration, setOption);<br>            <span class="hljs-keyword">return</span> result;<br>        &#125;;<br><br>        <span class="hljs-comment">//获取分布式锁</span><br>        Boolean lock = (Boolean)redisTemplate.execute(redisCallback);<br>        <span class="hljs-keyword">return</span> lock;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">unLock</span><span class="hljs-params">()</span> </span>&#123;<br>        String script = <span class="hljs-string">&quot;if redis.call(\&quot;get\&quot;,KEYS[1]) == ARGV[1] then\n&quot;</span> +<br>                <span class="hljs-string">&quot;    return redis.call(\&quot;del\&quot;,KEYS[1])\n&quot;</span> +<br>                <span class="hljs-string">&quot;else\n&quot;</span> +<br>                <span class="hljs-string">&quot;    return 0\n&quot;</span> +<br>                <span class="hljs-string">&quot;end&quot;</span>;<br>        RedisScript&lt;Boolean&gt; redisScript = RedisScript.of(script,Boolean.class);<br>        List&lt;String&gt; keys = Arrays.asList(key);<br><br>        Boolean result = (Boolean)redisTemplate.execute(redisScript, keys, value);<br>        log.info(<span class="hljs-string">&quot;释放锁的结果：&quot;</span>+result);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">close</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        unLock();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="二、Zookeeper分布式锁"><a href="#二、Zookeeper分布式锁" class="headerlink" title="二、Zookeeper分布式锁"></a>二、Zookeeper分布式锁</h1><h2 id="1、zookeeper基本概念"><a href="#1、zookeeper基本概念" class="headerlink" title="1、zookeeper基本概念"></a>1、zookeeper基本概念</h2><blockquote>
+<p>基于 Zookeeper 的瞬时节点实现分布式锁</p>
+</blockquote>
+<p>==数据结构==</p>
+<blockquote>
+<p>zookeeper数据结构</p>
+<p>一棵树 根节点 子节点</p>
+</blockquote>
+<p><img src="Zookeeper.assets/image-20211219171825749.png" srcset="/img/loading.gif" lazyload alt="image-20211219171825749"></p>
+<h2 id="2、Zookeeper环境搭建"><a href="#2、Zookeeper环境搭建" class="headerlink" title="2、Zookeeper环境搭建"></a>2、Zookeeper环境搭建</h2><p>后台端口改为了 63010</p>
+<h3 id="1-1、下载zookeeper软件包"><a href="#1-1、下载zookeeper软件包" class="headerlink" title="1.1、下载zookeeper软件包"></a>1.1、下载zookeeper软件包</h3><p><a target="_blank" rel="noopener" href="https://downloads.apache.org/zookeeper/zookeeper-3.6.3/">https://downloads.apache.org/zookeeper/zookeeper-3.6.3/</a></p>
+<ul>
+<li>这⾥使⽤的是 3.6.3 版，下载的是 apache-zookeeper-3.6.3-bin.tar.gz 压缩包，并将其放在 了 /root/workspace/software ⽬录下</li>
+</ul>
+<h3 id="1-2、解压并安装"><a href="#1-2、解压并安装" class="headerlink" title="1.2、解压并安装"></a>1.2、解压并安装</h3><ol>
+<li> /usr/local/ 下创建 zookeeper ⽂件夹并进⼊</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@centos_7_100 ~]# cd /usr/local<br>[root@centos_7_100 local]# mkdir zookeeper<br>[root@centos_7_100 local]# cd zookeeper<br><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>将 ZooKeeper 安装包解压到 /usr/local/zookeeper 中即可</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@centos_7_100 zookeeper]# tar -zxvf /root/workspace/software/apache-zookeeper-3.6.3-bin.tar.gz -C ./<br><br></code></pre></td></tr></table></figure>
+
+<p>解压完之后， /usr/local/zookeerper ⽬录中会出现⼀个 apache-zookeeper-3.6.1-bin 的⽬录</p>
+<h3 id="1-3、创建DATA⽬录"><a href="#1-3、创建DATA⽬录" class="headerlink" title="1.3、创建DATA⽬录"></a>1.3、创建DATA⽬录</h3><p>直接在 /usr/local/zookeeper/apache-zookeeper-3.6.1-bin ⽬录中创建⼀个 data ⽬录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@centos_7_100 zookeeper]# ll<br>总用量 0<br>drwxr-xr-x. 6 root root 133 12月  7 12:51 apache-zookeeper-3.6.3-bin<br>[root@centos_7_100 zookeeper]# cd apache-zookeeper-3.6.3-bin/<br>[root@centos_7_100 apache-zookeeper-3.6.3-bin]# ll<br>总用量 36<br>drwxr-xr-x. 2 esuser esuser  4096 4月   9 2021 bin<br>drwxr-xr-x. 2 esuser esuser    77 4月   9 2021 conf<br>drwxr-xr-x. 5 esuser esuser  4096 4月   9 2021 docs<br>drwxr-xr-x. 2 root   root    4096 12月  7 12:51 lib<br>-rw-r--r--. 1 esuser esuser 11358 4月   9 2021 LICENSE.txt<br>-rw-r--r--. 1 esuser esuser   432 4月   9 2021 NOTICE.txt<br>-rw-r--r--. 1 esuser esuser  1963 4月   9 2021 README.md<br>-rw-r--r--. 1 esuser esuser  3166 4月   9 2021 README_packaging.md<br>[root@centos_7_100 apache-zookeeper-3.6.3-bin]# mkdir data<br>[root@centos_7_100 apache-zookeeper-3.6.3-bin]# <br><br></code></pre></td></tr></table></figure>
+
+<p>等下该 data ⽬录地址要配到 ZooKeeper 的配置⽂件中</p>
+<h3 id="1-4、创建配置⽂件并修改"><a href="#1-4、创建配置⽂件并修改" class="headerlink" title="1.4、创建配置⽂件并修改"></a>1.4、创建配置⽂件并修改</h3><p>进⼊到 zookeeper 的 conf ⽬录，复制 zoo_sample.cfg 得到 zoo.cfg ：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@centos_7_100 apache-zookeeper-3.6.3-bin]# cd conf/<br>[root@centos_7_100 conf]# ll<br>总用量 12<br>-rw-r--r--. 1 esuser esuser  535 4月   9 2021 configuration.xsl<br>-rw-r--r--. 1 esuser esuser 3435 4月   9 2021 log4j.properties<br>-rw-r--r--. 1 esuser esuser 1148 4月   9 2021 zoo_sample.cfg<br>[root@centos_7_100 conf]# cp zoo_sample.cfg zoo.cfg<br>[root@centos_7_100 conf]# ll<br>总用量 16<br>-rw-r--r--. 1 esuser esuser  535 4月   9 2021 configuration.xsl<br>-rw-r--r--. 1 esuser esuser 3435 4月   9 2021 log4j.properties<br>-rw-r--r--. 1 root   root   1148 12月  7 12:53 zoo.cfg<br>-rw-r--r--. 1 esuser esuser 1148 4月   9 2021 zoo_sample.cfg<br></code></pre></td></tr></table></figure>
+
+<p>修改配置⽂件 zoo.cfg ，将其中的 dataDir 修改为上⾯刚创建的 data ⽬录，其他选项可以按需配置</p>
+<p>修改内容为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">dataDir=/usr/local/zookeeper/apache-zookeeper-<span class="hljs-number">3.6</span><span class="hljs-number">.3</span>-bin/data<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-5、启动Zookeeper"><a href="#1-5、启动Zookeeper" class="headerlink" title="1.5、启动Zookeeper"></a>1.5、启动Zookeeper</h3><p>回退到 /usr/local/zookeeper/apache-zookeeper-3.6.3-bin 目录 </p>
+<ul>
+<li>执行命令</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@centos_7_100 apache-zookeeper-3.6.3-bin]# ./bin/zkServer.sh start<br></code></pre></td></tr></table></figure>
+
+<p>启动后可以通过如下命令来检查启动后的状态：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@centos_7_100 apache-zookeeper-3.6.3-bin]# ./bin/zkServer.sh status<br>ZooKeeper JMX enabled by default<br>Using config: /usr/local/zookeeper/apache-zookeeper-3.6.3-bin/bin/../conf/zoo.cfg<br>Client port found: 2181. Client address: localhost. Client SSL: false.<br>Mode: standalone<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-6、启动可能会报错"><a href="#1-6、启动可能会报错" class="headerlink" title="1.6、启动可能会报错"></a>1.6、启动可能会报错</h3><p>/usr/local/zookeeper/apache-zookeeper-3.6.3-bin/logs目录下的</p>
+<p>zookeeper-root-server-centos_7_100.out 可以查看zookeeper启动的详细信息</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Problem starting AdminServer on address <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>, port <span class="hljs-number">8080</span> and command URL /commands<br></code></pre></td></tr></table></figure>
+
+<p>上面这个报错可能是8080端口被占用了,</p>
+<p> 可在<code>zoo.cfg</code>中配置<code>admin.serverPort=8088</code>修改端口。</p>
+<h3 id="1-7、配置环境变量"><a href="#1-7、配置环境变量" class="headerlink" title="1.7、配置环境变量"></a>1.7、配置环境变量</h3><p>编辑配置⽂件：/etc路径下 的 profile文件</p>
+<p>在文件尾部加入部加⼊ ZooKeeper 的 bin 路径配置即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">export ZOOKEEPER_HOME=/usr/local/zookeeper/apache-zookeeper-3.6.1-bin<br>export PATH=$PATH:$ZOOKEEPER_HOME/bin<br></code></pre></td></tr></table></figure>
+
+<p>最后执行 <code>source /etc/profile</code> 使环境变量生效即可</p>
+<h3 id="1-8、设置开机⾃启"><a href="#1-8、设置开机⾃启" class="headerlink" title="1.8、设置开机⾃启"></a>1.8、设置开机⾃启</h3><p>⾸先进⼊ /etc/rc.d/init.d ⽬录，创建⼀个名为 zookeeper 的⽂件，并赋予执⾏权限</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@centos_7_100 ~]# cd /etc/rc.d/init.d<br>[root@centos_7_100 init.d]# ll<br>总用量 56<br>-rwxr-xr-x. 1 root root   961 12月  3 10:17 fdfs_storaged<br>-rwxr-xr-x. 1 root root   963 12月  3 10:17 fdfs_trackerd<br>-rw-r--r--. 1 root root 18281 5月  22 2020 functions<br>-rwxr-xr-x. 1 root root  4569 5月  22 2020 netconsole<br>-rwxr-xr-x. 1 root root  7928 5月  22 2020 network<br>-rw-r--r--. 1 root root  1160 10月  2 2020 README<br>-rwxr-xr-x. 1 root root  1422 11月 14 20:38 redis_init_script<br>-rwxr-xr-x. 1 root root   817 11月 13 12:18 tomcat<br>[root@centos_7_100 init.d]# touch zookeeper<br>[root@centos_7_100 init.d]# chmod +x zookeeper <br></code></pre></td></tr></table></figure>
+
+<p>接下来编辑 zookeeper ⽂件，并在其中加⼊如下内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br><span class="hljs-meta">#</span><span class="bash">chkconfig:- 20 90</span><br><span class="hljs-meta">#</span><span class="bash">description:zookeeper</span><br><span class="hljs-meta">#</span><span class="bash">processname:zookeeper</span><br>ZOOKEEPER_HOME=/usr/local/zookeeper/apache-zookeeper-3.6.3-bin<br>export JAVA_HOME=/usr/local/java/jdk1.8.0_221 # 此处根据你的实际情况更换对<br>应<br>case $1 in<br> start) su root $ZOOKEEPER_HOME/bin/zkServer.sh start;;<br> stop) su root $ZOOKEEPER_HOME/bin/zkServer.sh stop;;<br> status) su root $ZOOKEEPER_HOME/bin/zkServer.sh status;;<br> restart) su root $ZOOKEEPER_HOME/bin/zkServer.sh restart;;<br> *) echo &quot;require start|stop|status|restart&quot; ;;<br>esac<br></code></pre></td></tr></table></figure>
+
+<p>最后加⼊开机启动即可：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@centos_7_100 init.d]# chkconfig --add zookeeper <br>[root@centos_7_100 init.d]# chkconfig zookeeper on <br></code></pre></td></tr></table></figure>
+
+<h3 id="1-9、zookeeper-cli客户端"><a href="#1-9、zookeeper-cli客户端" class="headerlink" title="1.9、zookeeper cli客户端"></a>1.9、zookeeper cli客户端</h3><h2 id="3、Zookeeper分布式锁原理"><a href="#3、Zookeeper分布式锁原理" class="headerlink" title="3、Zookeeper分布式锁原理"></a>3、Zookeeper分布式锁原理</h2><h3 id="3-1、实现原理"><a href="#3-1、实现原理" class="headerlink" title="3.1、实现原理"></a>3.1、实现原理</h3><blockquote>
+<ul>
+<li>利用Zookeeper的瞬时有序节点的特性</li>
+<li>多线程并发创建瞬时节点时,得到有序的序列</li>
+<li>序号最小的线程获得锁</li>
+<li>其它的线程监听自己序号的前一个序号</li>
+</ul>
+</blockquote>
+<h3 id="3-2、Zookeeper的观察器"><a href="#3-2、Zookeeper的观察器" class="headerlink" title="3.2、Zookeeper的观察器"></a>3.2、Zookeeper的观察器</h3><blockquote>
+<p>可设置观察器的3个方法：getData(); , getChildren(); , exists();</p>
+<p>观察器只能监控一次,再监控需重新设置</p>
+</blockquote>
+<h2 id="4、Maven依赖"><a href="#4、Maven依赖" class="headerlink" title="4、Maven依赖"></a>4、Maven依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.zookeeper<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>zookeeper<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.4.14<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="5、代码实现"><a href="#5、代码实现" class="headerlink" title="5、代码实现"></a>5、代码实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.example.distributezklock.lock;<br><br><span class="hljs-keyword">import</span> lombok.extern.slf4j.Slf4j;<br><span class="hljs-keyword">import</span> org.apache.zookeeper.*;<br><span class="hljs-keyword">import</span> org.apache.zookeeper.data.Stat;<br><br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.util.Collections;<br><span class="hljs-keyword">import</span> java.util.List;<br><br><span class="hljs-meta">@Slf4j</span><br><span class="hljs-comment">/**</span><br><span class="hljs-comment">* <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment">* <span class="hljs-doctag">@Date</span> 2021/12/21 10:54</span><br><span class="hljs-comment">* <span class="hljs-doctag">@param</span> null</span><br><span class="hljs-comment">* <span class="hljs-doctag">@Return</span> null</span><br><span class="hljs-comment">* <span class="hljs-doctag">@Description</span>: Zookeeper 分布式锁</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ZkLock</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">AutoCloseable</span>, <span class="hljs-title">Watcher</span> </span>&#123;<br><br>    <span class="hljs-keyword">private</span> ZooKeeper zooKeeper;<br>    <span class="hljs-keyword">private</span> String znode;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ZkLock</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException </span>&#123;<br>        <span class="hljs-keyword">this</span>.zooKeeper = <span class="hljs-keyword">new</span> ZooKeeper(<span class="hljs-string">&quot;192.168.198.100:2181&quot;</span>,<br>                <span class="hljs-number">10000</span>,<span class="hljs-keyword">this</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">getLock</span><span class="hljs-params">(String businessCode)</span> </span>&#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">//创建业务 根节点</span><br>            Stat stat = zooKeeper.exists(<span class="hljs-string">&quot;/&quot;</span> + businessCode, <span class="hljs-keyword">false</span>);<br>            <span class="hljs-comment">// 创建持久节点</span><br>            <span class="hljs-keyword">if</span> (stat == <span class="hljs-keyword">null</span>)&#123;<br>                zooKeeper.create(<span class="hljs-string">&quot;/&quot;</span> + businessCode,businessCode.getBytes(),<br>                        ZooDefs.Ids.OPEN_ACL_UNSAFE,<br>                        CreateMode.PERSISTENT);<br>            &#125;<br><br>            <span class="hljs-comment">//创建瞬时有序节点  /order/order_00000001</span><br>            znode = zooKeeper.create(<span class="hljs-string">&quot;/&quot;</span> + businessCode + <span class="hljs-string">&quot;/&quot;</span> + businessCode + <span class="hljs-string">&quot;_&quot;</span>, businessCode.getBytes(),<br>                    ZooDefs.Ids.OPEN_ACL_UNSAFE,<br>                    CreateMode.EPHEMERAL_SEQUENTIAL);<br><br>            <span class="hljs-comment">//获取业务节点下 所有的子节点</span><br>            List&lt;String&gt; childrenNodes = zooKeeper.getChildren(<span class="hljs-string">&quot;/&quot;</span> + businessCode, <span class="hljs-keyword">false</span>);<br>            <span class="hljs-comment">//子节点排序</span><br>            Collections.sort(childrenNodes);<br>            <span class="hljs-comment">//获取序号最小的（第一个）子节点</span><br>            String firstNode = childrenNodes.get(<span class="hljs-number">0</span>);<br>            <span class="hljs-comment">//如果创建的节点是第一个子节点，则获得锁</span><br>            <span class="hljs-keyword">if</span> (znode.endsWith(firstNode))&#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>            &#125;<br>            <span class="hljs-comment">//不是第一个子节点，则监听前一个节点</span><br>            String lastNode = firstNode;<br>            <span class="hljs-keyword">for</span> (String node:childrenNodes)&#123;<br>                <span class="hljs-keyword">if</span> (znode.endsWith(node))&#123;<br>                    zooKeeper.exists(<span class="hljs-string">&quot;/&quot;</span>+businessCode+<span class="hljs-string">&quot;/&quot;</span>+lastNode,<span class="hljs-keyword">true</span>);<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<span class="hljs-keyword">else</span> &#123;<br>                    lastNode = node;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>)&#123;<br>                wait();<br>            &#125;<br><br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br><br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">close</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        zooKeeper.delete(znode,-<span class="hljs-number">1</span>);<br>        zooKeeper.close();<br>        log.info(<span class="hljs-string">&quot;我已经释放了锁！&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">process</span><span class="hljs-params">(WatchedEvent event)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (event.getType() == Event.EventType.NodeDeleted)&#123;<br>            <span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>)&#123;<br>                notify();<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="6、单元测试"><a href="#6、单元测试" class="headerlink" title="6、单元测试"></a>6、单元测试</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">testZkLock</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>    ZkLock zkLock = <span class="hljs-keyword">new</span> ZkLock();<br>    <span class="hljs-keyword">boolean</span> lock = zkLock.getLock(<span class="hljs-string">&quot;order&quot;</span>);<br>    log.info(<span class="hljs-string">&quot;获得锁的结果：&quot;</span>+lock);<br><br>    zkLock.close();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="三、Curator分布式锁"><a href="#三、Curator分布式锁" class="headerlink" title="三、Curator分布式锁"></a>三、Curator分布式锁</h1><h2 id="3-1、实现"><a href="#3-1、实现" class="headerlink" title="3.1、实现"></a>3.1、实现</h2><blockquote>
+<ul>
+<li>引入Curator客户端</li>
+<li>Curator已经实现了分布式锁的方法</li>
+<li>直接调用即可</li>
+</ul>
+</blockquote>
+<h2 id="3-2、Maven依赖"><a href="#3-2、Maven依赖" class="headerlink" title="3.2、Maven依赖"></a>3.2、Maven依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.curator<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>curator-recipes<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>4.2.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="3-3、单元测试"><a href="#3-3、单元测试" class="headerlink" title="3.3、单元测试"></a>3.3、单元测试</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">testCuratorLock</span><span class="hljs-params">()</span></span>&#123;<br>    RetryPolicy retryPolicy = <span class="hljs-keyword">new</span> ExponentialBackoffRetry(<span class="hljs-number">1000</span>, <span class="hljs-number">3</span>);<br>    CuratorFramework client = CuratorFrameworkFactory.newClient(<span class="hljs-string">&quot;192.168.198.100:2181&quot;</span>, retryPolicy);<br>    client.start();<br>    InterProcessMutex lock = <span class="hljs-keyword">new</span> InterProcessMutex(client, <span class="hljs-string">&quot;/order&quot;</span>);<br>    <span class="hljs-keyword">try</span> &#123;<br>        <span class="hljs-keyword">if</span> ( lock.acquire(<span class="hljs-number">30</span>, TimeUnit.SECONDS) ) &#123;<br>            <span class="hljs-keyword">try</span>  &#123;<br>                log.info(<span class="hljs-string">&quot;我获得了锁！！！&quot;</span>);<br>            &#125;<br>            <span class="hljs-keyword">finally</span>  &#123;<br>                lock.release();<br>            &#125;<br>        &#125;<br>    &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>        e.printStackTrace();<br>    &#125;<br>    client.close();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-4、结合controller使用"><a href="#3-4、结合controller使用" class="headerlink" title="3.4、结合controller使用"></a>3.4、结合controller使用</h2><p>生成Bean</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Bean(initMethod=&quot;start&quot;,destroyMethod = &quot;close&quot;)</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> CuratorFramework <span class="hljs-title">getCuratorFramework</span><span class="hljs-params">()</span> </span>&#123;<br>    RetryPolicy retryPolicy = <span class="hljs-keyword">new</span> ExponentialBackoffRetry(<span class="hljs-number">1000</span>, <span class="hljs-number">3</span>);<br>    CuratorFramework client = CuratorFrameworkFactory.newClient(<span class="hljs-string">&quot;192.168.198.100:2181&quot;</span>, retryPolicy);<br>    <span class="hljs-keyword">return</span> client;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>controller 类实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Autowired</span><br><span class="hljs-keyword">private</span> CuratorFramework client;<br><span class="hljs-meta">@RequestMapping(&quot;curatorLock&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">curatorLock</span><span class="hljs-params">()</span></span>&#123;<br>        log.info(<span class="hljs-string">&quot;我进入了方法！&quot;</span>);<br>        InterProcessMutex lock = <span class="hljs-keyword">new</span> InterProcessMutex(client, <span class="hljs-string">&quot;/order&quot;</span>);<br>        <span class="hljs-keyword">try</span>&#123;<br>            <span class="hljs-keyword">if</span> (lock.acquire(<span class="hljs-number">30</span>, TimeUnit.SECONDS))&#123;<br>                log.info(<span class="hljs-string">&quot;我获得了锁！！&quot;</span>);<br>                Thread.sleep(<span class="hljs-number">10000</span>);<br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<span class="hljs-keyword">finally</span> &#123;<br>            <span class="hljs-keyword">try</span> &#123;<br>                log.info(<span class="hljs-string">&quot;我释放了锁！！&quot;</span>);<br>                lock.release();<br>            &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>                e.printStackTrace();<br>            &#125;<br>        &#125;<br>        log.info(<span class="hljs-string">&quot;方法执行完成！&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;方法执行完成！&quot;</span>;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="四、Redisson分布式锁"><a href="#四、Redisson分布式锁" class="headerlink" title="四、Redisson分布式锁"></a>四、Redisson分布式锁</h1><h2 id="4-1、使用Redisson"><a href="#4-1、使用Redisson" class="headerlink" title="4.1、使用Redisson"></a>4.1、使用Redisson</h2><ul>
+<li>通过Java Api方式引入Redisson</li>
+<li>Spring项目引入Redisson</li>
+<li>SpringBoot 项目引入Redisson</li>
+</ul>
+<h2 id="4-2、Maven依赖"><a href="#4-2、Maven依赖" class="headerlink" title="4.2、Maven依赖"></a>4.2、Maven依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.redisson<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>redisson<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.11.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="4-3、单元测试"><a href="#4-3、单元测试" class="headerlink" title="4.3、单元测试"></a>4.3、单元测试</h2><ul>
+<li>Java Api 方式使用Redisson</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.example.redissonlock;<br><br><span class="hljs-keyword">import</span> lombok.extern.slf4j.Slf4j;<br><span class="hljs-keyword">import</span> org.junit.Test;<br><span class="hljs-keyword">import</span> org.junit.runner.RunWith;<br><span class="hljs-keyword">import</span> org.redisson.Redisson;<br><span class="hljs-keyword">import</span> org.redisson.api.RLock;<br><span class="hljs-keyword">import</span> org.redisson.api.RedissonClient;<br><span class="hljs-keyword">import</span> org.redisson.config.Config;<br><span class="hljs-keyword">import</span> org.springframework.boot.test.context.SpringBootTest;<br><span class="hljs-keyword">import</span> org.springframework.test.context.junit4.SpringRunner;<br><br><span class="hljs-keyword">import</span> java.util.concurrent.TimeUnit;<br><br><span class="hljs-meta">@RunWith(SpringRunner.class)</span><br><span class="hljs-meta">@SpringBootTest</span><br><span class="hljs-meta">@Slf4j</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedissonLockApplicationTests</span> </span>&#123;<br><br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">contextLoads</span><span class="hljs-params">()</span> </span>&#123;<br>    &#125;<br><br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">testRedissonLock</span><span class="hljs-params">()</span> </span>&#123;<br>        Config config = <span class="hljs-keyword">new</span> Config();<br>        config.useSingleServer().setAddress(<span class="hljs-string">&quot;redis://192.168.198.100:6379&quot;</span>);<br>        RedissonClient redisson = Redisson.create(config);<br><br>        RLock rLock = redisson.getLock(<span class="hljs-string">&quot;order&quot;</span>);<br><br>        <span class="hljs-keyword">try</span> &#123;<br>            rLock.lock(<span class="hljs-number">30</span>, TimeUnit.SECONDS);<br>            log.info(<span class="hljs-string">&quot;我获得了锁！！！&quot;</span>);<br>            Thread.sleep(<span class="hljs-number">10000</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<span class="hljs-keyword">finally</span> &#123;<br>            log.info(<span class="hljs-string">&quot;我释放了锁！！&quot;</span>);<br>            rLock.unlock();<br>        &#125;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-4、SpringBoot使用Redisson"><a href="#4-4、SpringBoot使用Redisson" class="headerlink" title="4.4、SpringBoot使用Redisson"></a>4.4、SpringBoot使用Redisson</h2><ul>
+<li>maven依赖</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.redisson<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>redisson-spring-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.11.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>application.properties 配置文件</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-meta">spring.redis.host</span>=<span class="hljs-string">192.168.198.100</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>controller</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.example.redissonlock.controller;<br><br><span class="hljs-keyword">import</span> lombok.extern.slf4j.Slf4j;<br><span class="hljs-keyword">import</span> org.redisson.Redisson;<br><span class="hljs-keyword">import</span> org.redisson.api.RLock;<br><span class="hljs-keyword">import</span> org.redisson.api.RedissonClient;<br><span class="hljs-keyword">import</span> org.redisson.config.Config;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RestController;<br><br><span class="hljs-keyword">import</span> java.util.concurrent.TimeUnit;<br><br><span class="hljs-meta">@RestController</span><br><span class="hljs-meta">@Slf4j</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedissonLockController</span> </span>&#123;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> RedissonClient redisson;<br><br>    <span class="hljs-meta">@RequestMapping(&quot;redissonLock&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">redissonLock</span><span class="hljs-params">()</span> </span>&#123;<br>        RLock rLock = redisson.getLock(<span class="hljs-string">&quot;order&quot;</span>);<br>        log.info(<span class="hljs-string">&quot;我进入了方法！！&quot;</span>);<br>        <span class="hljs-keyword">try</span> &#123;<br>            rLock.lock(<span class="hljs-number">30</span>, TimeUnit.SECONDS);<br>            log.info(<span class="hljs-string">&quot;我获得了锁！！！&quot;</span>);<br>            Thread.sleep(<span class="hljs-number">10000</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<span class="hljs-keyword">finally</span> &#123;<br>            log.info(<span class="hljs-string">&quot;我释放了锁！！&quot;</span>);<br>            rLock.unlock();<br>        &#125;<br>        log.info(<span class="hljs-string">&quot;方法执行完成！！&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;方法执行完成！！&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-5、Spring使用Redisson"><a href="#4-5、Spring使用Redisson" class="headerlink" title="4.5、Spring使用Redisson"></a>4.5、Spring使用Redisson</h2><ul>
+<li>maven 依赖</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.redisson<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>redisson<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.11.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>application.properties 配置文件</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-comment"># spring.redis.host=192.168.198.100</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>redisson.xml 配置文件</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">beans</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://www.springframework.org/schema/beans&quot;</span></span><br><span class="hljs-tag">       <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="hljs-tag">       <span class="hljs-attr">xmlns:context</span>=<span class="hljs-string">&quot;http://www.springframework.org/schema/context&quot;</span></span><br><span class="hljs-tag">       <span class="hljs-attr">xmlns:redisson</span>=<span class="hljs-string">&quot;http://redisson.org/schema/redisson&quot;</span></span><br><span class="hljs-tag">       <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">&quot;</span></span><br><span class="hljs-string"><span class="hljs-tag">       http://www.springframework.org/schema/beans</span></span><br><span class="hljs-string"><span class="hljs-tag">       http://www.springframework.org/schema/beans/spring-beans.xsd</span></span><br><span class="hljs-string"><span class="hljs-tag">       http://www.springframework.org/schema/context</span></span><br><span class="hljs-string"><span class="hljs-tag">       http://www.springframework.org/schema/context/spring-context.xsd</span></span><br><span class="hljs-string"><span class="hljs-tag">       http://redisson.org/schema/redisson</span></span><br><span class="hljs-string"><span class="hljs-tag">       http://redisson.org/schema/redisson/redisson.xsd</span></span><br><span class="hljs-string"><span class="hljs-tag">&quot;</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">redisson:client</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">redisson:single-server</span> <span class="hljs-attr">address</span>=<span class="hljs-string">&quot;redis://192.168.198.100:6379&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">redisson:client</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">beans</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>启动类引入配置文件</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.example.redissonlock;<br><br><span class="hljs-keyword">import</span> org.springframework.boot.SpringApplication;<br><span class="hljs-keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.ImportResource;<br><br><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-comment">// 引入xml文件</span><br><span class="hljs-comment">// @ImportResource(&quot;classpath*:redisson.xml&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedissonLockApplication</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        SpringApplication.run(RedissonLockApplication.class, args);<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-6、controller"><a href="#4-6、controller" class="headerlink" title="4.6、controller"></a>4.6、controller</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.example.redissonlock.controller;<br><br><span class="hljs-keyword">import</span> lombok.extern.slf4j.Slf4j;<br><span class="hljs-keyword">import</span> org.redisson.Redisson;<br><span class="hljs-keyword">import</span> org.redisson.api.RLock;<br><span class="hljs-keyword">import</span> org.redisson.api.RedissonClient;<br><span class="hljs-keyword">import</span> org.redisson.config.Config;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RestController;<br><br><span class="hljs-keyword">import</span> java.util.concurrent.TimeUnit;<br><br><span class="hljs-meta">@RestController</span><br><span class="hljs-meta">@Slf4j</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedissonLockController</span> </span>&#123;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> RedissonClient redisson;<br><br>    <span class="hljs-meta">@RequestMapping(&quot;redissonLock&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">redissonLock</span><span class="hljs-params">()</span> </span>&#123;<br>        RLock rLock = redisson.getLock(<span class="hljs-string">&quot;order&quot;</span>);<br>        log.info(<span class="hljs-string">&quot;我进入了方法！！&quot;</span>);<br>        <span class="hljs-keyword">try</span> &#123;<br>            rLock.lock(<span class="hljs-number">30</span>, TimeUnit.SECONDS);<br>            log.info(<span class="hljs-string">&quot;我获得了锁！！！&quot;</span>);<br>            Thread.sleep(<span class="hljs-number">10000</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<span class="hljs-keyword">finally</span> &#123;<br>            log.info(<span class="hljs-string">&quot;我释放了锁！！&quot;</span>);<br>            rLock.unlock();<br>        &#125;<br>        log.info(<span class="hljs-string">&quot;方法执行完成！！&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;方法执行完成！！&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="五、分布式锁方案选择"><a href="#五、分布式锁方案选择" class="headerlink" title="五、分布式锁方案选择"></a>五、分布式锁方案选择</h1><h2 id="5-1、各种方案优缺点对比"><a href="#5-1、各种方案优缺点对比" class="headerlink" title="5.1、各种方案优缺点对比"></a>5.1、各种方案优缺点对比</h2><p><img src="Zookeeper.assets/image-20211221115756739.png" srcset="/img/loading.gif" lazyload alt="image-20211221115756739"></p>
+<h2 id="5-2、数据库方式"><a href="#5-2、数据库方式" class="headerlink" title="5.2、数据库方式"></a>5.2、数据库方式</h2><ul>
+<li>建议将分布式锁的数据库和生产的数据库分开,不要给数据库造成太大压力</li>
+</ul>
+<h2 id="5-3、总结"><a href="#5-3、总结" class="headerlink" title="5.3、总结"></a>5.3、总结</h2><ul>
+<li>不建议使用自己编写分布式锁</li>
+<li>推荐 ==Redisson== 和 ==Curator== 实现的分布式锁</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9B%B8%E5%85%B3/">分布式相关</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">分布式锁</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章可随意转载
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/12/26/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">分库分表</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/12/05/RabbitMQ/">
+                        <span class="hidden-mobile">RabbitMQ</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

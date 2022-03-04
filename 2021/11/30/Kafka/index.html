@@ -1,0 +1,726 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/mario.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="Kafka基本使用">
+  <meta name="author" content="tho">
+  <meta name="keywords" content="">
+  <meta name="description" content="Kafka基本使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka">
+<meta property="og:url" content="http://example.com/2021/11/30/Kafka/index.html">
+<meta property="og:site_name" content="Tho668&#39;s Blogs">
+<meta property="og:description" content="Kafka基本使用">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/Kafka.assets/image-20211211173259526.png">
+<meta property="og:image" content="http://example.com/img/Kafka.assets/image-20211211173747917.png">
+<meta property="og:image" content="http://example.com/img/Kafka.assets/image-20211211173915636.png">
+<meta property="article:published_time" content="2021-11-30T07:35:56.000Z">
+<meta property="article:modified_time" content="2022-03-04T14:06:29.113Z">
+<meta property="article:author" content="tho">
+<meta property="article:tag" content="Kafka">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/Kafka.assets/image-20211211173259526.png">
+  
+  <title>Kafka - Tho668&#39;s Blogs</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tho668</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/galaxy.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Kafka">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-11-30 15:35" pubdate>
+        November 30, 2021 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      32k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      99 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Kafka</h1>
+            
+            <div class="markdown-body">
+              <p>Kafka基本使用</p>
+<span id="more"></span>
+
+
+
+
+
+
+
+<ul>
+<li>Kafka应用实战</li>
+<li>Kafka高吞吐量日志收集实战</li>
+<li>架构思考：分布式日志，跟踪，警告，分析平台</li>
+</ul>
+<h1 id="一、Kafka基础"><a href="#一、Kafka基础" class="headerlink" title="一、Kafka基础"></a>一、Kafka基础</h1><h2 id="1-1、Kafka介绍"><a href="#1-1、Kafka介绍" class="headerlink" title="1.1、Kafka介绍"></a>1.1、Kafka介绍</h2><ul>
+<li>Kafka是LinkedIn开源的分布式消息系统，目前归属于Apache顶级项目</li>
+<li>Kafka主要特点是基于Pull的模式来处理消息消费，追求高吞吐量，一开始目的就是用于日志收集和传输</li>
+<li>0.8版本开始支持复制，不支持事务，对消息的丢失，重复，错误没有严格要去，适合产生大量数据的互联网服务的数据收集业务。</li>
+</ul>
+<blockquote>
+<p>Kafka特点</p>
+<ul>
+<li>分布式特性</li>
+<li>跨平台的特性</li>
+<li>实时性</li>
+<li>伸缩性</li>
+</ul>
+</blockquote>
+<p>kafka的主要特点： </p>
+<ul>
+<li>同时为发布和订阅提供高吞吐量。据了解，Kafka每秒可以生产约25万消息（50 MB），每秒处理55万消息（110 MB）。</li>
+<li> 可进行持久化操作。将消息持久化到磁盘，因此可用于批量消费，例如ETL，以及实时应用程序。通过将数据持久化到硬盘以及r 止数据丢失。 </li>
+<li>分布式系统，易于向外扩展。所有的producer、broker和consumer都会有多个，均为分布式的。无需停机即可扩展机器。</li>
+<li> 消息被处理的状态是在consumer端维护，而不是由server端维护。当失败时能自动平衡。</li>
+<li> 支持online和offline的场景。</li>
+</ul>
+<h2 id="1-2、Kafka高性能原因"><a href="#1-2、Kafka高性能原因" class="headerlink" title="1.2、Kafka高性能原因"></a>1.2、Kafka高性能原因</h2><ul>
+<li>顺序写，磁盘顺序写(不进行物理删除)</li>
+<li>Page Cache空中接力，高效读写</li>
+<li>后台异步，主动Flush</li>
+<li>预读策略,IO调度</li>
+</ul>
+<h2 id="1-3、PageCache"><a href="#1-3、PageCache" class="headerlink" title="1.3、PageCache"></a>1.3、PageCache</h2><ul>
+<li>操作系统主要实现的磁盘缓存(减少对磁盘IO的操作)，磁盘内容存储到内存中作为缓存</li>
+<li>用户请求磁盘上某文件,操作系统不是直接从磁盘上读取，而是先从PageCache中找有没有该文件信息，如果没有,从磁盘读取，而且先将该文件加入到PageCache中，之后才会将该文件返回给用户 </li>
+<li>写操作类似</li>
+<li>零拷贝(Zero copy)</li>
+</ul>
+<h2 id="1-4、Kafka集群模式"><a href="#1-4、Kafka集群模式" class="headerlink" title="1.4、Kafka集群模式"></a>1.4、Kafka集群模式</h2><ul>
+<li>借助zookeeper实现集群</li>
+</ul>
+<h2 id="1-5、Kafka的架构"><a href="#1-5、Kafka的架构" class="headerlink" title="1.5、Kafka的架构"></a>1.5、Kafka的架构</h2><p>​    Kafka的整体架构非常简单，是显式分布式架构，producer、broker（kafka）和consumer都可以有多个。Producer，consumer实现Kafka注册的接口，数据从pr broker，broker承担一个中间缓存和分发的作用。broker分发注册到系统中的consumer。broker的作用类似于缓存，即活跃的数据和离线处理系统之间的缓存。客 器端的通信，是基于简单，高性能，且与编程语言无关的TCP协议。</p>
+<blockquote>
+<p>基本概念</p>
+</blockquote>
+<ul>
+<li>Topic：特指Kafka处理的消息源（feeds of messages）的不同分类。 </li>
+<li>Partition：Topic物理上的分组，一个topic可以分为多个partition，每个partition是一个有序的队列。partition中的每条消息都会被分 序的id（offset）。 </li>
+<li>Message：消息，是通信的基本单位，每个producer可以向一个topic（主题）发布一些消息。 </li>
+<li>Producers：消息和数据生产者，向Kafka的一个topic发布消息的过程叫做producers。</li>
+<li>Consumers：消息和数据消费者，订阅topics并处理其发布的消息的过程叫做consumers。 </li>
+<li>Broker：缓存代理，Kafka集群中的一台或多台服务器统称为broker。</li>
+</ul>
+<blockquote>
+<p>发送消息的流程</p>
+</blockquote>
+<ul>
+<li>Producer根据指定的partition方法（round-robin、hash等），将消息发布到指定topic的partition里面 </li>
+<li>kafka集群接收到Producer发过来的消息后，将其持久化到硬盘，并保留消息指定时长（可配置），而不关注消息是否被消费。</li>
+<li> Consumer从kafka集群pull数据，并控制获取消息的offset</li>
+</ul>
+<h2 id="1-6、kafka的优秀设计"><a href="#1-6、kafka的优秀设计" class="headerlink" title="1.6、kafka的优秀设计"></a>1.6、kafka的优秀设计</h2><blockquote>
+<p>从kafka的吞吐量、负载均衡、消息拉取、扩展性来说一说kafka的优秀设计。</p>
+</blockquote>
+<p>==高吞吐==是kafka需要实现的核心目标之一，为此kafka做了以下一些设计：</p>
+<ul>
+<li>内存访问：直接使用 linux 文件系统的cache，来高效缓存数据，对数据进行读取和写入。</li>
+<li> 数据磁盘持久化：消息不在内存中cache，直接写入到磁盘，充分利用磁盘的顺序读写性能。 </li>
+<li>zero-copy：减少IO操作步骤 <ul>
+<li>采用linux Zero-Copy提高发送性能。传统的数据发送需要发送4次上下文切换，采用sendfile系统调用之后，数据直接在内核 统上下文切换减少为2次。根据测试结果，可以提高60%的数据发送性能。Zero-Copy详细的技术细节可以参考：linux官方零拷贝的介绍 </li>
+</ul>
+</li>
+<li>对消息的处理： 支持数据批量发送</li>
+</ul>
+<h1 id="二、Kafka基本使用"><a href="#二、Kafka基本使用" class="headerlink" title="二、Kafka基本使用"></a>二、Kafka基本使用</h1><h2 id="2-1、环境配置"><a href="#2-1、环境配置" class="headerlink" title="2.1、环境配置"></a>2.1、环境配置</h2><p>⾸先准备ZOOKEEPER服务</p>
+<p>因为 Kafka 的运⾏环境依赖于 ZooKeeper ，所以⾸先得安装并运⾏ ZooKeeper 。 </p>
+<h3 id="1-准备Kafka安装包"><a href="#1-准备Kafka安装包" class="headerlink" title="1.准备Kafka安装包"></a>1.准备Kafka安装包</h3><p>这⾥下载的是 3.0.0 版： kafka_2.12-3.0.0.tgz ，将下载后的安装包放在了 /root/workspace/software ⽬录下</p>
+<h3 id="2-解压并安装"><a href="#2-解压并安装" class="headerlink" title="2.解压并安装"></a>2.解压并安装</h3><ol>
+<li>/usr/local/ 下创建 kafka ⽂件夹并进⼊</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@centos_7_100 ~]# cd /usr/local<br>[root@centos_7_100 local]# mkdir kafka<br>[root@centos_7_100 local]# cd kafka<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>将Kafka安装包解压到 /usr/local/kafka 中即可</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">[root<span class="hljs-meta">@localhost</span> kafka]# tar -zxvf /root/workspace/software/kafka_2<span class="hljs-number">.12</span>-<span class="hljs-number">3.0</span><span class="hljs-number">.0</span>.tgz -C ./<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>解压完之后， /usr/local/kafka ⽬录中会出现⼀个 kafka_2.12-3.0.0 的⽬录</li>
+</ol>
+<h3 id="3-创建LOGS⽬录"><a href="#3-创建LOGS⽬录" class="headerlink" title="3.创建LOGS⽬录"></a>3.创建LOGS⽬录</h3><p>这⾥直接在 /usr/local/kafka/kafka_2.12-3.0.0 ⽬录中创建⼀个 logs ⽬录</p>
+<p>等下该 logs ⽬录地址要配到Kafka的配置⽂件中。</p>
+<h3 id="4-修改配置⽂件"><a href="#4-修改配置⽂件" class="headerlink" title="4.修改配置⽂件"></a>4.修改配置⽂件</h3><p>进⼊到 Kafka 的 config ⽬录，编辑配置⽂件 <code>server.properties</code></p>
+<p>修改配置⽂件，⼀是将其中的 log.dirs 修改为上⾯刚创建的 logs ⽬录，其他选项可以按需配置</p>
+<p>另外关注⼀下连接 ZooKeeper 的相关配置，根据实际情况进⾏配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// logs相关配置</span><br>log.dirs=/usr/local/kafka/kafka_2<span class="hljs-number">.12</span>-<span class="hljs-number">3.0</span><span class="hljs-number">.0</span>/logs<br><span class="hljs-comment">// zookeeper相关配置</span><br><span class="hljs-comment">// root directory for all kafka znodes.</span><br>zookeeper.connect=localhost:<span class="hljs-number">2181</span><br><br><span class="hljs-comment">// Timeout in ms for connecting to zookeeper</span><br>zookeeper.connection.timeout.ms=<span class="hljs-number">18000</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-启动Kafka"><a href="#5-启动Kafka" class="headerlink" title="5.启动Kafka"></a>5.启动Kafka</h3><blockquote>
+<p>启动kafka前必须要先启动zookeeper,否则会报错</p>
+</blockquote>
+<p>执⾏如下命令即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">./bin/kafka-server-start.sh ./config/server.properties<br></code></pre></td></tr></table></figure>
+
+<p>如果需要后台启动，则加上 -daemon 参数即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">./bin/kafka-server-start.sh  -daemon ./config/server.properties<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-实验验证"><a href="#6-实验验证" class="headerlink" title="6.实验验证"></a>6.实验验证</h3><p>⾸先创建⼀个名为 tho 的 topic ：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic tho<br><br>[root@centos_7_100 ~]# cd /usr/local/kafka/kafka_2.12-3.0.0/<br>[root@centos_7_100 kafka_2.12-3.0.0]# ./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic tho<br>Created topic tho.<br><br></code></pre></td></tr></table></figure>
+
+<p>创建完成以后，可以使⽤命令来列出⽬前已有的 topic 列表</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">./bin/kafka-topics.sh --list --bootstrap-server localhost:9092<br><br>[root@centos_7_100 kafka_2.12-3.0.0]# ./bin/kafka-topics.sh --list --bootstrap-server localhost:9092<br>tho<br></code></pre></td></tr></table></figure>
+
+<p>查看group信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group group02<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="7-可以同时开启三个ssh连接"><a href="#7-可以同时开启三个ssh连接" class="headerlink" title="7.可以同时开启三个ssh连接"></a>7.可以同时开启三个ssh连接</h3><blockquote>
+<p>一个连接观察kafka是否启动成功</p>
+<p>一个用来创建生产者</p>
+<p>一个用来创建消费者</p>
+<p>生产者发送消息的同时可以通过消费者来观察是否成功产生消息</p>
+</blockquote>
+<p>接下来创建⼀个⽣产者，⽤于在 codesheep 这个 topic 上⽣产消息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic tho<br></code></pre></td></tr></table></figure>
+
+<p>⽽后接着创建⼀个消费者，⽤于在 codesheep 这个 topic 上获取消息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic tho<br></code></pre></td></tr></table></figure>
+
+<p>此时⽣产者发出的消息，在消费者端可以获取到</p>
+<h3 id="8-实验过程中如果出现⼀些诸如客户端不能连通或访问等问题"><a href="#8-实验过程中如果出现⼀些诸如客户端不能连通或访问等问题" class="headerlink" title="8.实验过程中如果出现⼀些诸如客户端不能连通或访问等问题"></a>8.实验过程中如果出现⼀些诸如客户端不能连通或访问等问题</h3><blockquote>
+<p>先查看zookeeper是否成功启动</p>
+<p>ps -ef | grep zookeeper</p>
+</blockquote>
+<h3 id="或者可尝试考虑关闭防⽕墙："><a href="#或者可尝试考虑关闭防⽕墙：" class="headerlink" title="或者可尝试考虑关闭防⽕墙："></a>或者可尝试考虑关闭防⽕墙：</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 关闭防火墙</span><br>systemctl stop firewalld.service<br>systemctl disable firewalld.service<br><span class="hljs-meta">#</span><span class="bash"> 打开防火墙</span><br><br>systemctl start firewalld.service<br>systemctl enable firewalld.service<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 或者开启9092端口</span><br><span class="hljs-meta">#</span><span class="bash"> 打开单个端口：</span><br>firewall-cmd --zone=public --add-port=9092/tcp --permanent<br><span class="hljs-meta">#</span><span class="bash"> 重启防火墙</span>    <br>systemctl restart firewalld.service<br>firewall-cmd --list-ports<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-2、SpringBoot整合-producer"><a href="#2-2、SpringBoot整合-producer" class="headerlink" title="2.2、SpringBoot整合-producer"></a>2.2、SpringBoot整合-producer</h2><h3 id="1-maven配置"><a href="#1-maven配置" class="headerlink" title="1.maven配置"></a>1.maven配置</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">project</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span></span><br><span class="hljs-tag">         <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="hljs-tag">         <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">modelVersion</span>&gt;</span>4.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">modelVersion</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.tho<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>Kafka<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">packaging</span>&gt;</span>pom<span class="hljs-tag">&lt;/<span class="hljs-name">packaging</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">modules</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">module</span>&gt;</span>Kafka-producer<span class="hljs-tag">&lt;/<span class="hljs-name">module</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">module</span>&gt;</span>Kafka-consumer<span class="hljs-tag">&lt;/<span class="hljs-name">module</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">modules</span>&gt;</span><br>    <span class="hljs-comment">&lt;!--Springboot 依赖--&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">parent</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.1.5.RELEASE<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">relativePath</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">parent</span>&gt;</span><br>    <span class="hljs-comment">&lt;!--相关配置--&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">properties</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="hljs-tag">&lt;/<span class="hljs-name">project.build.sourceEncoding</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">project.reporting.outputEncoding</span>&gt;</span>UTF-8<span class="hljs-tag">&lt;/<span class="hljs-name">project.reporting.outputEncoding</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">java.version</span>&gt;</span>1.8<span class="hljs-tag">&lt;/<span class="hljs-name">java.version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">fasterxml.uuid.version</span>&gt;</span>3.1.4<span class="hljs-tag">&lt;/<span class="hljs-name">fasterxml.uuid.version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">org.codehaus.jackson.version</span>&gt;</span>2.1.4<span class="hljs-tag">&lt;/<span class="hljs-name">org.codehaus.jackson.version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">druid.version</span>&gt;</span>1.0.24<span class="hljs-tag">&lt;/<span class="hljs-name">druid.version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">elastic-job.version</span>&gt;</span>2.1.4<span class="hljs-tag">&lt;/<span class="hljs-name">elastic-job.version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">guava.version</span>&gt;</span>20.0<span class="hljs-tag">&lt;/<span class="hljs-name">guava.version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">commons-lang3.version</span>&gt;</span>3.3.1<span class="hljs-tag">&lt;/<span class="hljs-name">commons-lang3.version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">commons-io.version</span>&gt;</span>2.4<span class="hljs-tag">&lt;/<span class="hljs-name">commons-io.version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">commons-collections.version</span>&gt;</span>3.2.2<span class="hljs-tag">&lt;/<span class="hljs-name">commons-collections.version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">curator.version</span>&gt;</span>2.11.0<span class="hljs-tag">&lt;/<span class="hljs-name">curator.version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">fastjson.version</span>&gt;</span>1.1.26<span class="hljs-tag">&lt;/<span class="hljs-name">fastjson.version</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">properties</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-comment">&lt;!--使用自定义日志框架 屏蔽自带的日志框架--&gt;</span><br>            <span class="hljs-comment">&lt;!--&lt;exclusions&gt;</span><br><span class="hljs-comment">                &lt;exclusion&gt;</span><br><span class="hljs-comment">                    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="hljs-comment">                    &lt;artifactId&gt;spring-boot-starter-logging&lt;/artifactId&gt;</span><br><span class="hljs-comment">                &lt;/exclusion&gt;</span><br><span class="hljs-comment">            &lt;/exclusions&gt;--&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>test<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.projectlombok<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>lombok<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.kafka<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-kafka<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">project</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-application-properties"><a href="#2-application-properties" class="headerlink" title="2.application.properties"></a>2.application.properties</h3><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-meta">server.servlet.context-path</span>=<span class="hljs-string">/producer</span><br><span class="hljs-meta">server.port</span>=<span class="hljs-string">8001</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">## Spring 整合 kafka</span><br><span class="hljs-meta">spring.kafka.bootstrap-servers</span>=<span class="hljs-string">192.168.198.100:9092</span><br><span class="hljs-comment"># kafka发送消息失败时重试的次数</span><br><span class="hljs-meta">spring.kafka.producer.retries</span>=<span class="hljs-string">0</span><br><span class="hljs-comment"># kafka批量发送数据的配置</span><br><span class="hljs-meta">spring.kafka.producer.batch-size</span>=<span class="hljs-string">16384</span><br><span class="hljs-comment"># 设置kafka生产者内存缓存区大小(32m)</span><br><span class="hljs-meta">spring.kafka.producer.buffer-memory</span>=<span class="hljs-string">33554432</span><br><span class="hljs-comment"># kafka消息的序列化配置</span><br><span class="hljs-meta">spring.kafka.producer.key-serializer</span>=<span class="hljs-string">org.apache.kafka.common.serialization.StringSerializer</span><br><span class="hljs-meta">spring.kafka.producer.value-serializer</span>=<span class="hljs-string">org.apache.kafka.common.serialization.StringSerializer</span><br><span class="hljs-comment"># 这个是kafka生产端最重要的选项</span><br><span class="hljs-comment"># ack=0 ：生产者在成功写入消息之前不会等待任何来自服务器的响应</span><br><span class="hljs-comment"># ack=1 ：只要集群的首领节点收到消息，生产者就会收到一个来自服务器的成功响应</span><br><span class="hljs-comment"># acks=-1: 表示分区leader必须等待消息被成功写入到所有的ISR副本(同步副本)中才认为producer请求成功。这种方案提供最高的消息持久性保证，但是理论上吞吐率也是最差的。</span><br><span class="hljs-meta">spring.kafka.producer.acks</span>=<span class="hljs-string">1</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-创建KafkaTemplate"><a href="#3-创建KafkaTemplate" class="headerlink" title="3.创建KafkaTemplate"></a>3.创建KafkaTemplate</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.kafka.producer;<br><br><span class="hljs-keyword">import</span> lombok.extern.slf4j.Slf4j;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.kafka.core.KafkaTemplate;<br><span class="hljs-keyword">import</span> org.springframework.kafka.support.SendResult;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Component;<br><span class="hljs-keyword">import</span> org.springframework.util.concurrent.ListenableFuture;<br><span class="hljs-keyword">import</span> org.springframework.util.concurrent.ListenableFutureCallback;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span> 2021/12/11/15:45</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ProjectName</span> Kafka</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ClassName</span>: KafkaProducerService</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Description</span>: Kafka生产者服务类</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-meta">@Slf4j</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">KafkaProducerService</span> </span>&#123;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> KafkaTemplate&lt;String, Object&gt; kafkaTemplate;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sendMessage</span><span class="hljs-params">(String topic, Object object)</span> </span>&#123;<br>        ListenableFuture&lt;SendResult&lt;String, Object&gt;&gt; future = kafkaTemplate.send(topic, object);<br><br>        future.addCallback(<span class="hljs-keyword">new</span> ListenableFutureCallback&lt;SendResult&lt;String, Object&gt;&gt;() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onFailure</span><span class="hljs-params">(Throwable throwable)</span> </span>&#123;<br>                log.info(<span class="hljs-string">&quot;发送消息失败:&quot;</span> + throwable.getMessage());<br>            &#125;<br><br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onSuccess</span><span class="hljs-params">(SendResult&lt;String, Object&gt; result)</span> </span>&#123;<br>                log.info(<span class="hljs-string">&quot;发送消息成功:&quot;</span> + result.toString());<br>            &#125;<br>        &#125;);<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-3、SpringBoot整合-cosumer"><a href="#2-3、SpringBoot整合-cosumer" class="headerlink" title="2.3、SpringBoot整合-cosumer"></a>2.3、SpringBoot整合-cosumer</h2><blockquote>
+<p>maven pom.xml 配置同producer</p>
+</blockquote>
+<h3 id="1-application-properties"><a href="#1-application-properties" class="headerlink" title="1.application.properties"></a>1.application.properties</h3><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-meta">server.servlet.context-path</span>=<span class="hljs-string">/consumer</span><br><span class="hljs-meta">server.port</span>=<span class="hljs-string">8002</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">## Spring 整合 kafka</span><br><span class="hljs-meta">spring.kafka.bootstrap-servers</span>=<span class="hljs-string">192.168.198.100:9092</span><br><span class="hljs-comment"># kafka consumer消息签收机制:手工签收</span><br><span class="hljs-meta">spring.kafka.consumer.enable-auto-commit</span>=<span class="hljs-string">false</span><br><br><span class="hljs-meta">spring.kafka.listener.ack-mode</span>=<span class="hljs-string">manual</span><br><span class="hljs-comment"># 该属性指定了消费者在读取一个没有偏移量的分区或者偏移量无效的情况下该作何处理：</span><br><span class="hljs-comment"># latest（默认值）在偏移量无效的情况下，消费者将从最新的记录开始读取数据（在消费者启动之后生成的记录）</span><br><span class="hljs-comment"># earliest ：在偏移量无效的情况下，消费者将从起始位置读取分区的记录</span><br><span class="hljs-meta">spring.kafka.consumer.auto-offset-reset</span>=<span class="hljs-string">earliest</span><br><span class="hljs-comment">## 序列化配置</span><br><span class="hljs-meta">spring.kafka.consumer.key-deserializer</span>=<span class="hljs-string">org.apache.kafka.common.serialization.StringDeserializer</span><br><span class="hljs-meta">spring.kafka.consumer.value-deserializer</span>=<span class="hljs-string">org.apache.kafka.common.serialization.StringDeserializer</span><br><br><span class="hljs-meta">spring.kafka.listener.concurrency</span>=<span class="hljs-string">5</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-consumer实现类"><a href="#2-consumer实现类" class="headerlink" title="2.consumer实现类"></a>2.consumer实现类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.kafka.consumer;<br><br><span class="hljs-keyword">import</span> lombok.extern.slf4j.Slf4j;<br><span class="hljs-keyword">import</span> org.apache.kafka.clients.consumer.Consumer;<br><span class="hljs-keyword">import</span> org.apache.kafka.clients.consumer.ConsumerRecord;<br><span class="hljs-keyword">import</span> org.springframework.kafka.annotation.KafkaListener;<br><span class="hljs-keyword">import</span> org.springframework.kafka.support.Acknowledgment;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Component;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span> 2021/12/11/15:59</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ProjectName</span> Kafka</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ClassName</span>: KafkaConsumerService</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Description</span>: Kafka消费者服务类</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-meta">@Slf4j</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">KafkaConsumerService</span> </span>&#123;<br><br>    <span class="hljs-meta">@KafkaListener(groupId = &quot;group02&quot;, topics = &quot;topic02&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onMessage</span><span class="hljs-params">(ConsumerRecord&lt;String, Object&gt; record,</span></span><br><span class="hljs-params"><span class="hljs-function">                          Acknowledgment acknowledgment,</span></span><br><span class="hljs-params"><span class="hljs-function">                          Consumer&lt;?, ?&gt; consumer)</span> </span>&#123;<br><br>        log.info(<span class="hljs-string">&quot;消费端接收消息:&#123;&#125;&quot;</span>, record.value());<br>        <span class="hljs-comment">// 手工签收机制</span><br>        acknowledgment.acknowledge();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-4、测试"><a href="#2-4、测试" class="headerlink" title="2.4、测试"></a>2.4、测试</h2><h3 id="1-producer测试"><a href="#1-producer测试" class="headerlink" title="1.producer测试"></a>1.producer测试</h3><blockquote>
+<p>producer测试类</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> kafka.test;<br><br><span class="hljs-keyword">import</span> com.tho.kafka.Application;<br><span class="hljs-keyword">import</span> com.tho.kafka.producer.KafkaProducerService;<br><span class="hljs-keyword">import</span> org.junit.Test;<br><span class="hljs-keyword">import</span> org.junit.runner.RunWith;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.boot.test.context.SpringBootTest;<br><span class="hljs-keyword">import</span> org.springframework.test.context.junit4.SpringRunner;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span> 2021/12/11/15:50</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ProjectName</span> Kafka</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ClassName</span>: KafkaTest</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Description</span>: Kafka 测试</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@RunWith(SpringRunner.class)</span><br><span class="hljs-meta">@SpringBootTest(classes = Application.class)</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">KafkaTest</span> </span>&#123;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> KafkaProducerService kafkaProducerService;<br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">kafkaProducerTest</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> InterruptedException </span>&#123;<br><br>        String topic = <span class="hljs-string">&quot;topic02&quot;</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">6</span>; i++) &#123;<br>            kafkaProducerService.sendMessage(topic, <span class="hljs-string">&quot;hello kafka:&quot;</span> + i);<br>        &#125;<br>        Thread.sleep(Integer.MAX_VALUE);<br><br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果报错</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Error connecting to node node1:<span class="hljs-number">9092</span> (id: <span class="hljs-number">2</span> rack: <span class="hljs-keyword">null</span>) java.net.UnknownHostException<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可能是kafka无法根据节点名称获得服务器ip地址</p>
+<p>需要在windows系统中修改hosts文件</p>
+<p>ip地址对应 服务器的名称 也就是服务器的hostname</p>
+</blockquote>
+<blockquote>
+<p>修改为 </p>
+<p>192.168.198.100  centos_7_100</p>
+</blockquote>
+<p>windows系统中,在命令行中断 cmd 中使用命令 <code>ipconfig/flushdns</code> 刷新dns缓存</p>
+<h3 id="2-consumer测试"><a href="#2-consumer测试" class="headerlink" title="2.consumer测试"></a>2.consumer测试</h3><blockquote>
+<p>启动kafka consumer 通过Application.java </p>
+<p>可以看到group的信息</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@centos_7_100 kafka_2.12-3.0.0]# ./bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group group02<br><br>GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                     HOST             CLIENT-ID<br>group02         topic02         0          0               12              12              consumer-2-a54662f3-5d45-45d7-bf0e-5a169c307a11 /192.168.198.110 consumer-2<br><br></code></pre></td></tr></table></figure>
+
+<p>可以打印出consumer消费的信息</p>
+<h1 id="三、Kafka收集海量日志"><a href="#三、Kafka收集海量日志" class="headerlink" title="三、Kafka收集海量日志"></a>三、Kafka收集海量日志</h1><h2 id="ELK"><a href="#ELK" class="headerlink" title="ELK"></a>ELK</h2><p>==注意的点:东八区的时间 8个小时 logstash kinaba 搜索的时候要处理好时间==</p>
+<p>==watcher告警 搜索的字段是关键字(日志级别),错误日志信息的索引要加入模板，映射为keyword==</p>
+<h2 id="3-1、架构设计"><a href="#3-1、架构设计" class="headerlink" title="3.1、架构设计"></a>3.1、架构设计</h2><p>适合海量数据的官方结构设计</p>
+<p><img src="/img/Kafka.assets/image-20211211173259526.png" srcset="/img/loading.gif" lazyload alt="image-20211211173259526"></p>
+<p><img src="/img/Kafka.assets/image-20211211173747917.png" srcset="/img/loading.gif" lazyload alt="image-20211211173747917"></p>
+<p><img src="/img/Kafka.assets/image-20211211173915636.png" srcset="/img/loading.gif" lazyload alt="image-20211211173915636"></p>
+<h2 id="3-2、日志输出"><a href="#3-2、日志输出" class="headerlink" title="3.2、日志输出"></a>3.2、日志输出</h2><ul>
+<li>Log4j2 (性能更好一些,占用服务器资源更多)</li>
+<li>Log4j</li>
+</ul>
+<blockquote>
+<p>日志分级         warn info error 级别的日志</p>
+<p>日志过滤         需要的/不需要的</p>
+<p>MDC线程变量 日志里的ThreadLocal</p>
+</blockquote>
+<h2 id="3-3、整合Springboot"><a href="#3-3、整合Springboot" class="headerlink" title="3.3、整合Springboot"></a>3.3、整合Springboot</h2><h3 id="1-maven依赖"><a href="#1-maven依赖" class="headerlink" title="1.maven依赖"></a>1.maven依赖</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">project</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span></span><br><span class="hljs-tag">         <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="hljs-tag">         <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span><br>    <span class="hljs-comment">&lt;!--Springboot 依赖--&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">parent</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.1.5.RELEASE<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">relativePath</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">parent</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">modelVersion</span>&gt;</span>4.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">modelVersion</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>Kafka-logCollect<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-comment">&lt;!-- 	排除spring-boot-starter-logging --&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">exclusions</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">exclusion</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-logging<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">exclusion</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">exclusions</span>&gt;</span><br><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-comment">&lt;!-- 	排除spring-boot-starter-logging --&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-logging<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">exclusions</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">exclusion</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>*<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>*<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">exclusion</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">exclusions</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>test<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.projectlombok<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>lombok<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-comment">&lt;!-- log4j2 强依赖于disruptor框架--&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-log4j2<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.lmax<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>disruptor<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.3.4<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>fastjson<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.2.58<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">build</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">finalName</span>&gt;</span>collector<span class="hljs-tag">&lt;/<span class="hljs-name">finalName</span>&gt;</span><br>        <span class="hljs-comment">&lt;!-- 打包时包含properties、xml --&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">resources</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">resource</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">directory</span>&gt;</span>src/main/java<span class="hljs-tag">&lt;/<span class="hljs-name">directory</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">includes</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">include</span>&gt;</span>**/*.properties<span class="hljs-tag">&lt;/<span class="hljs-name">include</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">include</span>&gt;</span>**/*.xml<span class="hljs-tag">&lt;/<span class="hljs-name">include</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">includes</span>&gt;</span><br>                <span class="hljs-comment">&lt;!-- 是否替换资源中的属性--&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">filtering</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">filtering</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">resource</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">resource</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">directory</span>&gt;</span>src/main/resources<span class="hljs-tag">&lt;/<span class="hljs-name">directory</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">resource</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">resources</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">plugins</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>              	<span class="hljs-comment">&lt;!--springboot项目 不加会报错 没有主清单属性--&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">mainClass</span>&gt;</span>com.tho.log.collect.Application<span class="hljs-tag">&lt;/<span class="hljs-name">mainClass</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">plugins</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">build</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">project</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-application-properties-1"><a href="#2-application-properties-1" class="headerlink" title="2.application.properties"></a>2.application.properties</h3><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-meta">server.servlet.context-path</span>=<span class="hljs-string">/</span><br><span class="hljs-meta">server.port</span>=<span class="hljs-string">8001</span><br><br><span class="hljs-meta">spring.application.name</span>=<span class="hljs-string">kafka-logCollect</span><br><span class="hljs-meta">spring.http.encoding.charset</span>=<span class="hljs-string">UTF-8</span><br><span class="hljs-meta">spring.jackson.date-format</span>=<span class="hljs-string">yyyy-MM-dd HH:mm:ss</span><br><span class="hljs-meta">spring.jackson.time-zone</span>=<span class="hljs-string">GMT+8</span><br><span class="hljs-meta">spring.jackson.default-property-inclusion</span>=<span class="hljs-string">NON_NULL</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-log4j2-xml"><a href="#3-log4j2-xml" class="headerlink" title="3.log4j2.xml"></a>3.log4j2.xml</h3><blockquote>
+<p>log4j2 配置文件</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">Configuration</span> <span class="hljs-attr">status</span>=<span class="hljs-string">&quot;INFO&quot;</span> <span class="hljs-attr">schema</span>=<span class="hljs-string">&quot;Log4J-V2.0.xsd&quot;</span> <span class="hljs-attr">monitorInterval</span>=<span class="hljs-string">&quot;600&quot;</span> &gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">Properties</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">Property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;LOG_HOME&quot;</span>&gt;</span>logs<span class="hljs-tag">&lt;/<span class="hljs-name">Property</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;FILE_NAME&quot;</span>&gt;</span>Kafka-logCollect<span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;patternLayout&quot;</span>&gt;</span>[%d&#123;yyyy-MM-dd&#x27;T&#x27;HH:mm:ss.SSSZZ&#125;] [%level&#123;length=5&#125;] [%thread-%tid] [%logger] [%X&#123;hostName&#125;] [%X&#123;ip&#125;] [%X&#123;applicationName&#125;] [%F,%L,%C,%M] [%m] ## &#x27;%ex&#x27;%n<span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">Properties</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">Appenders</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">Console</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;CONSOLE&quot;</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;SYSTEM_OUT&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">PatternLayout</span> <span class="hljs-attr">pattern</span>=<span class="hljs-string">&quot;$&#123;patternLayout&#125;&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">Console</span>&gt;</span>  <br>        <span class="hljs-tag">&lt;<span class="hljs-name">RollingRandomAccessFile</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;appAppender&quot;</span> <span class="hljs-attr">fileName</span>=<span class="hljs-string">&quot;$&#123;LOG_HOME&#125;/app-$&#123;FILE_NAME&#125;.log&quot;</span> <span class="hljs-attr">filePattern</span>=<span class="hljs-string">&quot;$&#123;LOG_HOME&#125;/app-$&#123;FILE_NAME&#125;-%d&#123;yyyy-MM-dd&#125;-%i.log&quot;</span> &gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">PatternLayout</span> <span class="hljs-attr">pattern</span>=<span class="hljs-string">&quot;$&#123;patternLayout&#125;&quot;</span> /&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">Policies</span>&gt;</span><br>              <span class="hljs-tag">&lt;<span class="hljs-name">TimeBasedTriggeringPolicy</span> <span class="hljs-attr">interval</span>=<span class="hljs-string">&quot;1&quot;</span>/&gt;</span><br>              <span class="hljs-tag">&lt;<span class="hljs-name">SizeBasedTriggeringPolicy</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;500MB&quot;</span>/&gt;</span><br>          <span class="hljs-tag">&lt;/<span class="hljs-name">Policies</span>&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">DefaultRolloverStrategy</span> <span class="hljs-attr">max</span>=<span class="hljs-string">&quot;20&quot;</span>/&gt;</span>         <br>        <span class="hljs-tag">&lt;/<span class="hljs-name">RollingRandomAccessFile</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">RollingRandomAccessFile</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;errorAppender&quot;</span> <span class="hljs-attr">fileName</span>=<span class="hljs-string">&quot;$&#123;LOG_HOME&#125;/error-$&#123;FILE_NAME&#125;.log&quot;</span> <span class="hljs-attr">filePattern</span>=<span class="hljs-string">&quot;$&#123;LOG_HOME&#125;/error-$&#123;FILE_NAME&#125;-%d&#123;yyyy-MM-dd&#125;-%i.log&quot;</span> &gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">PatternLayout</span> <span class="hljs-attr">pattern</span>=<span class="hljs-string">&quot;$&#123;patternLayout&#125;&quot;</span> /&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">Filters</span>&gt;</span><br>              <span class="hljs-tag">&lt;<span class="hljs-name">ThresholdFilter</span> <span class="hljs-attr">level</span>=<span class="hljs-string">&quot;warn&quot;</span> <span class="hljs-attr">onMatch</span>=<span class="hljs-string">&quot;ACCEPT&quot;</span> <span class="hljs-attr">onMismatch</span>=<span class="hljs-string">&quot;DENY&quot;</span>/&gt;</span><br>          <span class="hljs-tag">&lt;/<span class="hljs-name">Filters</span>&gt;</span>              <br>          <span class="hljs-tag">&lt;<span class="hljs-name">Policies</span>&gt;</span><br>              <span class="hljs-tag">&lt;<span class="hljs-name">TimeBasedTriggeringPolicy</span> <span class="hljs-attr">interval</span>=<span class="hljs-string">&quot;1&quot;</span>/&gt;</span><br>              <span class="hljs-tag">&lt;<span class="hljs-name">SizeBasedTriggeringPolicy</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;500MB&quot;</span>/&gt;</span><br>          <span class="hljs-tag">&lt;/<span class="hljs-name">Policies</span>&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">DefaultRolloverStrategy</span> <span class="hljs-attr">max</span>=<span class="hljs-string">&quot;20&quot;</span>/&gt;</span>         <br>        <span class="hljs-tag">&lt;/<span class="hljs-name">RollingRandomAccessFile</span>&gt;</span>            <br>    <span class="hljs-tag">&lt;/<span class="hljs-name">Appenders</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">Loggers</span>&gt;</span><br>        <span class="hljs-comment">&lt;!-- 业务相关 异步logger --&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">AsyncLogger</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;com.tho.*&quot;</span> <span class="hljs-attr">level</span>=<span class="hljs-string">&quot;info&quot;</span> <span class="hljs-attr">includeLocation</span>=<span class="hljs-string">&quot;true&quot;</span>&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">AppenderRef</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;appAppender&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">AsyncLogger</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">AsyncLogger</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;com.tho.*&quot;</span> <span class="hljs-attr">level</span>=<span class="hljs-string">&quot;info&quot;</span> <span class="hljs-attr">includeLocation</span>=<span class="hljs-string">&quot;true&quot;</span>&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">AppenderRef</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;errorAppender&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">AsyncLogger</span>&gt;</span>       <br>        <span class="hljs-tag">&lt;<span class="hljs-name">Root</span> <span class="hljs-attr">level</span>=<span class="hljs-string">&quot;info&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">Appender-Ref</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;CONSOLE&quot;</span>/&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">Appender-Ref</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;appAppender&quot;</span>/&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">AppenderRef</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;errorAppender&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">Root</span>&gt;</span>         <br>    <span class="hljs-tag">&lt;/<span class="hljs-name">Loggers</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">Configuration</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-打印的日志"><a href="#4-打印的日志" class="headerlink" title="4.打印的日志"></a>4.打印的日志</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 日志格式</span><br>[%d&#123;yyyy-MM-dd<span class="hljs-string">&#x27;T&#x27;</span>HH:mm:ss.SSSZZ&#125;]   时间<br>[%level&#123;length=<span class="hljs-number">5</span>&#125;]  								日志级别<br>[%thread-%tid] 											线程信息<br>[%logger] 													具体的类 <br>[%X&#123;hostName&#125;] 											host名称<br>[%X&#123;ip&#125;] 														ip地址<br>[%X&#123;applicationName&#125;] 							应用名称<br>[%F,%L,%C,%M]												F 当前执行的类(file文件) L 行号 C <span class="hljs-class"><span class="hljs-keyword">class</span>信息 <span class="hljs-title">M</span> 方法(<span class="hljs-title">method</span>) </span><br><span class="hljs-class">[%<span class="hljs-title">m</span>]  															日志<span class="hljs-title">info</span>信息</span><br><span class="hljs-class">## &#x27;%<span class="hljs-title">ex</span>&#x27;%<span class="hljs-title">n</span>                          <span class="hljs-title">ex</span>异常信息 %<span class="hljs-title">n</span> 表示换行</span><br><span class="hljs-class"></span><br><span class="hljs-class">[2021-12-11<span class="hljs-title">T18</span>:34:13.024+08:00] </span><br><span class="hljs-class">[<span class="hljs-title">INFO</span>] </span><br><span class="hljs-class">[<span class="hljs-title">main</span>-1] </span><br><span class="hljs-class">[<span class="hljs-title">org</span>.<span class="hljs-title">springframework</span>.<span class="hljs-title">boot</span>.<span class="hljs-title">web</span>.<span class="hljs-title">embedded</span>.<span class="hljs-title">tomcat</span>.<span class="hljs-title">TomcatWebServer</span>]</span><br><span class="hljs-class">[] </span><br><span class="hljs-class">[] </span><br><span class="hljs-class">[] [<span class="hljs-title">TomcatWebServer</span>.<span class="hljs-title">java</span>,204,<span class="hljs-title">org</span>.<span class="hljs-title">springframework</span>.<span class="hljs-title">boot</span>.<span class="hljs-title">web</span>.<span class="hljs-title">embedded</span>.<span class="hljs-title">tomcat</span>.<span class="hljs-title">TomcatWebServer</span>,<span class="hljs-title">start</span>] </span><br><span class="hljs-class">[<span class="hljs-title">Tomcat</span> <span class="hljs-title">started</span> <span class="hljs-title">on</span> <span class="hljs-title">port</span>(<span class="hljs-title">s</span>): 8001 (<span class="hljs-title">http</span>) <span class="hljs-title">with</span> <span class="hljs-title">context</span> <span class="hljs-title">path</span> &#x27;&#x27;] </span><br><span class="hljs-class">  ## &#x27;&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="3-4、filebeat日志收集"><a href="#3-4、filebeat日志收集" class="headerlink" title="3.4、filebeat日志收集"></a>3.4、filebeat日志收集</h2><h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs java">filebeat安装：<br><br>cd /usr/local<br><span class="hljs-comment">// 安装包放在 /root/workspace/software</span><br>tar -zxvf filebeat-<span class="hljs-number">7.15</span><span class="hljs-number">.2</span>-linux-x86_64.tar.gz -C /usr/local/filebeat<br>cd /usr/local<br>mv filebeat-<span class="hljs-number">7.15</span><span class="hljs-number">.2</span>-linux-x86_64.tar.gz/ filebeat-<span class="hljs-number">7.15</span><span class="hljs-number">.2</span><br><br>## 配置filebeat，可以参考filebeat.full.yml中的配置。<br>vim /usr/local/filebeat-<span class="hljs-number">5.6</span><span class="hljs-number">.2</span>/filebeat.yml<br><br>filebeat启动：<br><br>## 检查配置是否正确<br>cd /usr/local/filebeat-<span class="hljs-number">6.6</span><span class="hljs-number">.0</span><br>./filebeat -c filebeat.yml -configtest<br>## Config OK<br><br>## 启动filebeat<br>/usr/local/filebeat-<span class="hljs-number">6.6</span><span class="hljs-number">.0</span>/filebeat &amp;<br>ps -ef | grep filebeat<br><br>可以通过查看 kafka的日志文件和 工程运行生成的log日志文件进行比对,当工程生成的log更新之后,查看kafka日志是否更新来判断filebeat是否启动成功<br><br><br>## 启动kafka：<br>./bin/kafka-server-start.sh ./config/server.properties<br><br>## 查看topic列表：<br>./bin/kafka-topics.sh --list --bootstrap-server localhost:<span class="hljs-number">9092</span><br><br>## 创建topic<br>./bin/kafka-topics.sh --create --bootstrap-server localhost:<span class="hljs-number">9092</span> --replication-factor <span class="hljs-number">1</span> --partitions <span class="hljs-number">1</span> --topic app-Kafka-logCollect<br>  <br>./bin/kafka-topics.sh --create --bootstrap-server localhost:<span class="hljs-number">9092</span> --replication-factor <span class="hljs-number">1</span> --partitions <span class="hljs-number">1</span> --topic error-Kafka-logCollect<br><br><br><br><br><br>## 查看topic情况<br>kafka-topics.sh --zookeeper <span class="hljs-number">192.168</span><span class="hljs-number">.11</span><span class="hljs-number">.111</span>:<span class="hljs-number">2181</span> --topic app-log-test --describe<br><br><br></code></pre></td></tr></table></figure>
+
+<p>filebeat配置文件  filebeat.yml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><br><br><span class="hljs-comment"># ============================== Filebeat inputs ===============================</span><br><br><span class="hljs-attr">filebeat.prospectors:</span><br><br><span class="hljs-comment"># Each - is an input. Most options can be set at the input level, so</span><br><span class="hljs-comment"># you can use different inputs for various configurations.</span><br><span class="hljs-comment"># Below are the input specific configurations.</span><br><br><span class="hljs-bullet">-</span> <span class="hljs-attr">input_type:</span> <span class="hljs-string">log</span><br><br>  <span class="hljs-comment"># Paths that should be crawled and fetched. Glob based paths.</span><br>  <span class="hljs-attr">paths:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">/root/project/logs/app-Kafka-logCollect.log</span><br>    <span class="hljs-comment">#- c:\programdata\elasticsearch\logs\*</span><br>  <span class="hljs-attr">document_type:</span> <span class="hljs-string">&quot;app-log&quot;</span><br>  <span class="hljs-attr">multiline:</span> <br>    <span class="hljs-attr">pattern:</span> <span class="hljs-string">&#x27;^\[&#x27;</span> <span class="hljs-comment"># 中括号开头为日志记录</span><br>    <span class="hljs-attr">negate:</span> <span class="hljs-literal">true</span>    <span class="hljs-comment"># 是否匹配到</span><br>    <span class="hljs-attr">match:</span> <span class="hljs-string">after</span>    <span class="hljs-comment"># 合并到上一行的末尾</span><br>    <span class="hljs-attr">max_lines:</span> <span class="hljs-number">2000</span> <span class="hljs-comment"># 最大的行数</span><br>    <span class="hljs-attr">timeout:</span> <span class="hljs-string">2s</span>     <span class="hljs-comment"># 如果在规定的时间内没有新的日志事件,就不用等待后面的日志信息</span><br>  <span class="hljs-attr">fields:</span><br>    <span class="hljs-attr">logbiz:</span> <span class="hljs-string">Kafka-logCollect</span><br>    <span class="hljs-attr">logtopic:</span> <span class="hljs-string">app-Kafka-logCollect</span>  <span class="hljs-comment"># 按服务划分 用作kafka topic</span><br>    <span class="hljs-attr">evn:</span> <span class="hljs-string">dev</span><br>  <br><span class="hljs-bullet">-</span> <span class="hljs-attr">input_type:</span> <span class="hljs-string">log</span><br><br><br>  <span class="hljs-comment"># Paths that should be crawled and fetched. Glob based paths.</span><br>  <span class="hljs-attr">paths:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">/root/project/logs/error-Kafka-logCollect.log</span><br>  <span class="hljs-attr">document_type:</span> <span class="hljs-string">&quot;error-log&quot;</span><br>  <span class="hljs-attr">multiline:</span> <br>    <span class="hljs-attr">pattern:</span> <span class="hljs-string">&#x27;^\[&#x27;</span> <span class="hljs-comment"># 中括号开头为日志记录</span><br>    <span class="hljs-attr">negate:</span> <span class="hljs-literal">true</span>    <span class="hljs-comment"># 是否匹配到</span><br>    <span class="hljs-attr">match:</span> <span class="hljs-string">after</span>    <span class="hljs-comment"># 合并到上一行的末尾</span><br>    <span class="hljs-attr">max_lines:</span> <span class="hljs-number">2000</span> <span class="hljs-comment"># 最大的行数</span><br>    <span class="hljs-attr">timeout:</span> <span class="hljs-string">2s</span>     <span class="hljs-comment"># 如果在规定的时间内没有新的日志事件,就不用等待后面的日志信息</span><br>  <span class="hljs-attr">fields:</span><br>    <span class="hljs-attr">logbiz:</span> <span class="hljs-string">Kafka-logCollect</span><br>    <span class="hljs-attr">logtopic:</span> <span class="hljs-string">error-Kafka-logCollect</span>  <span class="hljs-comment"># 按服务划分 用作kafka topic</span><br>    <span class="hljs-attr">evn:</span> <span class="hljs-string">dev</span><br><br><br><br><span class="hljs-comment"># ============================== Filebeat modules ==============================</span><br><span class="hljs-attr">output.kafka:</span><br>    <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span><br>    <span class="hljs-attr">hosts:</span> [<span class="hljs-string">&quot;192.168.198.100:9092&quot;</span>]<br>    <span class="hljs-attr">topic:</span> <span class="hljs-string">&#x27;<span class="hljs-template-variable">%&#123;[fields.logtopic]&#125;</span>&#x27;</span><br>    <br>    <span class="hljs-attr">partition.hash:</span><br>      <span class="hljs-attr">reachable_only:</span> <span class="hljs-literal">true</span><br>    <span class="hljs-attr">compression:</span> <span class="hljs-string">gzip</span><br>    <span class="hljs-attr">max_message_bytes:</span> <span class="hljs-number">1000000</span><br>    <span class="hljs-attr">required_acks:</span> <span class="hljs-number">1</span><br><span class="hljs-attr">logging.to_files:</span> <span class="hljs-literal">true</span><br><br><br></code></pre></td></tr></table></figure>
+
+<h2 id="3-5、logstash日志过滤"><a href="#3-5、logstash日志过滤" class="headerlink" title="3.5、logstash日志过滤"></a>3.5、logstash日志过滤</h2><h3 id="1-logstash配置"><a href="#1-logstash配置" class="headerlink" title="1.logstash配置"></a>1.logstash配置</h3><p>logstash目录下 /usr/local/logstash/logstash-6.4.3 新建文件夹 script</p>
+<p>script文件夹下新建配置文件 logstash-script.conf</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><code class="hljs java">input &#123;<br>	kafka &#123;<br>		## app-log-服务名称<br>		topics_pattern =&gt; <span class="hljs-string">&quot;app-Kafka-.*&quot;</span><br>		bootstrap_servers =&gt; <span class="hljs-string">&quot;192.168.198.100:9092&quot;</span><br>		codec =&gt; json<br>		consumer_threads =&gt; <span class="hljs-number">1</span> ## 增加consumer并行消费线程数<br>		decorate_events =&gt; <span class="hljs-keyword">true</span><br>		# auto_offset_rest =&gt; <span class="hljs-string">&quot;latest&quot;</span><br>		group_id =&gt; <span class="hljs-string">&quot;app-log-group&quot;</span><br>	&#125;<br>	<br>	kafka &#123;<br>		## app-log-服务名称<br>		topics_pattern =&gt; <span class="hljs-string">&quot;error-Kafka-.*&quot;</span><br>		bootstrap_servers =&gt; <span class="hljs-string">&quot;192.168.198.100:9092&quot;</span><br>		codec =&gt; json<br>		consumer_threads =&gt; <span class="hljs-number">1</span> ## 增加consumer并行消费线程数<br>		decorate_events =&gt; <span class="hljs-keyword">true</span><br>		# auto_offset_rest =&gt; <span class="hljs-string">&quot;latest&quot;</span><br>		group_id =&gt; <span class="hljs-string">&quot;error-log-group&quot;</span><br>	&#125;<br>&#125;<br><br>filter &#123;<br>	<br>	## 时区转换<br>	ruby &#123;<br>		code =&gt; <span class="hljs-string">&quot;event.set(&#x27;index_time&#x27;, event.timestamp.time.localtime.strftime(&#x27;%Y.%m.%d&#x27;))&quot;</span><br>	&#125;<br>	<br>	<span class="hljs-keyword">if</span>	<span class="hljs-string">&quot;app-Kafka&quot;</span> in [fields][logtopic] &#123;<br>		grok &#123;<br>			## 表达式<br>			match =&gt; [<span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-string">&quot;\[%&#123;NOTSPACE:currentDateTime&#125;\] \[%&#123;NOTSPACE:level&#125;\] \[%&#123;NOTSPACE:thread-id&#125;\] \[%&#123;NOTSPACE:class&#125;\] \[%&#123;DATA:hostName&#125;\] \[%&#123;DATA:ip&#125;\] \[%&#123;DATA:applicationName&#125;\] \[%&#123;DATA:location&#125;\] \[%&#123;DATA:messageInfo&#125;\] ## (\&#x27;\&#x27;|%&#123;QUOTEDSTRING:throwable&#125;)&quot;</span>]<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-keyword">if</span>	<span class="hljs-string">&quot;error-Kafka&quot;</span> in [fields][logtopic] &#123;<br>		grok &#123;<br>			## 表达式<br>			match =&gt; [<span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-string">&quot;\[%&#123;NOTSPACE:currentDateTime&#125;\] \[%&#123;NOTSPACE:level&#125;\] \[%&#123;NOTSPACE:thread-id&#125;\] \[%&#123;NOTSPACE:class&#125;\] \[%&#123;DATA:hostName&#125;\] \[%&#123;DATA:ip&#125;\] \[%&#123;DATA:applicationName&#125;\] \[%&#123;DATA:location&#125;\] \[%&#123;DATA:messageInfo&#125;\] ## (\&#x27;\&#x27;|%&#123;QUOTEDSTRING:throwable&#125;)&quot;</span>]<br>		&#125;<br>	&#125;<br>	<br>	<br>	<br>&#125;<br>## 测试输出到控制台<br>output &#123;<br>	stdout &#123;codec =&gt; rubydebug&#125;<br>&#125;<br><br>## 输出到elasticSearch<br>output &#123;<br>	<br>	<span class="hljs-keyword">if</span>	<span class="hljs-string">&quot;app-Kafka&quot;</span> in [fields][logtopic] &#123;<br>		<br>		## es插件<br>		elasticsearch &#123;<br>		# es地址<br>		hosts =&gt; [<span class="hljs-string">&quot;192.168.198.100:9200&quot;</span>]<br>		# 同步的索引名<br>		index =&gt; <span class="hljs-string">&quot;app-log-%&#123;[fields][logbiz]&#125;-%&#123;index_time&#125;&quot;</span><br>		# 设置 _docID 和 数据相同<br>		# document_id =&gt; <span class="hljs-string">&quot;%&#123;itemId&#125;&quot;</span> <br>		<br>		# 定义模板名称<br>		# template_name =&gt; <span class="hljs-string">&quot;myik&quot;</span><br>		# 模板所在位置<br>		# template =&gt; <span class="hljs-string">&quot;/usr/local/logstash/logstash-6.4.3/sync/logstash-ik.json&quot;</span><br>		# 重写模板<br>		# template_overwrite =&gt; <span class="hljs-keyword">true</span><br>		# 默认为<span class="hljs-keyword">true</span>,<span class="hljs-keyword">false</span>关闭logstash自动管理模板功能，如果自定义模板,则设置为<span class="hljs-keyword">false</span><br>		manage_template =&gt; <span class="hljs-keyword">true</span><br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-keyword">if</span>	<span class="hljs-string">&quot;error-Kafka&quot;</span> in [fields][logtopic] &#123;<br>		<br>		## es插件<br>		elasticsearch &#123;<br>		# es地址<br>		hosts =&gt; [<span class="hljs-string">&quot;192.168.198.100:9200&quot;</span>]<br>		# 同步的索引名<br>		index =&gt; <span class="hljs-string">&quot;app-log-%&#123;[fields][logbiz]&#125;-%&#123;index_time&#125;&quot;</span><br>		# 设置 _docID 和 数据相同<br>		# document_id =&gt; <span class="hljs-string">&quot;%&#123;itemId&#125;&quot;</span> <br>		<br>		# 定义模板名称<br>		# template_name =&gt; <span class="hljs-string">&quot;myik&quot;</span><br>		# 模板所在位置<br>		# template =&gt; <span class="hljs-string">&quot;/usr/local/logstash/logstash-6.4.3/sync/logstash-ik.json&quot;</span><br>		# 重写模板<br>		# template_overwrite =&gt; <span class="hljs-keyword">true</span><br>		# 默认为<span class="hljs-keyword">true</span>,<span class="hljs-keyword">false</span>关闭logstash自动管理模板功能，如果自定义模板,则设置为<span class="hljs-keyword">false</span><br>		manage_template =&gt; <span class="hljs-keyword">true</span><br>		&#125;<br>	&#125;<br><br>	<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-启动logstash"><a href="#2-启动logstash" class="headerlink" title="2.启动logstash"></a>2.启动logstash</h3><blockquote>
+<p>进入logstash 的 bin目录 执行命令 <code>./logstash -f /usr/local/logstash/logstash-6.4.3/script/logstash-script.conf</code></p>
+</blockquote>
+<blockquote>
+<p>可以通过kafka来查看结果 查看group信息</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> logstash-script.conf 配置文件中配置了两种日志类型各自的groupId</span> <br>./bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group app-log-group<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-6、日志持久化，可视化"><a href="#3-6、日志持久化，可视化" class="headerlink" title="3.6、日志持久化，可视化"></a>3.6、日志持久化，可视化</h2><blockquote>
+<p>ElasticSearch 索引创建周期,命名规范选择</p>
+<p>Kibana控制台应用，可视化日志</p>
+<p>监控告警 Watcher 插件基本使用 WatchApi</p>
+</blockquote>
+<ul>
+<li>启动filebeat</li>
+<li>kafka (启动kafka之前需要启动zk)</li>
+<li>logstash</li>
+</ul>
+<p>启动ElasticSearch =&gt; 将日志持久化到es上</p>
+<p>配置好kibana控制台</p>
+<h3 id="1-配置kibana"><a href="#1-配置kibana" class="headerlink" title="1.配置kibana"></a>1.配置kibana</h3><blockquote>
+<ul>
+<li>解压缩kibana安装包</li>
+<li>修改配置文件 kibana.yml</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java">server.port: <span class="hljs-number">5601</span><br>server.host: <span class="hljs-string">&quot;0.0.0.0&quot;</span><br>server.name: <span class="hljs-string">&quot;kibana_198.100&quot;</span><br>elasticsearch.hosts: [<span class="hljs-string">&quot;http://192.168.198.100:9200&quot;</span>]<br>#elasticsearch.username: <span class="hljs-string">&quot;kibana_system&quot;</span><br>#elasticsearch.password: <span class="hljs-string">&quot;pass&quot;</span><br>i18n.locale: <span class="hljs-string">&quot;zh-CN&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-启动kibana"><a href="#2-启动kibana" class="headerlink" title="2.启动kibana"></a>2.启动kibana</h3><h4 id="启动kibana"><a href="#启动kibana" class="headerlink" title="启动kibana"></a><strong>启动kibana</strong></h4><p>该命令在kibana的bin目录下面</p>
+<p>启动时间会稍微较长</p>
+<p><code>./kibana --allow-root</code></p>
+<h3 id="3-kibana配置"><a href="#3-kibana配置" class="headerlink" title="3.kibana配置"></a>3.kibana配置</h3><blockquote>
+<p>elasticSearch 和 kibana全部配置好 x-pack插件</p>
+<p>elasticSearch 设置账户密码 依赖于ealsticSearch 的 应用要配置好es的账户密码</p>
+</blockquote>
+<blockquote>
+<p>kibana配置可视化查看es数据</p>
+<p>kibana界面左侧最底部的 </p>
+<p>1.Stack Management</p>
+<p>2.Kibana选项下的 索引模式</p>
+<p>3.创建索引模式</p>
+<p>4.名称 app-log-* 查看右侧是否匹配成功 </p>
+<p>​    时间戳字段选择 currentDateTime</p>
+<p>5.创建索引成功,回到主页,选择Analytics下的 Discover 查看具体的es信息</p>
+</blockquote>
+<h2 id="3-7、watcher监控告警"><a href="#3-7、watcher监控告警" class="headerlink" title="3.7、watcher监控告警"></a>3.7、watcher监控告警</h2><h3 id="1-watch配置"><a href="#1-watch配置" class="headerlink" title="1.watch配置"></a>1.watch配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><code class="hljs java">## 创建一个watcher,比如定义一个trigger 每个10s钟看一下input里的数据<br>## 创建一个watcher,比如定义一个trigger 每个5s钟看一下input里的数据<br>PUT _xpack/watcher/watch/error_log_collector_watcher<br>&#123;<br>  <span class="hljs-string">&quot;trigger&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;schedule&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;interval&quot;</span>: <span class="hljs-string">&quot;5s&quot;</span><br>    &#125;<br>  &#125;,<br>  <span class="hljs-string">&quot;input&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;search&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;request&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;indices&quot;</span>: [<span class="hljs-string">&quot;&lt;error-log-error-collect-&#123;now+8h/d&#125;&gt;&quot;</span>],<br>        <span class="hljs-string">&quot;body&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;size&quot;</span>: <span class="hljs-number">0</span>,<br>          <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;bool&quot;</span>: &#123;<br>              <span class="hljs-string">&quot;must&quot;</span>: [<br>                  &#123;<br>                    <span class="hljs-string">&quot;term&quot;</span>: &#123;<span class="hljs-string">&quot;level&quot;</span>: <span class="hljs-string">&quot;ERROR&quot;</span>&#125;<br>                  &#125;<br>              ],<br>              <span class="hljs-string">&quot;filter&quot;</span>: &#123;<br>                <span class="hljs-string">&quot;range&quot;</span>: &#123;<br>                    <span class="hljs-string">&quot;currentDateTime&quot;</span>: &#123;<br>                    <span class="hljs-string">&quot;gt&quot;</span>: <span class="hljs-string">&quot;now-30s&quot;</span> , <span class="hljs-string">&quot;lt&quot;</span>: <span class="hljs-string">&quot;now&quot;</span><br>                  &#125;<br>                &#125;<br>              &#125; <br>            &#125;<br>          &#125;<br>        &#125;<br>      &#125;<br>    &#125;<br>  &#125;,<br><br>  <span class="hljs-string">&quot;condition&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;compare&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;ctx.payload.hits.total&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;gt&quot;</span>: <span class="hljs-number">0</span><br>      &#125;<br>    &#125;<br>  &#125;,<br> <br>  <span class="hljs-string">&quot;transform&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;search&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;request&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;indices&quot;</span>: [<span class="hljs-string">&quot;&lt;error-log-error-collect-&#123;now+8h/d&#125;&gt;&quot;</span>],<br>        <span class="hljs-string">&quot;body&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;size&quot;</span>: <span class="hljs-number">1</span>,<br>          <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;bool&quot;</span>: &#123;<br>              <span class="hljs-string">&quot;must&quot;</span>: [<br>                  &#123;<br>                    <span class="hljs-string">&quot;term&quot;</span>: &#123;<span class="hljs-string">&quot;level&quot;</span>: <span class="hljs-string">&quot;ERROR&quot;</span>&#125;<br>                  &#125;<br>              ],<br>              <span class="hljs-string">&quot;filter&quot;</span>: &#123;<br>                <span class="hljs-string">&quot;range&quot;</span>: &#123;<br>                    <span class="hljs-string">&quot;currentDateTime&quot;</span>: &#123;<br>                    <span class="hljs-string">&quot;gt&quot;</span>: <span class="hljs-string">&quot;now-30s&quot;</span> , <span class="hljs-string">&quot;lt&quot;</span>: <span class="hljs-string">&quot;now&quot;</span><br>                  &#125;<br>                &#125;<br>              &#125; <br>            &#125;<br>          &#125;,<br>          <span class="hljs-string">&quot;sort&quot;</span>: [<br>            &#123;<br>                <span class="hljs-string">&quot;currentDateTime&quot;</span>: &#123;<br>                    <span class="hljs-string">&quot;order&quot;</span>: <span class="hljs-string">&quot;desc&quot;</span><br>                &#125;<br>            &#125;<br>          ]<br>        &#125;<br>      &#125;<br>    &#125;<br>  &#125;,<br>  <span class="hljs-string">&quot;actions&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;test_error&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;webhook&quot;</span> : &#123;<br>        <span class="hljs-string">&quot;method&quot;</span> : <span class="hljs-string">&quot;POST&quot;</span>,<br>        <span class="hljs-string">&quot;url&quot;</span> : <span class="hljs-string">&quot;http://192.168.198.100:8001/accurateWatch&quot;</span>,<br>        <span class="hljs-string">&quot;body&quot;</span> : <span class="hljs-string">&quot;&#123;\&quot;title\&quot;: \&quot;异常错误告警\&quot;, \&quot;applicationName\&quot;: \&quot;&#123;&#123;#ctx.payload.hits.hits&#125;&#125;&#123;&#123;_source.applicationName&#125;&#125;&#123;&#123;/ctx.payload.hits.hits&#125;&#125;\&quot;, \&quot;level\&quot;:\&quot;告警级别P1\&quot;, \&quot;body\&quot;: \&quot;&#123;&#123;#ctx.payload.hits.hits&#125;&#125;&#123;&#123;_source.messageInfo&#125;&#125;&#123;&#123;/ctx.payload.hits.hits&#125;&#125;\&quot;, \&quot;executionTime\&quot;: \&quot;&#123;&#123;#ctx.payload.hits.hits&#125;&#125;&#123;&#123;_source.currentDateTime&#125;&#125;&#123;&#123;/ctx.payload.hits.hits&#125;&#125;\&quot;&#125;&quot;</span><br>      &#125;<br>    &#125;<br> &#125;<br>&#125;<br><br># 查看一个watcher<br># <br>GET _xpack/watcher/watch/error_log_collector_watcher<br><br><br>#删除一个watcher<br>DELETE _xpack/watcher/watch/error_log_collector_watcher<br><br>#执行watcher<br># POST _xpack/watcher/watch/error_log_collector_watcher/_execute<br><br>#查看执行结果<br>GET /.watcher-history*/_search?pretty<br>&#123;<br>  <span class="hljs-string">&quot;sort&quot;</span> : [<br>    &#123; <span class="hljs-string">&quot;result.execution_time&quot;</span> : <span class="hljs-string">&quot;desc&quot;</span> &#125;<br>  ],<br>  <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;watch_id&quot;</span>: <span class="hljs-string">&quot;error_log_collector_watcher&quot;</span><br>    &#125;<br>  &#125;<br>&#125;<br><br>GET error-log-collector-<span class="hljs-number">2019.09</span><span class="hljs-number">.18</span>/_search?size=<span class="hljs-number">10</span><br>&#123;<br><br>  <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;level&quot;</span>: <span class="hljs-string">&quot;ERROR&quot;</span><br>    &#125;<br>  &#125;<br>  ,<br>  <span class="hljs-string">&quot;sort&quot;</span>: [<br>    &#123;<br>        <span class="hljs-string">&quot;currentDateTime&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;order&quot;</span>: <span class="hljs-string">&quot;desc&quot;</span><br>        &#125;<br>    &#125;<br>  ] <br>&#125;<br><br><br>GET error-log-collector-<span class="hljs-number">2019.09</span><span class="hljs-number">.18</span>/_search?size=<span class="hljs-number">10</span><br>&#123;<br><br>  <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;level&quot;</span>: <span class="hljs-string">&quot;ERROR&quot;</span><br>    &#125;<br>  &#125;<br>  ,<br>  <span class="hljs-string">&quot;sort&quot;</span>: [<br>    &#123;<br>        <span class="hljs-string">&quot;currentDateTime&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;order&quot;</span>: <span class="hljs-string">&quot;desc&quot;</span><br>        &#125;<br>    &#125;<br>  ] <br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-创建错误日志信息模板"><a href="#2-创建错误日志信息模板" class="headerlink" title="2.创建错误日志信息模板"></a>2.创建错误日志信息模板</h3><blockquote>
+<p>错误的日志 error-log 索引需要的模板如下</p>
+<p>需要该索引字段来进行watcher的监控警告</p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><code class="hljs json">PUT _template/error-log-<br>&#123;<br>  <span class="hljs-attr">&quot;template&quot;</span>: <span class="hljs-string">&quot;error-log-*&quot;</span>,<br>  <span class="hljs-attr">&quot;order&quot;</span>: <span class="hljs-number">0</span>,<br>  <span class="hljs-attr">&quot;settings&quot;</span>: &#123;<br>    <span class="hljs-attr">&quot;index&quot;</span>: &#123;<br>      <span class="hljs-attr">&quot;refresh_interval&quot;</span>: <span class="hljs-string">&quot;5s&quot;</span><br>    &#125;<br>  &#125;,<br>  <span class="hljs-attr">&quot;mappings&quot;</span>: &#123;<br>    <br>      <span class="hljs-attr">&quot;dynamic_templates&quot;</span>: [<br>        &#123;<br>          <span class="hljs-attr">&quot;message_field&quot;</span>: &#123;<br>            <span class="hljs-attr">&quot;match_mapping_type&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,<br>            <span class="hljs-attr">&quot;path_match&quot;</span>: <span class="hljs-string">&quot;message&quot;</span>,<br>            <span class="hljs-attr">&quot;mapping&quot;</span>: &#123;<br>              <span class="hljs-attr">&quot;norms&quot;</span>: <span class="hljs-literal">false</span>,<br>              <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;text&quot;</span>,<br>              <span class="hljs-attr">&quot;analyzer&quot;</span>: <span class="hljs-string">&quot;ik_max_word&quot;</span>,<br>              <span class="hljs-attr">&quot;search_analyzer&quot;</span>: <span class="hljs-string">&quot;ik_max_word&quot;</span><br>            &#125;<br>          &#125;<br>        &#125;,<br>        &#123;<br>          <span class="hljs-attr">&quot;throwable_field&quot;</span>: &#123;<br>            <span class="hljs-attr">&quot;match_mapping_type&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,<br>            <span class="hljs-attr">&quot;path_match&quot;</span>: <span class="hljs-string">&quot;throwable&quot;</span>,<br>            <span class="hljs-attr">&quot;mapping&quot;</span>: &#123;<br>              <span class="hljs-attr">&quot;norms&quot;</span>: <span class="hljs-literal">false</span>,<br>              <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;text&quot;</span>,<br>              <span class="hljs-attr">&quot;analyzer&quot;</span>: <span class="hljs-string">&quot;ik_max_word&quot;</span>,<br>              <span class="hljs-attr">&quot;search_analyzer&quot;</span>: <span class="hljs-string">&quot;ik_max_word&quot;</span><br>            &#125;<br>          &#125;<br>        &#125;,<br>        &#123;<br>          <span class="hljs-attr">&quot;string_fields&quot;</span>: &#123;<br>            <span class="hljs-attr">&quot;match_mapping_type&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,<br>            <span class="hljs-attr">&quot;match&quot;</span>: <span class="hljs-string">&quot;*&quot;</span>,<br>            <span class="hljs-attr">&quot;mapping&quot;</span>: &#123;<br>              <span class="hljs-attr">&quot;norms&quot;</span>: <span class="hljs-literal">false</span>,<br>              <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;text&quot;</span>,<br>              <span class="hljs-attr">&quot;analyzer&quot;</span>: <span class="hljs-string">&quot;ik_max_word&quot;</span>,<br>              <span class="hljs-attr">&quot;search_analyzer&quot;</span>: <span class="hljs-string">&quot;ik_max_word&quot;</span>,<br>              <span class="hljs-attr">&quot;fields&quot;</span>: &#123;<br>                <span class="hljs-attr">&quot;keyword&quot;</span>: &#123;<br>                  <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;keyword&quot;</span><br>                &#125;<br>              &#125;<br>            &#125;<br>          &#125;<br>        &#125;<br>      ],<br>      <span class="hljs-attr">&quot;properties&quot;</span>: &#123;         <br>        <span class="hljs-attr">&quot;hostName&quot;</span>: &#123;<br>          <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;keyword&quot;</span><br>        &#125;,<br>        <span class="hljs-attr">&quot;ip&quot;</span>: &#123;<br>          <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;ip&quot;</span><br>        &#125;,<br>        <span class="hljs-attr">&quot;level&quot;</span>: &#123;<br>          <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;keyword&quot;</span><br>        &#125;,<br>		<span class="hljs-attr">&quot;currentDateTime&quot;</span>: &#123;<br>		  <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;date&quot;</span><br>		&#125;<br>      &#125;<br>    <br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-可以ack掉watcher告警信息"><a href="#3-可以ack掉watcher告警信息" class="headerlink" title="3.可以ack掉watcher告警信息"></a>3.可以ack掉watcher告警信息</h3><h2 id="3-8、watcher相关学习"><a href="#3-8、watcher相关学习" class="headerlink" title="3.8、watcher相关学习"></a>3.8、watcher相关学习</h2>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Kafka/">Kafka</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章可随意转载
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/11/30/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">分布式会话</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/11/20/Redis/">
+                        <span class="hidden-mobile">Redis</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

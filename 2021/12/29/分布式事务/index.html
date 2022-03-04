@@ -1,0 +1,638 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/mario.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="分布式事务">
+  <meta name="author" content="tho">
+  <meta name="keywords" content="">
+  <meta name="description" content="分布式事务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式事务">
+<meta property="og:url" content="http://example.com/2021/12/29/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/index.html">
+<meta property="og:site_name" content="Tho668&#39;s Blogs">
+<meta property="og:description" content="分布式事务">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/12/29/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.assets/image-20220105221637828.png">
+<meta property="og:image" content="http://example.com/2021/12/29/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.assets/image-20220105222035561.png">
+<meta property="og:image" content="http://example.com/2021/12/29/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.assets/image-20220106155647202.png">
+<meta property="og:image" content="http://example.com/2021/12/29/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.assets/image-20220108125126799.png">
+<meta property="og:image" content="http://example.com/2021/12/29/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.assets/image-20220110134213965.png">
+<meta property="article:published_time" content="2021-12-29T01:24:32.000Z">
+<meta property="article:modified_time" content="2022-03-04T14:26:25.208Z">
+<meta property="article:author" content="tho">
+<meta property="article:tag" content="分布式事务">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2021/12/29/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.assets/image-20220105221637828.png">
+  
+  <title>分布式事务 - Tho668&#39;s Blogs</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tho668</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/galaxy.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="分布式事务">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-12-29 09:24" pubdate>
+        December 29, 2021 am
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      9.4k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      29 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">分布式事务</h1>
+            
+            <div class="markdown-body">
+              <p>分布式事务</p>
+<span id="more"></span>
+
+
+
+<h1 id="一、分布式事务"><a href="#一、分布式事务" class="headerlink" title="一、分布式事务"></a>一、分布式事务</h1><ul>
+<li>CAP原理</li>
+<li>ACID原理 和 BASE原理</li>
+<li>事务补偿机制</li>
+</ul>
+<blockquote>
+<p>分布式事务的解决方案</p>
+</blockquote>
+<ul>
+<li>基于XA协议的两阶段提交 (提交过程复杂，谨慎使用)</li>
+<li>基于本地消息表的最终一致方案</li>
+<li>基于MQ消息队列的最终一致方案</li>
+</ul>
+<h2 id="1-1、CAP原理"><a href="#1-1、CAP原理" class="headerlink" title="1.1、CAP原理"></a>1.1、CAP原理</h2><ul>
+<li>C - Consistent，一致性。具体是指，操作成功后，所有的节点在同一时间内，看到的数据都是完全一致的，一致性指的就是数据一致性</li>
+<li>A - Availability，可用性。指服务一致可用性，在规定的时间内完成响应</li>
+<li>P - Partition tolerance，分区容错性。指分布式系统遇到某节点或网络分区故障的时候，仍然能够对外提供服务</li>
+</ul>
+<img src="%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.assets/image-20220105221637828.png" srcset="/img/loading.gif" lazyload alt="image-20220105221637828" style="zoom:50%;" />
+
+<blockquote>
+<p>CAP原理指出，这三个指标不能同时满足，最多只能同时满足其中两个</p>
+</blockquote>
+<blockquote>
+<p>之所以使用分布式系统，就是为了在某个节点不可用的情况下，整个服务对外还是可以的，这正是满足P(分区容错性)。如果我们的服务不满足P(分区容错性)，那么我们的系统也就不是分布式的，所以P(分区容错性)总是成立的，那么A 和 C为什么不能同时满足呢</p>
+</blockquote>
+<img src="%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.assets/image-20220105222035561.png" srcset="/img/loading.gif" lazyload alt="image-20220105222035561" style="zoom:80%;" />
+
+<blockquote>
+<ul>
+<li>A 和 B 是两个数据节点，A 向 B 同步数据，并且作为一个整体对外提供服务。由于我们的系统保证了P(分区容错性)，那么A 和 B 的同步，我们允许出现故障。接下来我们再保证A (可用性)，也就是说A 和B 同步出现问题时，客户端还能够访问我们的系统，那么客户即可能访问A 也可能访问B，这时,A 和 B的数据是不一致的，所以C(一致性)不能满足</li>
+<li>如果我们满足C（一致性），无论访问A还是B，得到的结果都是一样的，那么A和B的数据不一致，需要等到A和B的数据一致之后，也就是同步恢复之后，才可对外提供服务，这样我们虽然满足了C(一致性)，却不能满足A（可用性）</li>
+<li>所以,在满足P（分区容错性)的同时，A和C只能有一个满足</li>
+</ul>
+</blockquote>
+<h2 id="1-2、ACID与BASE"><a href="#1-2、ACID与BASE" class="headerlink" title="1.2、ACID与BASE"></a>1.2、ACID与BASE</h2><blockquote>
+<p>ACID </p>
+</blockquote>
+<ul>
+<li>关系型数据库中，最大的特点就是事务处理，也就是ACID,ACID是事务处理的4个特性<ul>
+<li>A - Atomicity(原子性)  ，事务中的操作要么都做，要么都不做</li>
+<li>C - Consistency(一致性)，系统必须始终处于强一致状态下。</li>
+<li>I - Isolation(隔离性)，一个事务的执行不能被其它事务所干扰。</li>
+<li>D - Durability(持久性)，一个已提交的事务对数据库中的数据改变时永久性的</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>ACID强调的是强一致性，要么都做，要么都不做，所有的用户看到的都是一致的数据，传统的数据库都有ACID特性，它们再CAP原理中，保证的是CA,但是在分布式系统流行的当下，满足CA特性的系统很难生存下去，ACID也逐渐向BASE转换，BASE指的是 Basically Available(基本可用)，Soft-state(软状态)，Eventually consistenct(最终一致)的缩写</p>
+</blockquote>
+<ul>
+<li>Basically Available ，基本可用指的是分布式系统再出现故障的时候，允许损失部分可用性，即保证核心可用，电商大促时，为了应对访问量激增，部分用户可能会被引导到降级页面，服务层也可能只提供降级服务，这就是损失部分可用性的体现</li>
+<li>Soft-state，软状态指的是允许系统存在中间状态，而该中间状态不会影响系统整体可用性。分布式存储中一般一份数据至少会有两到三个副本，允许不同节点间副本同步的延时就是软状态的体现。mysql replication 的异步复制也是一种体现</li>
+<li>Eventual Consistent ，最终一致性是指系统中的所有数据副本经过一定时间后，最终能够达到一致的状态。弱一致性和强一致性相反，最终一致性是弱一致性的一种特殊情况</li>
+</ul>
+<blockquote>
+<ul>
+<li>BASE模型是传统ACID模型的反面，不同于ACID,BASE强调的是牺牲高一致性，从而获得可用性，数据允许一段时间内的不一致，只要保证最终一致性就可以了</li>
+<li>再分布式事务的解决方案中，它们都是依赖了ACID 或者 BASE 模型而实现的。像基于XA协议的两阶段提交和事务补偿机制就是基于ACID 实现的</li>
+<li>而基于本地消息表和基于MQ的最终一致方案都是通过BASE原理实现的</li>
+</ul>
+</blockquote>
+<h2 id="1-3、分布式事务问题"><a href="#1-3、分布式事务问题" class="headerlink" title="1.3、分布式事务问题"></a>1.3、分布式事务问题</h2><ul>
+<li>单一数据库的事务很容易解决</li>
+<li>多个独立的数据库之间，无法统一事务，造成数据不一致的情况</li>
+</ul>
+<blockquote>
+<p>一个下单操作可能涉及到多个数据库中数据的修改，这涉及到三个数据库的共同事务</p>
+</blockquote>
+<h2 id="1-4、分布式事务解决方案"><a href="#1-4、分布式事务解决方案" class="headerlink" title="1.4、分布式事务解决方案"></a>1.4、分布式事务解决方案</h2><ul>
+<li>基于XA协议的两阶段提交</li>
+<li>事务补偿机制</li>
+<li>基于本地消息表 + 定时任务的最终一致方案</li>
+<li>基于MQ的最终一致方案</li>
+</ul>
+<h3 id="1、基于XA协议的两阶段提交"><a href="#1、基于XA协议的两阶段提交" class="headerlink" title="1、基于XA协议的两阶段提交"></a>1、基于XA协议的两阶段提交</h3><ul>
+<li>XA由X/OPEN 组织提出的分布式事务的规范</li>
+<li>有一个事务管理器(TM) 和 多个资源管理器(RM)组成</li>
+<li>提交分为两个阶段：prepare 和 commit</li>
+<li>保证数据的强一致性</li>
+<li>commit阶段出现问题，事务出现不一致，需人工处理</li>
+<li>效率低下，性能与本地事务相差10倍</li>
+<li>Mysql5.7 及以上均支持XA协议</li>
+<li>Java系统中，采用XA协议流行的数据源 Atomikos(充当事务管理器的角色)</li>
+</ul>
+<h3 id="2、事务补偿机制-不推荐使用"><a href="#2、事务补偿机制-不推荐使用" class="headerlink" title="2、事务补偿机制(不推荐使用)"></a>2、事务补偿机制(不推荐使用)</h3><ul>
+<li>针对每个操作，都要注册一个与其对应的补偿(撤销)操作</li>
+<li>执行失败时，调用补偿操作，撤销之前的操作</li>
+</ul>
+<blockquote>
+<p>事务补偿例子</p>
+</blockquote>
+<ul>
+<li>A给B转账，A和B在两家不同的银行，A账户扣减200元，B账户增加200元，两个操作要保证原子性，转账的动作要么全成功，要么全失败</li>
+<li>A和B在两家不同的银行，存在分布式事务的问题</li>
+<li>转账接口需要提供补偿机制</li>
+<li>如果A在扣减的过程中出现问题，直接抛出异常，事务回滚</li>
+<li>如果B在增加余额过程中出现问题，调用A的补偿操作，恢复A的钱</li>
+<li>A之前的扣减操作得到了补偿，进行了撤销</li>
+<li>保证了A和B的账户没有问题</li>
+</ul>
+<p><img src="%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.assets/image-20220106155647202.png" srcset="/img/loading.gif" lazyload alt="image-20220106155647202"></p>
+<blockquote>
+<p>优点：逻辑清晰，流程简单</p>
+<p>缺点：数据一致性比XA还要差，可能出错的点较多</p>
+<ul>
+<li>TCC(事务补偿机制)属于应用层的一种补偿方式，需要写大量的代码来实现</li>
+</ul>
+</blockquote>
+<h3 id="3、基于本地消息表的最终一致方案"><a href="#3、基于本地消息表的最终一致方案" class="headerlink" title="3、基于本地消息表的最终一致方案"></a>3、基于本地消息表的最终一致方案</h3><ul>
+<li>采用BASE原理，保证事务最终一致</li>
+<li>在一致性方面，允许一段时间内的不一致，但最终会一致</li>
+<li>在实际的系统当中，要根据具体情况，判断是否采用</li>
+<li>基于本地消息表的方案中，将==本事务外==操作，记录在消息表中</li>
+<li>其它事务，提供操作接口</li>
+<li>定时任务轮询本地消息表，将未执行的消息发送给操作窗口</li>
+<li>操作接口处理成功，返回成功标识，处理失败，返回失败标识</li>
+<li>定时任务接到标识，更新消息状态</li>
+<li>定时任务按照一定的周期反复执行</li>
+<li>对于屡次失败的消息，可以设置最大失败次数</li>
+<li>超过最大失败次数的消息，不再进行接口调用，等待人工处理</li>
+</ul>
+<p><img src="%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.assets/image-20220108125126799.png" srcset="/img/loading.gif" lazyload alt="image-20220108125126799"></p>
+<p>优点：避免了分布式事务，实现了最终一致性</p>
+<p>缺点：要注意重试时的幂等性操作</p>
+<h3 id="4、基于MQ的最终一致方案"><a href="#4、基于MQ的最终一致方案" class="headerlink" title="4、基于MQ的最终一致方案"></a>4、基于MQ的最终一致方案</h3><ul>
+<li>原理，流程与本地消息表是类似的</li>
+<li>不同点：本地消息表改为MQ</li>
+<li>定时任务，改为MQ的消费者</li>
+</ul>
+<img src="%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.assets/image-20220110134213965.png" srcset="/img/loading.gif" lazyload alt="image-20220110134213965" style="zoom:67%;" />
+
+<ul>
+<li>优点：不依赖于定时任务，基于MQ更高效，更可靠</li>
+<li>基于MQ适合公司内部的系统</li>
+<li>不同公司之间无法基于MQ，本地消息表更合适</li>
+</ul>
+<h2 id="1-5、基于XA协议的Atomikos做分布式事务"><a href="#1-5、基于XA协议的Atomikos做分布式事务" class="headerlink" title="1.5、基于XA协议的Atomikos做分布式事务"></a>1.5、基于XA协议的Atomikos做分布式事务</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1.环境准备"></a>1.环境准备</h3><blockquote>
+<ul>
+<li><p>环境准备 两台虚拟机上的mysql 分别建立 xa_101 和 xa_102 数据库，两个数据库分别建立两张表 xa_101 xa_102</p>
+</li>
+<li><p>新建springBoot项目</p>
+</li>
+</ul>
+</blockquote>
+<p>Atomikos   maven依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-jta-atomikos<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>springboot配置多数据源需要使用配置文件进行配置</p>
+<p>DB101数据源配置(DB102数据源配置类似于DB101)</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.xademo.config;<br><br><span class="hljs-keyword">import</span> com.atomikos.jdbc.AtomikosDataSourceBean;<br><span class="hljs-keyword">import</span> com.mysql.cj.jdbc.MysqlXADataSource;<br><span class="hljs-keyword">import</span> org.mybatis.spring.SqlSessionFactoryBean;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Qualifier;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Bean;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Configuration;<br><span class="hljs-keyword">import</span> org.springframework.core.io.support.PathMatchingResourcePatternResolver;<br><span class="hljs-keyword">import</span> org.springframework.core.io.support.ResourcePatternResolver;<br><br><span class="hljs-keyword">import</span> javax.sql.DataSource;<br><span class="hljs-keyword">import</span> javax.sql.XADataSource;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span> 2022/1/6/11:53</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ProjectName</span> xa-demo</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ClassName</span>: ConfigDb101</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Description</span>: DB101 数据源配置</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-comment">// mapper 接口文件的位置</span><br><span class="hljs-meta">@MapperScan(value = &quot;com.tho.xademo.dao101&quot;, sqlSessionFactoryRef = &quot;sqlSessionFactoryBean101&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ConfigDb101</span> </span>&#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 配置db101数据源</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Bean(&quot;DB101&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> DataSource <span class="hljs-title">DB101</span><span class="hljs-params">()</span> </span>&#123;<br>        MysqlXADataSource xaDataSource = <span class="hljs-keyword">new</span> MysqlXADataSource();<br>        xaDataSource.setUser(<span class="hljs-string">&quot;root&quot;</span>);<br>        xaDataSource.setPassword(<span class="hljs-string">&quot;123456&quot;</span>);<br>        xaDataSource.setUrl(<span class="hljs-string">&quot;jdbc:mysql://192.168.198.101:3306/xa_101&quot;</span>);<br><br>        <span class="hljs-comment">// 使用 Atomikos统一管理</span><br>        AtomikosDataSourceBean atomikosDataSourceBean = <span class="hljs-keyword">new</span> AtomikosDataSourceBean();<br>      	<span class="hljs-comment">// 要写上下面的语句,否则会报NPE</span><br>      	atomikosDataSourceBean.setUniqueResourceName(<span class="hljs-string">&quot;atomikosDataSourceBean101&quot;</span>);<br>        atomikosDataSourceBean.setXaDataSource(xaDataSource);<br>        <span class="hljs-keyword">return</span> atomikosDataSourceBean;<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 配置mybatis sql session factory</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> dataSource</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Bean(&quot;sqlSessionFactoryBean101&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> SqlSessionFactoryBean <span class="hljs-title">sqlSessionFactoryBean</span><span class="hljs-params">(<span class="hljs-meta">@Qualifier(&quot;DB101&quot;)</span> DataSource dataSource)</span> <span class="hljs-keyword">throws</span> IOException </span>&#123;<br>        SqlSessionFactoryBean sqlSessionFactoryBean = <span class="hljs-keyword">new</span> SqlSessionFactoryBean();<br>        sqlSessionFactoryBean.setDataSource(dataSource);<br>        ResourcePatternResolver resourceResolver = <span class="hljs-keyword">new</span> PathMatchingResourcePatternResolver();<br>        sqlSessionFactoryBean.setMapperLocations(resourceResolver.getResources(<span class="hljs-string">&quot;mybatis/db101/*.xml&quot;</span>));<br>        <span class="hljs-keyword">return</span> sqlSessionFactoryBean;<br>    &#125;<br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 配置 Atomikos事务管理器</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Bean(&quot;xaTransaction&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> JtaTransactionManager <span class="hljs-title">jtaTransactionManager</span><span class="hljs-params">()</span> </span>&#123;<br>        UserTransaction userTransaction = <span class="hljs-keyword">new</span> UserTransactionImp();<br>        UserTransactionManager userTransactionManager = <span class="hljs-keyword">new</span> UserTransactionManager();<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> JtaTransactionManager(userTransaction, userTransactionManager);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-通过generator生成mapper类"><a href="#2-通过generator生成mapper类" class="headerlink" title="2.通过generator生成mapper类"></a>2.通过generator生成mapper类</h3><blockquote>
+<p>pom.xml 引入插件信息</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.mybatis.generator<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mybatis-generator-maven-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.3.7<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>mysql<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mysql-connector-java<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>8.0.17<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>生成器的配置文件</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">generatorConfiguration</span></span><br><span class="hljs-meta">        <span class="hljs-meta-keyword">PUBLIC</span> <span class="hljs-meta-string">&quot;-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN&quot;</span></span><br><span class="hljs-meta">        <span class="hljs-meta-string">&quot;http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd&quot;</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">generatorConfiguration</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">context</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;MysqlTables&quot;</span> <span class="hljs-attr">targetRuntime</span>=<span class="hljs-string">&quot;MyBatis3&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">jdbcConnection</span> <span class="hljs-attr">driverClass</span>=<span class="hljs-string">&quot;com.mysql.cj.jdbc.Driver&quot;</span></span><br><span class="hljs-tag">                        <span class="hljs-attr">connectionURL</span>=<span class="hljs-string">&quot;jdbc:mysql://192.168.198.102:3306/xa_102?serverTimezone=Asia/Shanghai<span class="hljs-symbol">&amp;amp;</span>useSSL=false&quot;</span></span><br><span class="hljs-tag">                        <span class="hljs-attr">userId</span>=<span class="hljs-string">&quot;root&quot;</span></span><br><span class="hljs-tag">                        <span class="hljs-attr">password</span>=<span class="hljs-string">&quot;123456&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;nullCatalogMeansCurrent&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;true&quot;</span> /&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">jdbcConnection</span>&gt;</span><br><br>        <span class="hljs-tag">&lt;<span class="hljs-name">javaTypeResolver</span> &gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;forceBigDecimals&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;false&quot;</span> /&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">javaTypeResolver</span>&gt;</span><br><br>        <span class="hljs-tag">&lt;<span class="hljs-name">javaModelGenerator</span> <span class="hljs-attr">targetPackage</span>=<span class="hljs-string">&quot;com.tho.xademo.db102.model&quot;</span> <span class="hljs-attr">targetProject</span>=<span class="hljs-string">&quot;src\main\java&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;enableSubPackages&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;true&quot;</span> /&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;trimStrings&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;true&quot;</span> /&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">javaModelGenerator</span>&gt;</span><br><br>        <span class="hljs-tag">&lt;<span class="hljs-name">sqlMapGenerator</span> <span class="hljs-attr">targetPackage</span>=<span class="hljs-string">&quot;mybatis/db102&quot;</span>  <span class="hljs-attr">targetProject</span>=<span class="hljs-string">&quot;src\main\resources&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;enableSubPackages&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;true&quot;</span> /&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">sqlMapGenerator</span>&gt;</span><br><br>        <span class="hljs-tag">&lt;<span class="hljs-name">javaClientGenerator</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;XMLMAPPER&quot;</span> <span class="hljs-attr">targetPackage</span>=<span class="hljs-string">&quot;com.tho.xademo.db102.dao&quot;</span>  <span class="hljs-attr">targetProject</span>=<span class="hljs-string">&quot;src\main\java&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;enableSubPackages&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;true&quot;</span> /&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">javaClientGenerator</span>&gt;</span><br><br>        <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">schema</span>=<span class="hljs-string">&quot;xa_102&quot;</span> <span class="hljs-attr">tableName</span>=<span class="hljs-string">&quot;xa_102&quot;</span> <span class="hljs-attr">domainObjectName</span>=<span class="hljs-string">&quot;XA102&quot;</span> &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span><br><br><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">context</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">generatorConfiguration</span>&gt;</span><br><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-测试XA事务"><a href="#3-测试XA事务" class="headerlink" title="3.测试XA事务"></a>3.测试XA事务</h3><blockquote>
+<p>service类</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.xademo.service;<br><br><span class="hljs-keyword">import</span> com.tho.xademo.db101.dao.XA101Mapper;<br><span class="hljs-keyword">import</span> com.tho.xademo.db101.model.XA101;<br><span class="hljs-keyword">import</span> com.tho.xademo.db102.dao.XA102Mapper;<br><span class="hljs-keyword">import</span> com.tho.xademo.db102.model.XA102;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Service;<br><span class="hljs-keyword">import</span> org.springframework.transaction.annotation.Transactional;<br><br><span class="hljs-keyword">import</span> javax.annotation.Resource;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span> 2022/1/6/12:18</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ProjectName</span> xa-demo</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ClassName</span>: XAService</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Description</span>: XA 测试类</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Service</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">XAService</span> </span>&#123;<br><br>    <span class="hljs-meta">@Resource</span><br>    <span class="hljs-keyword">private</span> XA101Mapper xa101Mapper;<br><br>    <span class="hljs-meta">@Resource</span><br>    <span class="hljs-keyword">private</span> XA102Mapper xa102Mapper;<br><br>    <span class="hljs-meta">@Transactional(transactionManager = &quot;xaTransaction&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">XATest</span><span class="hljs-params">()</span> </span>&#123;<br>         XA101 xa101 = <span class="hljs-keyword">new</span> XA101();<br>         xa101.setId(<span class="hljs-number">1</span>);<br>         xa101.setName(<span class="hljs-string">&quot;tho&quot;</span>);<br>         xa101Mapper.insert(xa101);<br><br>         XA102 xa102 = <span class="hljs-keyword">new</span> XA102();<br>         xa102.setId(<span class="hljs-number">2</span>);<br>         xa102.setName(<span class="hljs-string">&quot;tho666&quot;</span>);<br>         xa102Mapper.insert(xa102);<br>     &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>测试类</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.xademo;<br><br><span class="hljs-keyword">import</span> com.tho.xademo.service.XAService;<br><span class="hljs-keyword">import</span> org.junit.jupiter.api.Test;<br><span class="hljs-keyword">import</span> org.junit.runner.RunWith;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.boot.test.context.SpringBootTest;<br><span class="hljs-keyword">import</span> org.springframework.test.context.junit4.SpringRunner;<br><br><span class="hljs-meta">@RunWith(SpringRunner.class)</span><br><span class="hljs-meta">@SpringBootTest(classes = XaDemoApplication.class)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">XaDemoApplicationTests</span> </span>&#123;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> XAService xaService;<br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">contextLoads</span><span class="hljs-params">()</span> </span>&#123;<br>    &#125;<br><br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">xaTest</span><span class="hljs-params">()</span> </span>&#123;<br>        xaService.XATest();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-模拟sql执行错误"><a href="#4-模拟sql执行错误" class="headerlink" title="4.模拟sql执行错误"></a>4.模拟sql执行错误</h3><blockquote>
+<p>修改表中字段，将其长度修改为2，这样修改之后插入数据时会报错，查看事务的执行情况</p>
+<p>最后两张表的数据都没有插入成功</p>
+</blockquote>
+<h2 id="1-6、Mycat和Sharding-jdbc的分布式事务"><a href="#1-6、Mycat和Sharding-jdbc的分布式事务" class="headerlink" title="1.6、Mycat和Sharding-jdbc的分布式事务"></a>1.6、Mycat和Sharding-jdbc的分布式事务</h2><ul>
+<li>Mycat和 Sharding-Jdbc 内置了XA分布式事务，Mycat需要在配置文件中修改</li>
+</ul>
+<h2 id="1-7、基于本地消息表分布式事务"><a href="#1-7、基于本地消息表分布式事务" class="headerlink" title="1.7、基于本地消息表分布式事务"></a>1.7、基于本地消息表分布式事务</h2><h2 id="1-8、基于MQ分布式事务"><a href="#1-8、基于MQ分布式事务" class="headerlink" title="1.8、基于MQ分布式事务"></a>1.8、基于MQ分布式事务</h2>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9B%B8%E5%85%B3/">分布式相关</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">分布式事务</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章可随意转载
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/01/springCloud/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SpringCloud</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/12/26/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">
+                        <span class="hidden-mobile">分库分表</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

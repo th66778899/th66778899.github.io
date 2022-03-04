@@ -1,0 +1,1432 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/mario.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="SpringCloud基础组件">
+  <meta name="author" content="tho">
+  <meta name="keywords" content="">
+  <meta name="description" content="SpringCloud基础组件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringCloud">
+<meta property="og:url" content="http://example.com/2022/02/01/springCloud/index.html">
+<meta property="og:site_name" content="Tho668&#39;s Blogs">
+<meta property="og:description" content="SpringCloud基础组件">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/springCloud.assets/image-20220130171732376.png">
+<meta property="og:image" content="http://example.com/img/springCloud.assets/image-20220205150830444.png">
+<meta property="og:image" content="http://example.com/img/springCloud.assets/image-20220210152803883.png">
+<meta property="og:image" content="http://example.com/img/springCloud.assets/image-20220213131027914.png">
+<meta property="og:image" content="http://example.com/img/springCloud.assets/image-20220214152855031.png">
+<meta property="og:image" content="http://example.com/img/springCloud.assets/image-20220214154744795.png">
+<meta property="og:image" content="http://example.com/img/springCloud.assets/image-20220214154920464.png">
+<meta property="article:published_time" content="2022-02-01T04:36:26.000Z">
+<meta property="article:modified_time" content="2022-03-04T14:24:34.459Z">
+<meta property="article:author" content="tho">
+<meta property="article:tag" content="SpringCloud">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/springCloud.assets/image-20220130171732376.png">
+  
+  <title>SpringCloud - Tho668&#39;s Blogs</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tho668</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/galaxy.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="SpringCloud">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-01 12:36" pubdate>
+        February 1, 2022 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      25k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      80 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">SpringCloud</h1>
+            
+            <div class="markdown-body">
+              <p>SpringCloud基础组件</p>
+<span id="more"></span>
+
+<h1 id="一、SpringCloud简介"><a href="#一、SpringCloud简介" class="headerlink" title="一、SpringCloud简介"></a>一、SpringCloud简介</h1><ul>
+<li>SpringCloud 和 微服务之间的关系</li>
+<li>SpringCloud 整体架构</li>
+<li>SpringCloud组件库(产地来自三个地方) Netflix Alibaba</li>
+<li>SpringCloud 更新很频繁，选择</li>
+<li>电商系统微服务化的构想</li>
+<li>开发环境和依赖组件的版本</li>
+</ul>
+<h2 id="1-1、微服务拆分"><a href="#1-1、微服务拆分" class="headerlink" title="1.1、微服务拆分"></a>1.1、微服务拆分</h2><ol>
+<li><p>拆分依赖项 每个pom都只引入自己使用到的依赖</p>
+</li>
+<li><p>微服务模块拆分粒度始终</p>
+</li>
+<li><p>公共组件拆离</p>
+</li>
+<li><p>平台中间件剥离(注册中心，配置中心)</p>
+</li>
+</ol>
+<h1 id="二、SpringCloudNetflix"><a href="#二、SpringCloudNetflix" class="headerlink" title="二、SpringCloudNetflix"></a>二、SpringCloudNetflix</h1><h2 id="2-1、服务治理-Eureka"><a href="#2-1、服务治理-Eureka" class="headerlink" title="2.1、服务治理(Eureka)"></a>2.1、服务治理(Eureka)</h2><ul>
+<li><p>概念 技术选型</p>
+</li>
+<li><p>服务治理全链路</p>
+<p>  服务注册，服务发现，心跳和续约，服务下线，剔除和自保</p>
+</li>
+<li><p>源码解读 - 服务注册，心跳检测和服务续约</p>
+</li>
+<li><p>注册中心高可用改造</p>
+</li>
+<li><p>实现</p>
+</li>
+</ul>
+<h3 id="1-服务治理-技术选型"><a href="#1-服务治理-技术选型" class="headerlink" title="1.服务治理 - 技术选型"></a>1.服务治理 - 技术选型</h3><p>分布式系统CAP定理</p>
+<blockquote>
+<p>一致性：各个分布式节点数据一致</p>
+<ul>
+<li>强一致性：某次更新之后，所有的请求都可以访问到更新的值</li>
+<li>弱一致性：某次更新之后，有的请求或者所有请求都拿不到更新的值</li>
+<li>最终一致性：未来的某一时刻，所有请求都可以拿到更新的值</li>
+</ul>
+</blockquote>
+<p>C - 强一致性</p>
+<p>A - 可用性</p>
+<p>P - 分区容错性</p>
+<blockquote>
+<p>CAP定理：分布式系统只能三选二 且 分区容错性必须要满足，因为分布式系统不可能只有一个服务器</p>
+</blockquote>
+<blockquote>
+<p>三大服务治理</p>
+<ul>
+<li>Eureka 老牌劲旅(Netflix)</li>
+<li>Consul 同门师弟(官方)</li>
+<li>Nacos 后起之秀(Alibaba)</li>
+</ul>
+</blockquote>
+<h3 id="2-Eureka2-0开源计划搁置"><a href="#2-Eureka2-0开源计划搁置" class="headerlink" title="2.Eureka2.0开源计划搁置"></a>2.Eureka2.0开源计划搁置</h3><h3 id="3-搭建注册中心demo"><a href="#3-搭建注册中心demo" class="headerlink" title="3.搭建注册中心demo"></a>3.搭建注册中心demo</h3><ul>
+<li>创建Demo顶层pom 和 子项目 eureka-server</li>
+<li>添加Eureka依赖</li>
+<li>设置启动类</li>
+<li>Start</li>
+</ul>
+<h3 id="4-解读注册中心UI界面"><a href="#4-解读注册中心UI界面" class="headerlink" title="4.解读注册中心UI界面"></a>4.解读注册中心UI界面</h3><h3 id="5-服务注册"><a href="#5-服务注册" class="headerlink" title="5.服务注册"></a>5.服务注册</h3><h3 id="6-服务注册源码解读"><a href="#6-服务注册源码解读" class="headerlink" title="6.服务注册源码解读"></a>6.服务注册源码解读</h3><blockquote>
+<ul>
+<li>重要的注解</li>
+<li>代理模式，装饰器模式</li>
+<li>服务注册都注册什么内容</li>
+</ul>
+</blockquote>
+<h3 id="7-创建服务消费者"><a href="#7-创建服务消费者" class="headerlink" title="7.创建服务消费者"></a>7.创建服务消费者</h3><h3 id="8-服务心跳和续约源码"><a href="#8-服务心跳和续约源码" class="headerlink" title="8.服务心跳和续约源码"></a>8.服务心跳和续约源码</h3><h3 id="9-启用心跳和健康度检查"><a href="#9-启用心跳和健康度检查" class="headerlink" title="9.启用心跳和健康度检查"></a>9.启用心跳和健康度检查</h3><h3 id="10-注册中心高可用"><a href="#10-注册中心高可用" class="headerlink" title="10.注册中心高可用"></a>10.注册中心高可用</h3><h2 id="2-2、负载均衡-Ribbon"><a href="#2-2、负载均衡-Ribbon" class="headerlink" title="2.2、负载均衡(Ribbon)"></a>2.2、负载均衡(Ribbon)</h2><h3 id="1-负载均衡介绍"><a href="#1-负载均衡介绍" class="headerlink" title="1.负载均衡介绍"></a>1.负载均衡介绍</h3><blockquote>
+<ul>
+<li>概念 体系架构 技术选型</li>
+<li>深入Ribbon<ul>
+<li>负载均衡策略和原理，加载方式，IPing机制</li>
+<li>源码阅读 LoadBalanced 底层机制 &amp; 可扩展性</li>
+<li>架构探讨 - 如何选择负载均衡策略</li>
+<li>Demo  +  造轮子</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>理解负载均衡</p>
+<ul>
+<li>雨露均沾</li>
+<li>不能让某台机器负载过高</li>
+<li>如果请求太大，所有机器要都承担较高负载</li>
+</ul>
+</blockquote>
+<h3 id="2-客户端负载均衡-amp-服务端负载均衡"><a href="#2-客户端负载均衡-amp-服务端负载均衡" class="headerlink" title="2.客户端负载均衡&amp;服务端负载均衡"></a>2.客户端负载均衡&amp;服务端负载均衡</h3><ul>
+<li>客户端负载均衡</li>
+</ul>
+<blockquote>
+<p>客户端从Eureka 中获取服务的机器列表，根据一定的负载均衡策略，选择访问某个服务</p>
+</blockquote>
+<ul>
+<li>服务端负载均衡</li>
+</ul>
+<blockquote>
+<p>客户端 借助 nginx(软件) 或者 F5(软件) 实现负载均衡，客户端</p>
+</blockquote>
+<blockquote>
+<p>大型应用通常是 客户端 + 服务端 负载均衡搭配使用</p>
+</blockquote>
+<blockquote>
+<p>两种负载均衡策略对比</p>
+</blockquote>
+<p><img src="/img/springCloud.assets/image-20220130171732376.png" srcset="/img/loading.gif" lazyload alt="image-20220130171732376"></p>
+<h3 id="3-添加负载均衡功能"><a href="#3-添加负载均衡功能" class="headerlink" title="3.添加负载均衡功能"></a>3.添加负载均衡功能</h3><ul>
+<li>创建ribbon-consumer</li>
+<li>添加依赖，调用eureka-client</li>
+<li>启动多个eureka-client</li>
+<li>将负载均衡策略应用到全局或指定服务</li>
+</ul>
+<blockquote>
+<p>Ribbon懒加载机制，Ribbon在第一次方法调用的时候才去初始化LoadBalancer，这样看来，第一个方法不仅包含HTTP连接和方法的响应时间，还包括了LoadBalancer的创建耗时，假如方法本身比较耗时的话，而且超时时间又设置地比较短，那么很大可能这第一次http调用就会失败</p>
+<ul>
+<li>通过配置关闭懒加载</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-meta">ribbon.eager-load.enabled</span>=<span class="hljs-string">true</span><br><span class="hljs-meta">ribbon.eager-load.clients</span>=<span class="hljs-string">ribbon-consumer</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>第一个参数开启了Ribbon的饥饿加载模式</li>
+<li>第二个参数指定了需要应用饥饿加载的服务名称</li>
+</ul>
+</blockquote>
+<h3 id="4-负载均衡配置"><a href="#4-负载均衡配置" class="headerlink" title="4.负载均衡配置"></a>4.负载均衡配置</h3><ul>
+<li>全局负载均衡配置</li>
+<li>指定服务负载均衡配置</li>
+</ul>
+<blockquote>
+<ol>
+<li>application.properties 配置文件配置 </li>
+</ol>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-meta">eureka-client.ribbon.NFLoadBalancerRuleClassName</span>=<span class="hljs-string">com.netflix.loadbalancer.RandomRule</span><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>指定加载Bean</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.springcloud;<br><br><span class="hljs-keyword">import</span> com.netflix.loadbalancer.IRule;<br><span class="hljs-keyword">import</span> com.netflix.loadbalancer.RandomRule;<br><span class="hljs-keyword">import</span> org.springframework.cloud.netflix.ribbon.RibbonClient;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Bean;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Configuration;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span> 2022/1/31/14:08</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ProjectName</span> spring-cloud-netflix-demo</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ClassName</span>: RibbonConfiguration</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Description</span>: TODO</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RibbonConfiguration</span> </span>&#123;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> IRule <span class="hljs-title">defaultLBStrategy</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RandomRule();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>通过注解 实现</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.springcloud;<br><br><span class="hljs-keyword">import</span> org.springframework.cloud.netflix.ribbon.RibbonClient;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Configuration;<br><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-meta">@RibbonClient(name = &quot;eureka-client&quot;, configuration = com.netflix.loadbalancer.RandomRule.class)</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RibbonConfiguration</span> </span>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li>注解配置的负载均衡策略优先于配置文件配置的负载均衡 ，可能和资源文件加载顺序有关</li>
+</ul>
+<h3 id="5-负载均衡策略解析-源码解析"><a href="#5-负载均衡策略解析-源码解析" class="headerlink" title="5.负载均衡策略解析(源码解析)"></a>5.负载均衡策略解析(源码解析)</h3><ul>
+<li>熟悉7种负载均衡策略</li>
+<li>自旋锁使用方式</li>
+<li>防御性编程</li>
+</ul>
+<h3 id="6-LoadBalanced-注解"><a href="#6-LoadBalanced-注解" class="headerlink" title="6.LoadBalanced 注解"></a>6.LoadBalanced 注解</h3><ul>
+<li>LoadBalanced 作用原理</li>
+<li>拦截器到IRule的调用链路</li>
+<li>IPing机制 </li>
+</ul>
+<h3 id="7-IPing机制解析"><a href="#7-IPing机制解析" class="headerlink" title="7.IPing机制解析"></a>7.IPing机制解析</h3><h3 id="8-IRule机制可扩展研究"><a href="#8-IRule机制可扩展研究" class="headerlink" title="8.IRule机制可扩展研究"></a>8.IRule机制可扩展研究</h3><h3 id="9-造轮子-自定义IRule"><a href="#9-造轮子-自定义IRule" class="headerlink" title="9.造轮子 - 自定义IRule"></a>9.造轮子 - 自定义IRule</h3><ul>
+<li>自定义基于一致性哈希负载均衡策略</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.springcloud.rule;<br><br><span class="hljs-keyword">import</span> com.netflix.client.config.IClientConfig;<br><span class="hljs-keyword">import</span> com.netflix.loadbalancer.AbstractLoadBalancerRule;<br><span class="hljs-keyword">import</span> com.netflix.loadbalancer.IRule;<br><span class="hljs-keyword">import</span> com.netflix.loadbalancer.Server;<br><span class="hljs-keyword">import</span> lombok.NoArgsConstructor;<br><span class="hljs-keyword">import</span> org.springframework.util.CollectionUtils;<br><span class="hljs-keyword">import</span> org.springframework.web.context.request.RequestContextHolder;<br><span class="hljs-keyword">import</span> org.springframework.web.context.request.ServletRequestAttributes;<br><br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletRequest;<br><span class="hljs-keyword">import</span> java.io.UnsupportedEncodingException;<br><span class="hljs-keyword">import</span> java.security.MessageDigest;<br><span class="hljs-keyword">import</span> java.security.NoSuchAlgorithmException;<br><span class="hljs-keyword">import</span> java.util.List;<br><span class="hljs-keyword">import</span> java.util.SortedMap;<br><span class="hljs-keyword">import</span> java.util.TreeMap;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span> 2022/2/2/13:32</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ProjectName</span> spring-cloud-netflix-demo</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ClassName</span>: MyRule</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Description</span>: TODO</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@NoArgsConstructor</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyRule</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractLoadBalancerRule</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">IRule</span> </span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initWithNiwsConfig</span><span class="hljs-params">(IClientConfig clientConfig)</span> </span>&#123;<br><br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Server <span class="hljs-title">choose</span><span class="hljs-params">(Object key)</span> </span>&#123;<br>        HttpServletRequest request = ((ServletRequestAttributes)<br>                RequestContextHolder.getRequestAttributes())<br>                .getRequest();<br>        String uri = request.getServletPath() + <span class="hljs-string">&quot;?&quot;</span> + request.getQueryString();<br><br><br>        <span class="hljs-keyword">return</span> route(uri.hashCode(), getLoadBalancer().getAllServers());<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Server <span class="hljs-title">route</span><span class="hljs-params">(<span class="hljs-keyword">int</span> hashId, List&lt;Server&gt; addressList)</span> </span>&#123;<br><br>        <span class="hljs-keyword">if</span> (CollectionUtils.isEmpty(addressList)) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>        &#125;<br>        TreeMap&lt;Long, Server&gt; address = <span class="hljs-keyword">new</span> TreeMap&lt;&gt;();<br>        addressList.stream().forEach(e -&gt; &#123;<br>            <span class="hljs-comment">// 虚化若干个服务节点，到环上</span><br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">8</span>; i++) &#123;<br>                <span class="hljs-keyword">long</span> hash = hash(e.getId() + i);<br>                address.put(hash, e);<br>            &#125;<br>        &#125;);<br>        <span class="hljs-keyword">long</span> hash = hash(String.valueOf(hashId));<br>        SortedMap&lt;Long, Server&gt; last = address.tailMap(hash);<br>        <span class="hljs-comment">// 当request URL hash值大于任意一个服务器对应的hashKey</span><br>        <span class="hljs-comment">// 取address中的第一个节点</span><br><br>        <span class="hljs-keyword">if</span> (last.isEmpty()) &#123;<br>            address.firstEntry().getValue();<br>        &#125;<br><br><br>        <span class="hljs-keyword">return</span> last.get(last.firstKey());<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">hash</span><span class="hljs-params">(String key)</span> </span>&#123;<br><br>        MessageDigest md5;<br><br><br>        <span class="hljs-keyword">try</span> &#123;<br>            md5 = MessageDigest.getInstance(<span class="hljs-string">&quot;md5&quot;</span>);<br>        &#125;  <span class="hljs-keyword">catch</span> (NoSuchAlgorithmException e) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(e);<br>        &#125;<br><br>        <span class="hljs-keyword">byte</span>[] keyByte = <span class="hljs-keyword">null</span>;<br><br>        <span class="hljs-keyword">try</span> &#123;<br>            keyByte = key.getBytes(<span class="hljs-string">&quot;UTF-8&quot;</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (UnsupportedEncodingException e) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(e);<br>        &#125;<br>        md5.update(keyByte);<br>        <span class="hljs-keyword">byte</span>[] digest = md5.digest();<br>        <span class="hljs-keyword">long</span> hashCode = ((<span class="hljs-keyword">long</span>)(digest[<span class="hljs-number">2</span>] &amp; <span class="hljs-number">0xFF</span> &lt;&lt; <span class="hljs-number">16</span>))<br>                | ((<span class="hljs-keyword">long</span>)(digest[<span class="hljs-number">1</span>] &amp; <span class="hljs-number">0xFF</span> &lt;&lt; <span class="hljs-number">8</span>))<br>                | ((<span class="hljs-keyword">long</span>)(digest[<span class="hljs-number">0</span>] &amp; <span class="hljs-number">0xFF</span>));<br><br>        <span class="hljs-keyword">return</span> hashCode &amp; <span class="hljs-number">0xffffffffL</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="2-3、服务通信-amp-调用-Feign"><a href="#2-3、服务通信-amp-调用-Feign" class="headerlink" title="2.3、服务通信&amp;调用(Feign)"></a>2.3、服务通信&amp;调用(Feign)</h2><ul>
+<li>服务间调用介绍(什么是Feign ， 它做了什么)</li>
+<li>深入Feign (体系结构，底层机制，动态代理，重试)</li>
+<li>Feign的项目结构</li>
+<li>源码阅读 EnableFeignClient 注解的底层机制 Feign协议解析过程</li>
+</ul>
+<h3 id="1-现有的服务调用方式"><a href="#1-现有的服务调用方式" class="headerlink" title="1.现有的服务调用方式"></a>1.现有的服务调用方式</h3><ul>
+<li>Eureka <a href="http://ip:port/path">http://ip:port/path</a> 借助 RestTemplate实现</li>
+<li>Ribbon <a target="_blank" rel="noopener" href="http://servicename/path">http://serviceName/path</a> 借助 Ribbon 实现负载均衡，借助服务名来实现</li>
+</ul>
+<h3 id="2-Feign基础"><a href="#2-Feign基础" class="headerlink" title="2.Feign基础"></a>2.Feign基础</h3><blockquote>
+<p>Feign解决了什么问题</p>
+</blockquote>
+<ul>
+<li>简化远程调用</li>
+<li>集成Ribbon</li>
+<li>集成Hystrix</li>
+</ul>
+<blockquote>
+<p>Feign调用方式</p>
+</blockquote>
+<ul>
+<li>@FignClient(“service-name”)</li>
+</ul>
+<h3 id="3-Feign应用到服务消费者中"><a href="#3-Feign应用到服务消费者中" class="headerlink" title="3.Feign应用到服务消费者中"></a>3.Feign应用到服务消费者中</h3><h3 id="4-Feign注解背后的源码"><a href="#4-Feign注解背后的源码" class="headerlink" title="4.Feign注解背后的源码"></a>4.Feign注解背后的源码</h3><ul>
+<li>EnableFeignClients 注解背后的加载流程</li>
+<li>Spring 中 Bean 加载模式的扩展点</li>
+<li>Feign 构造上下文对象(FeignContext) 的过程</li>
+</ul>
+<h3 id="5-改造项目结构"><a href="#5-改造项目结构" class="headerlink" title="5.改造项目结构"></a>5.改造项目结构</h3><ul>
+<li>构建公共接口层(注意不要引入依赖)</li>
+<li>改造服务提供者</li>
+<li>创建基于公共接口层的服务消费者</li>
+</ul>
+<h3 id="6-配置Ribbon-重试-和-超时策略"><a href="#6-配置Ribbon-重试-和-超时策略" class="headerlink" title="6.配置Ribbon 重试 和 超时策略"></a>6.配置Ribbon 重试 和 超时策略</h3><p>配置文件配置</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">feign-client:</span><br>  <span class="hljs-attr">ribbon:</span><br>    <span class="hljs-comment"># 每台机器最大重试次数</span><br>    <span class="hljs-attr">MaxAutoRetries:</span> <span class="hljs-number">2</span><br>    <span class="hljs-comment"># 可以再重试几台机器</span><br>    <span class="hljs-attr">MaxAutoRetriesNextServer:</span> <span class="hljs-number">2</span><br>    <span class="hljs-comment"># 连接超时</span><br>    <span class="hljs-attr">ConnectionTimeout:</span> <span class="hljs-number">1000</span><br>    <span class="hljs-comment"># 业务处理超时时间</span><br>    <span class="hljs-attr">ReadTimeout:</span> <span class="hljs-number">2000</span><br>    <span class="hljs-comment"># 在所有 HTTP Method 进行重试</span><br>    <span class="hljs-attr">OkToRetryOnAllOpertions:</span> <span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="7-Contract协议解析过程"><a href="#7-Contract协议解析过程" class="headerlink" title="7.Contract协议解析过程"></a>7.Contract协议解析过程</h3><ul>
+<li>一家三口：Contract，BaseContract，SpringMvcContract</li>
+</ul>
+<blockquote>
+<p>不能存在泛型，只能继承一个接口，继承的接口不能再继承其它接口</p>
+</blockquote>
+<ul>
+<li>子类BaseContract 校验规则是什么</li>
+<li>孙类SpringMvcContract 类如何抽取元数据</li>
+</ul>
+<h3 id="8-Feign-项目实战"><a href="#8-Feign-项目实战" class="headerlink" title="8.Feign 项目实战"></a>8.Feign 项目实战</h3><h2 id="2-4、降级熔断-Hystrix"><a href="#2-4、降级熔断-Hystrix" class="headerlink" title="2.4、降级熔断(Hystrix)"></a>2.4、降级熔断(Hystrix)</h2><ul>
+<li>服务容错介绍</li>
+<li>Hystrix服务降级<ul>
+<li>核心功能，服务降级原理，常用降级方案</li>
+<li>Demo Fallback，RequestCache 多级降级</li>
+</ul>
+</li>
+<li>Hystrix服务熔断<ul>
+<li>熔断器工作原理</li>
+<li>集成Hystrix熔断器</li>
+</ul>
+</li>
+<li>源码阅读<ul>
+<li>Hystrix触发方式，熔断器的参数的作用</li>
+</ul>
+</li>
+<li>架构思考<ul>
+<li>降级和熔断的规划</li>
+<li>主链路规划</li>
+<li>业务与容灾策略</li>
+</ul>
+</li>
+<li>线程隔离方案<ul>
+<li>线程池</li>
+<li>信号量</li>
+</ul>
+</li>
+<li>Demo <ul>
+<li>Turbine + Hystrix 大盘 - 聚合监控信息</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-服务容错解决方案"><a href="#1-服务容错解决方案" class="headerlink" title="1.服务容错解决方案"></a>1.服务容错解决方案</h3><ul>
+<li>服务雪崩</li>
+</ul>
+<blockquote>
+<p>生产故障三步</p>
+<ul>
+<li>延迟</li>
+<li>服务不可用</li>
+<li>造成资损</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>降低故障影响</p>
+<ul>
+<li>降低串联影响</li>
+<li>隔离异常服务</li>
+<li>减压(快速失败 熔断)</li>
+<li>备选方案(降级  最小可用性)</li>
+</ul>
+</blockquote>
+<h3 id="2-Feign-Hystrix-实现Fallback降级"><a href="#2-Feign-Hystrix-实现Fallback降级" class="headerlink" title="2.Feign + Hystrix 实现Fallback降级"></a>2.Feign + Hystrix 实现Fallback降级</h3><ul>
+<li>创建 hystrix-consumer项目 引入依赖</li>
+<li>实现 Fallback 降级逻辑</li>
+<li>Fallback 降级还有什么花式玩法</li>
+</ul>
+<h3 id="3-Hystrix-实现Timeout降级"><a href="#3-Hystrix-实现Timeout降级" class="headerlink" title="3.Hystrix 实现Timeout降级"></a>3.Hystrix 实现Timeout降级</h3><ul>
+<li>配置文件配置 hystrix 超时降级</li>
+</ul>
+<h3 id="4-Hystrix-实现RequestCache减压"><a href="#4-Hystrix-实现RequestCache减压" class="headerlink" title="4.Hystrix 实现RequestCache减压"></a>4.Hystrix 实现RequestCache减压</h3><ul>
+<li><p>Request Cache 只是一种减压手段</p>
+</li>
+<li><p>使用 @CacheResult 缓存值</p>
+</li>
+</ul>
+<h3 id="5-多级降级方案"><a href="#5-多级降级方案" class="headerlink" title="5.多级降级方案"></a>5.多级降级方案</h3><ul>
+<li>模拟二级降级场景</li>
+<li>一直错误的情况</li>
+</ul>
+<p>某个方法超时时间可以通过注解来配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@GetMapping(&quot;/timeout2&quot;)</span><br><span class="hljs-meta">@HystrixCommand(fallbackMethod = &quot;timeoutFallBack&quot;,commandProperties = &#123;</span><br><span class="hljs-meta">        @HystrixProperty(name = &quot;execution.isolation.thread.timeoutInMilliseconds&quot;, value = &quot;3000&quot;)&#125;)</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">timeOut2</span><span class="hljs-params">(Integer timeOut)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> service.retry(timeOut);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>但是要注意  service.retry(timeOut);  此方法的超时时间如果短于 timeOut2 中通过注解配置的超时时间，以更短的超时时间为主</p>
+<h3 id="6-Hystrix降级触发方案-阅读源码"><a href="#6-Hystrix降级触发方案-阅读源码" class="headerlink" title="6.Hystrix降级触发方案(阅读源码)"></a>6.Hystrix降级触发方案(阅读源码)</h3><ul>
+<li>Aspect 切面编程</li>
+<li>RxJava 中的 Observer 模式</li>
+<li>RxFunction 回调函数实现异常判定</li>
+</ul>
+<h3 id="7-Hystrix-熔断"><a href="#7-Hystrix-熔断" class="headerlink" title="7.Hystrix 熔断"></a>7.Hystrix 熔断</h3><ul>
+<li>熔断器参数配置</li>
+<li>验证断路器开关状态切换</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-comment"># Hystrix 熔断器配置</span><br><span class="hljs-comment"># 重要的配置</span><br><span class="hljs-comment"># 熔断的前提条件,(请求的数量),在一定的时间窗口内,请求达到5个以后,才开始进行熔断判断</span><br><span class="hljs-meta">hystrix.command.default.circuitBreaker.requestVolumeThreshold</span>=<span class="hljs-string">5</span><br><span class="hljs-comment"># 错误请求占总请求的百分比,超过 50% 错误请求,熔断开启</span><br><span class="hljs-meta">hystrix.command.default.circuitBreaker.errorThresholdPercentage</span>=<span class="hljs-string">50</span><br><span class="hljs-comment"># 当熔断开启以后,经过 多少时间,再进入半开状态</span><br><span class="hljs-meta">hystrix.command.default.circuitBreaker.sleepWindowInMilliseconds</span>=<span class="hljs-string">15000</span><br><span class="hljs-comment"># 配置时间窗口</span><br><span class="hljs-meta">hystrix.command.default.metrics.rollingStats.timeInMilliseconds</span>=<span class="hljs-string">20000</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 不重要的配置</span><br><span class="hljs-meta">hystrix.command.default.circuitBreaker.enabled</span>=<span class="hljs-string">true</span><br><span class="hljs-comment"># 强制开启熔断开关</span><br><span class="hljs-meta">hystrix.command.default.circuitBreaker.forceOpen</span>=<span class="hljs-string">false</span><br><span class="hljs-comment"># 强制关闭熔断开关</span><br><span class="hljs-meta">hystrix.command.default.circuitBreaker.forceClosed</span>=<span class="hljs-string">false</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="8-Hystrix-熔断器参数作用-源码"><a href="#8-Hystrix-熔断器参数作用-源码" class="headerlink" title="8.Hystrix 熔断器参数作用(源码)"></a>8.Hystrix 熔断器参数作用(源码)</h3><ul>
+<li><p>HystrixCircuitBreaker</p>
+</li>
+<li><p>断路判断逻辑</p>
+</li>
+<li><p>断路器开启/关闭 触发判断</p>
+</li>
+<li><p>Half - Open 下的同步控制</p>
+</li>
+</ul>
+<h3 id="9-降级熔断规划-主链路"><a href="#9-降级熔断规划-主链路" class="headerlink" title="9.降级熔断规划 - 主链路"></a>9.降级熔断规划 - 主链路</h3><img src="/img/springCloud.assets/image-20220205150830444.png" srcset="/img/loading.gif" lazyload alt="image-20220205150830444" style="zoom:80%;" />
+
+<h3 id="10-线程隔离-核心方案以及工作原理"><a href="#10-线程隔离-核心方案以及工作原理" class="headerlink" title="10.线程隔离 - 核心方案以及工作原理"></a>10.线程隔离 - 核心方案以及工作原理</h3><ul>
+<li><p>每个服务设定一定的线程数量, 该服务只能使用这些线程</p>
+</li>
+<li><p>线程隔离两种实现方式</p>
+<ul>
+<li>线程池</li>
+<li>信号量隔离</li>
+</ul>
+</li>
+</ul>
+<p>两种实现方式对比</p>
+<p>实现原理：</p>
+<ul>
+<li>线程池技术：它使用Hystrix自己内建的线程池去执行方法调用，而不是使用Tomcat的线程池</li>
+<li>信号量技术：它直接使用tomcat的容器线程去执行方法，不会创建新的线程，信号量只充当开关和计数器的作用。获取到信号量就执行，没有获取到就　fallback</li>
+</ul>
+<p>性能对比</p>
+<p>-　线程池技术：涉及到线程的相关操作，还有线程之间的切换，性能不如信号量机制<br>-　信号量机制：直接使用Tｏｍｃａｔ容器线程去访问方法，信号量只是一个计数器的作用</p>
+<p>超时判定</p>
+<ul>
+<li>线程池技术：相当于多了一层保护机制，可以对 “执行阶段” 超时进行判断</li>
+<li>信号量技术：只能等待网络请求超时 “被动超时” 的情况</li>
+</ul>
+<p>选择：官方文档指出，信号量机制仅适用超高并发的非外部接口调用上，其它场景应该使用线程池技术</p>
+<blockquote>
+<p>tips：线程池技术要注意ThreadLocal 的数据传递的作用，由于前后调用不在同一个线程内，也不在父子线程内，如果业务层面声明了ThreaLocal 变量 ，将无法获取正确的值</p>
+</blockquote>
+<h3 id="11-Turbine-聚合-Hystrix-信息"><a href="#11-Turbine-聚合-Hystrix-信息" class="headerlink" title="11.Turbine 聚合 Hystrix 信息"></a>11.Turbine 聚合 Hystrix 信息</h3><ul>
+<li>创建 hystrix-turbine 子模块，引入依赖</li>
+<li>添加Turbine 配置， 指定监控服务名称</li>
+<li>hystrix-fallback 项目开放 actuator 服务</li>
+</ul>
+<h3 id="12-Turbine-集成-大盘监控"><a href="#12-Turbine-集成-大盘监控" class="headerlink" title="12.Turbine 集成 大盘监控"></a>12.Turbine 集成 大盘监控</h3><ul>
+<li>创建 hystrix-dashboard 项目,引入依赖</li>
+<li>启动大盘监控</li>
+<li>解读监控页面内容，断路器进一步了解</li>
+</ul>
+<h3 id="13-集成-Hystrix-和-Turbine"><a href="#13-集成-Hystrix-和-Turbine" class="headerlink" title="13.集成 Hystrix 和 Turbine"></a>13.集成 Hystrix 和 Turbine</h3><ul>
+<li>配置基础组件 Turbine</li>
+<li>配置 Dashboard  +  开放微服务端点</li>
+<li>基于 HystrixCommand 注解配置降级和线程池</li>
+</ul>
+<p>基于注解配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@HystrixCommand(</span><br><span class="hljs-meta">        commandKey = &quot;loginFail&quot; ,// 全局唯一的标识服务, 默认函数名称</span><br><span class="hljs-meta">        groupKey = &quot;password&quot;  , // 全局服务分组, 用于组织仪表盘,统计信息 默认 类名称</span><br><span class="hljs-meta">        fallbackMethod = &quot;loginFailFallBack&quot; ,// 同一个类里面 public / private 都可以</span><br><span class="hljs-meta">        // ignoreExceptions = &#123;IllegalAccessException.class&#125;   // 在列表中的exception 不会降级</span><br><span class="hljs-meta">        // 线程有关属性</span><br><span class="hljs-meta">        // 线程组,多个服务可以共用一个线程组</span><br><span class="hljs-meta">        threadPoolKey = &quot;threadPoolA&quot;,</span><br><span class="hljs-meta">        threadPoolProperties = &#123;</span><br><span class="hljs-meta">                // 核心线程数</span><br><span class="hljs-meta">                @HystrixProperty(name = &quot;coreSize&quot;, value = &quot;8&quot;),</span><br><span class="hljs-meta">                // size &gt; 0 LinkedBlockingQueue 实现 请求等待队列</span><br><span class="hljs-meta">                // SynchronousQueue 不存储元素 阻塞队列(建议读源码, 学CAS 操作)</span><br><span class="hljs-meta">                @HystrixProperty(name = &quot;maxQueueSize&quot;, value = &quot;20&quot;),</span><br><span class="hljs-meta">                // maxQueueSize = -1 时无效 队列没有达到 maxQueueSize 依然拒绝请求</span><br><span class="hljs-meta">                @HystrixProperty(name = &quot;queueSizeRejectionThreshold&quot;, value = &quot;15&quot;),</span><br><span class="hljs-meta">                // 统计窗口持续时间 (线程池)</span><br><span class="hljs-meta">                @HystrixProperty(name = &quot;metrics.rollingStats.timeInMilliseconds&quot;, value = &quot;1024&quot;),</span><br><span class="hljs-meta">                // 统计窗口内 筒子数量 (线程池)</span><br><span class="hljs-meta">                @HystrixProperty(name = &quot;metrics.rollingStats.numBuckets&quot;, value = &quot;18&quot;)</span><br><span class="hljs-meta"></span><br><span class="hljs-meta">        &#125;</span><br><span class="hljs-meta">        // ,</span><br><span class="hljs-meta">        // commandProperties = &#123;</span><br><span class="hljs-meta">        //         // 熔断降级相关属性也可以配置在这里</span><br><span class="hljs-meta">        // &#125;</span><br><span class="hljs-meta"></span><br><span class="hljs-meta">)</span><br></code></pre></td></tr></table></figure>
+
+<p>基于 配置文件 配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">feign:</span><br>  <span class="hljs-attr">hystrix:</span><br>    <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br>  <span class="hljs-attr">client:</span><br>    <span class="hljs-attr">config:</span><br>      <span class="hljs-comment"># 默认全局配置</span><br>      <span class="hljs-attr">default:</span><br>        <span class="hljs-attr">connectTimeout:</span> <span class="hljs-number">1000</span><br>        <span class="hljs-attr">readTimeout:</span> <span class="hljs-number">5000</span><br>      <span class="hljs-comment"># 优先级高于上面配置</span><br>      <span class="hljs-attr">foodie-user-service:</span><br>        <span class="hljs-attr">connectTimeout:</span> <span class="hljs-number">1000</span><br>        <span class="hljs-attr">readTimeout:</span> <span class="hljs-number">5000</span><br><br><br><span class="hljs-comment"># 开启所有 actuator-endpoint</span><br><span class="hljs-attr">management:</span><br>  <span class="hljs-attr">endpoint:</span><br>    <span class="hljs-attr">health:</span><br>      <span class="hljs-attr">show-details:</span> <span class="hljs-string">always</span><br>  <span class="hljs-attr">endpoints:</span><br>    <span class="hljs-attr">web:</span><br>      <span class="hljs-attr">exposure:</span><br>        <span class="hljs-attr">include:</span> <span class="hljs-string">&#x27;*&#x27;</span><br>        <span class="hljs-comment"># health info xxx</span><br><br><span class="hljs-attr">hystrix:</span><br>  <span class="hljs-attr">command:</span><br>    <span class="hljs-comment"># 有的属性是默认值,写不写都行</span><br>    <span class="hljs-attr">default:</span><br>      <span class="hljs-attr">fallback:</span><br>        <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">circuitBreaker:</span><br>        <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br>        <span class="hljs-comment"># 超过 50% 错误开启熔断</span><br>        <span class="hljs-attr">errorThresholdPercentage:</span> <span class="hljs-number">50</span><br>        <span class="hljs-comment"># 5个request 之后才进行统计</span><br>        <span class="hljs-attr">requestVolumeThreshold:</span> <span class="hljs-number">5</span><br>        <span class="hljs-comment"># 10 秒后进行半开启状态</span><br>        <span class="hljs-attr">sleepWindowInMilliseconds:</span> <span class="hljs-number">10000</span><br>        <span class="hljs-comment"># forceClosed , forceOpen 强制关闭/开启 熔断开关</span><br>      <span class="hljs-attr">execution:</span><br>        <span class="hljs-attr">timeout:</span><br>          <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br>        <span class="hljs-comment"># 可以指定线程池方式还是 信号量方式</span><br>        <span class="hljs-attr">isolation:</span><br>          <span class="hljs-attr">thread:</span><br>            <span class="hljs-attr">interruptTimeout:</span> <span class="hljs-literal">true</span><br>            <span class="hljs-attr">interruptOnFutureCancel:</span> <span class="hljs-literal">true</span><br>            <span class="hljs-attr">timeoutInMilliseconds:</span> <span class="hljs-number">10000</span><br>      <span class="hljs-attr">metrics:</span><br>        <span class="hljs-attr">rollingStats:</span><br>          <span class="hljs-comment"># 时间窗口统计</span><br>          <span class="hljs-attr">timeInMilliseconds:</span> <span class="hljs-number">20000</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Ambiguous mapping 错误</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment">* 对于需要调用端指定降级业务的场景来说,由于<span class="hljs-doctag">@RequestMapping</span>  和 xxxMapping 注解可以从原始接口上继承，因此</span><br><span class="hljs-comment"> * 不能配置完全一样的两个路径，否则启动报错</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * 在实际应用中，ItemCommentsService 上面定义了 <span class="hljs-doctag">@RequestMapping</span> 同时 ItemCommentsFeignClient 继承自 ItemCommentsService</span><br><span class="hljs-comment"> * 因此在Spring 上下文中加载了两个访问路径一样的方法，会报错 Ambiguous mapping</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * 解决问题的思路，避免Spring 上下文中同时加载两个访问路径相同的方法</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * 1) 在启动类扫包的时候，不要把原始的Feign接口扫描进来 也就是 ItemCommentsService</span><br><span class="hljs-comment"> * 具体做法:  可以使用 <span class="hljs-doctag">@EnableFeignClients</span> 注解的clients 属性, 只加载需要的Feign接口</span><br><span class="hljs-comment"> * 优点： 访问提供者和调用者不需要额外的配置</span><br><span class="hljs-comment"> * 缺点： 需要将每个使用的类都写一遍</span><br><span class="hljs-comment"> * 2) 原始Feign接口不定义<span class="hljs-doctag">@RequestMapping</span> 注解</span><br><span class="hljs-comment"> * 优点：启动的时候直接扫包即可，不用加载接口</span><br><span class="hljs-comment"> * 缺点：a.服务提供者需要额外的配置访问的注解</span><br><span class="hljs-comment"> *       b.任何情况下，即使不需要在调用端定义fallback类，服务调用者都需要声明一个</span><br><span class="hljs-comment"> * 3) 原始Feign接口不要定义 <span class="hljs-doctag">@FeignClients</span> 注解 这样就不会被加载到上下文中</span><br><span class="hljs-comment"> * 优点：启动的时候直接扫包即可,不用指定加载接口,服务提供者不用额外配置</span><br><span class="hljs-comment"> * 缺点: 任何情况下，服务调用者都需要一个额外的 <span class="hljs-doctag">@FeignClient</span> 接口</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li> 第一种方案是最简便的</li>
+</ul>
+<h2 id="2-5、分布式配置中心-Config"><a href="#2-5、分布式配置中心-Config" class="headerlink" title="2.5、分布式配置中心(Config)"></a>2.5、分布式配置中心(Config)</h2><ul>
+<li>配置中心介绍，在微服务中的应用</li>
+<li>Config核心功能和应用</li>
+<li>直连式架构模型<ul>
+<li>Github 准备 存储属性</li>
+<li>搭建 config-server 应用</li>
+<li>将应用方直连配置中心</li>
+</ul>
+</li>
+<li>资源文件加载方式(源码阅读)</li>
+<li>参数动态刷新机制 + Demo</li>
+<li>高可用性分析<ul>
+<li>单中心宕机，高可用改造方向</li>
+<li>借助Eureka 实现高可用配置中心架构</li>
+</ul>
+</li>
+<li>架构思考<ul>
+<li>总线式架构展望</li>
+<li>分布式配置中心的用途</li>
+</ul>
+</li>
+<li>用对称密钥对配置项加密 解密</li>
+</ul>
+<h3 id="1-配置中心的作用"><a href="#1-配置中心的作用" class="headerlink" title="1.配置中心的作用"></a>1.配置中心的作用</h3><ul>
+<li>配置项定义 (程序 hardcode)</li>
+<li>配置文件 application.yml bootstrap.yml 保存尽量不变的属性</li>
+<li>环境变量 (操作系统层面)</li>
+<li>数据库存储 配置信息</li>
+</ul>
+<blockquote>
+<p>传统配置管理的缺点</p>
+<ul>
+<li>格式不统一，json，properties，yml</li>
+<li>没有版本控制</li>
+<li>基于静态配置 </li>
+<li>分布零散 - 没有统一管理</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>配置项的静态内容</p>
+<ul>
+<li>环境配置 <ul>
+<li>数据库连接串</li>
+<li>Eureka 注册中心</li>
+<li>Kafka 连接</li>
+<li>应用名称</li>
+</ul>
+</li>
+<li>安全配置(进行加密)<ul>
+<li>连接密码</li>
+<li>公钥私钥</li>
+<li>Http 连接 Cert</li>
+</ul>
+</li>
+</ul>
+<p>动态内容</p>
+<ul>
+<li>功能控制<ul>
+<li>功能开关</li>
+<li>人工熔断开关</li>
+<li>蓝绿发布</li>
+<li>数据源切换</li>
+</ul>
+</li>
+<li>业务规则<ul>
+<li>当日外汇利率</li>
+<li>动态文案</li>
+<li>规则引擎参数</li>
+</ul>
+</li>
+<li>应用参数<ul>
+<li>网关 黑白名单</li>
+<li>缓存过期时间</li>
+<li>日志MDC设置</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>配置管理的需求</p>
+<ul>
+<li>配置项定义<ul>
+<li>高可用</li>
+<li>版本管理 (修改记录，版本控制，权限控制)</li>
+<li>业务需求（内容加密，动态推送变更)</li>
+<li>配置分离(中心化管理)</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="2-创建Github配置仓库"><a href="#2-创建Github配置仓库" class="headerlink" title="2.创建Github配置仓库"></a>2.创建Github配置仓库</h3><ul>
+<li>创建github仓库</li>
+<li>文件命名规则(文件名不能随便起)</li>
+<li>添加配置文件和属性</li>
+</ul>
+<blockquote>
+<p>文件命名规则</p>
+<ul>
+<li>Application &amp; profile (application-dev.yml)</li>
+<li>Label - 代码分支名称</li>
+</ul>
+</blockquote>
+<h3 id="3-搭建配置中心"><a href="#3-搭建配置中心" class="headerlink" title="3.搭建配置中心"></a>3.搭建配置中心</h3><ul>
+<li>创建  config-server 项目引入依赖</li>
+<li>添加参数和启动类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.springcloud;<br><br><span class="hljs-keyword">import</span> org.springframework.boot.WebApplicationType;<br><span class="hljs-keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;<br><span class="hljs-keyword">import</span> org.springframework.boot.builder.SpringApplicationBuilder;<br><span class="hljs-keyword">import</span> org.springframework.cloud.config.server.EnableConfigServer;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span> 2022/2/8/14:49</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ProjectName</span> spring-cloud-netflix-demo</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ClassName</span>: ConfigServerApplication</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Description</span>: TODO</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-meta">@EnableConfigServer</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ConfigServerApplication</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span>  </span>&#123;<br><br><br><br>        <span class="hljs-keyword">new</span> SpringApplicationBuilder(ConfigServerApplication.class)<br>                .web(WebApplicationType.SERVLET)<br>                .run(args);<br>    <span class="hljs-comment">//      访问git 仓库的配置文件</span><br>    <span class="hljs-comment">//    http://localhost:60000/&#123;label&#125;/&#123;application&#125;-&#123;profile&#125;.json (.yml .properties )</span><br>    <span class="hljs-comment">//    http://localhost:60000/&#123;application&#125;/&#123;profile&#125;/&#123;label&#125;</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>对应的配置文件</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">application:</span><br>    <span class="hljs-attr">name:</span> <span class="hljs-string">config-server</span><br>  <span class="hljs-attr">cloud:</span><br>    <span class="hljs-attr">config:</span><br>      <span class="hljs-attr">server:</span><br>        <span class="hljs-attr">git:</span><br><span class="hljs-comment">#          uri: git@github.com:th66778899/config-repo.git</span><br>          <span class="hljs-attr">uri:</span> <span class="hljs-string">https://github.com/th66778899/config-repo.git</span><br>          <span class="hljs-comment"># 强制拉取资源文件</span><br>          <span class="hljs-attr">force-pull:</span> <span class="hljs-literal">true</span><br><span class="hljs-comment"># 多个项目共用一个repo 使用文件夹来进行区分</span><br><span class="hljs-comment">#          search-paths: aaa, ccc, ddd</span><br><span class="hljs-comment">#          username:</span><br><span class="hljs-comment">#          password:</span><br><span class="hljs-attr">server:</span><br>  <span class="hljs-attr">port:</span> <span class="hljs-number">60000</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-搭建Client-直连式配置中心"><a href="#4-搭建Client-直连式配置中心" class="headerlink" title="4.搭建Client 直连式配置中心"></a>4.搭建Client 直连式配置中心</h3><ul>
+<li>创建 config-client 项目引入依赖</li>
+<li>配置启动项和启动类</li>
+<li>注入Github 属性到测试用例</li>
+</ul>
+<h3 id="5-阅读源码-资源文件加载"><a href="#5-阅读源码-资源文件加载" class="headerlink" title="5.阅读源码(资源文件加载)"></a>5.阅读源码(资源文件加载)</h3><ul>
+<li>Config server 加载资源文件</li>
+</ul>
+<h3 id="6-动态拉取参数"><a href="#6-动态拉取参数" class="headerlink" title="6.动态拉取参数"></a>6.动态拉取参数</h3><ul>
+<li>引入特殊依赖</li>
+<li>改造 config-client 可以拉取动态参数</li>
+<li>借助 actuator 可以让config-client 访问 config-server ,获取最新的配置信息，</li>
+</ul>
+<p>访问 <a target="_blank" rel="noopener" href="http://localhost:61000/actuator/refresh">http://localhost:61000/actuator/refresh</a> 会显示更新的配置信息</p>
+<ul>
+<li>只有发生了变化的配置才会显示出来</li>
+</ul>
+<h3 id="7-配置中心高可用"><a href="#7-配置中心高可用" class="headerlink" title="7.配置中心高可用"></a>7.配置中心高可用</h3><ul>
+<li>config-server 向eureka注册中心报道</li>
+<li>config-client 从注册中心获取config-server 地址</li>
+</ul>
+<h3 id="8-使用对称性密钥进行加解密"><a href="#8-使用对称性密钥进行加解密" class="headerlink" title="8.使用对称性密钥进行加解密"></a>8.使用对称性密钥进行加解密</h3><ul>
+<li>JDK 中替换 JCE (jdk版本 高于8u161 不需要替换，已经集成了最新的)</li>
+<li>改造 config-server 并生成加密字符串</li>
+<li>修改Github 文件，启动服务拉取配置</li>
+</ul>
+<blockquote>
+<p>密钥在哪，加解密就在哪进行</p>
+</blockquote>
+<h3 id="9-分布式配置中心的通用场景"><a href="#9-分布式配置中心的通用场景" class="headerlink" title="9.分布式配置中心的通用场景"></a>9.分布式配置中心的通用场景</h3><ul>
+<li>环境隔离<ul>
+<li>日常环境</li>
+<li>预发环境</li>
+<li>生产环境</li>
+</ul>
+</li>
+<li>业务开关 + 定向推送<ul>
+<li>灰度发布，蓝绿发布，金丝雀发布</li>
+</ul>
+</li>
+<li>修改业务逻辑 <ul>
+<li>网关黑名单 -&gt; 网关层</li>
+<li>费率 - 规则引擎 （下单接口）</li>
+<li>熔断阈值   (下单接口)</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-集成配置中心"><a href="#10-集成配置中心" class="headerlink" title="10.集成配置中心"></a>10.集成配置中心</h3><ul>
+<li>搭建配置中心</li>
+<li>创建Github 配置文件</li>
+<li>用户中心集成Config</li>
+</ul>
+<h2 id="2-6、消息总线-BUS"><a href="#2-6、消息总线-BUS" class="headerlink" title="2.6、消息总线(BUS)"></a>2.6、消息总线(BUS)</h2><p>BUS</p>
+<ul>
+<li>消息总线 (BUS) 介绍</li>
+<li>BUS 体系结构和接入方式 (借助RabbitMQ实现)</li>
+<li>将配置中心改造为总线式架构</li>
+<li>源码阅读 - bus -refresh 底层机制</li>
+<li>Git Webhook 自动推送</li>
+<li>架构思考 - 消息总线如何用于其它业务场景</li>
+</ul>
+<h3 id="1-BUS-简介"><a href="#1-BUS-简介" class="headerlink" title="1.BUS 简介"></a>1.BUS 简介</h3><ul>
+<li>BUS的标签<ul>
+<li>轻量级 (依赖于 stream 组件)</li>
+<li>消息广播 (基于 发布 - 订阅)</li>
+<li>无缝集成 Config</li>
+<li>自定义消息</li>
+</ul>
+</li>
+<li>BUS 的两个场景<ul>
+<li>配置变更通知(仅仅是通知配置的变更)</li>
+<li>自定义消息广播</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-搭建总线式架构配置中心"><a href="#2-搭建总线式架构配置中心" class="headerlink" title="2.搭建总线式架构配置中心"></a>2.搭建总线式架构配置中心</h3><ul>
+<li>创建 config-bus-server 和 config-bus-consumer</li>
+<li>启动RabbitMQ 修改demo 配置属性</li>
+<li>使用 actuator 服务推送Bus 变更</li>
+</ul>
+<h3 id="3-源码阅读-bus-refresh底层机制"><a href="#3-源码阅读-bus-refresh底层机制" class="headerlink" title="3.源码阅读 - bus-refresh底层机制"></a>3.源码阅读 - bus-refresh底层机制</h3><ul>
+<li>内置的事件结构，RefreshRemoteApplicationEvent</li>
+<li>刷新事件的发送端 - RefreshBusEndpoint</li>
+</ul>
+<h3 id="4-WebHook-自动推送"><a href="#4-WebHook-自动推送" class="headerlink" title="4.WebHook 自动推送"></a>4.WebHook 自动推送</h3><p>配置Github 的 WebHook</p>
+<ul>
+<li>设置 encrypt.key</li>
+<li>将上一步中的key添加到github仓库设置中</li>
+<li>配置Webhook url</li>
+</ul>
+<h3 id="5-BUS其它业务场景"><a href="#5-BUS其它业务场景" class="headerlink" title="5.BUS其它业务场景"></a>5.BUS其它业务场景</h3><ul>
+<li>自定义自己的事件</li>
+<li>清空缓存：通知所有服务监听者清空某项业务的本地缓存业务，我们也可以在自定义的消息体中加业务属性，事件监听逻辑可以根据这些属性来定点清除某个特点业务对象的缓存</li>
+<li>数据同步：子系统依赖实时的数据库记录变动触发响应的业务逻辑，我们这里可以将数据的binlog抓取出来，通过广播功能同步到所有监听器，起到数据同步的作用</li>
+</ul>
+<h3 id="6-BUS总结"><a href="#6-BUS总结" class="headerlink" title="6.BUS总结"></a>6.BUS总结</h3><img src="/img/springCloud.assets/image-20220210152803883.png" srcset="/img/loading.gif" lazyload alt="image-20220210152803883" style="zoom:80%;" />
+
+<h2 id="2-7、服务网关-Gateway"><a href="#2-7、服务网关-Gateway" class="headerlink" title="2.7、服务网关(Gateway)"></a>2.7、服务网关(Gateway)</h2><ul>
+<li>服务网关在微服务中的应用</li>
+<li>第二代网关组件Gateway 介绍 (第一代网关 Zuul)</li>
+<li>Gateway 体系架构</li>
+<li>Gateway 急速落地(路由规则)</li>
+<li>Gateway断言功能详解<ul>
+<li>Demo 利用断言实现URL映射</li>
+<li>利用After 断言构建简易秒杀场景</li>
+</ul>
+</li>
+<li>Gateway 过滤器原理和生命周期<ul>
+<li>demo 自定义过滤器</li>
+</ul>
+</li>
+<li>源码阅读Gateway 过滤器机制解析</li>
+<li>权限认证 -  分布式session 的替代方案<ul>
+<li>基于 jwt 的网关层鉴权服务</li>
+</ul>
+</li>
+<li>如何借助网关层对服务端各类异常做统一处理</li>
+<li>网关的另一个技能 - 限流</li>
+<li>还有哪些网关技术，如何选型</li>
+</ul>
+<h3 id="1-第二代网关Gateway简介"><a href="#1-第二代网关Gateway简介" class="headerlink" title="1.第二代网关Gateway简介"></a>1.第二代网关Gateway简介</h3><ul>
+<li>SpringCloud 官方主推</li>
+<li>底层基于Netty</li>
+</ul>
+<blockquote>
+<p>Gateway的业务场景</p>
+</blockquote>
+<ul>
+<li>路由寻址 (根据url导向到后端的服务)</li>
+<li>负载均衡 (ribbon)</li>
+<li>限流</li>
+<li>鉴权</li>
+</ul>
+<p>Gateway 自动装配工厂类 GatewayAutoConfiguration</p>
+<h3 id="2-创建默认路由规则-demo"><a href="#2-创建默认路由规则-demo" class="headerlink" title="2.创建默认路由规则(demo)"></a>2.创建默认路由规则(demo)</h3><ul>
+<li>创建gateway-sample 项目，引入依赖</li>
+<li>连接eureka自动创建路由</li>
+<li>通过 Actuator 实现动态路由功能</li>
+</ul>
+<h3 id="3-Path断言"><a href="#3-Path断言" class="headerlink" title="3.Path断言"></a>3.Path断言</h3><ul>
+<li>使用Path断言转发请求(yml配置 java配置)</li>
+<li>配合使用Method断言</li>
+</ul>
+<h3 id="4-After断言实现简易秒杀"><a href="#4-After断言实现简易秒杀" class="headerlink" title="4.After断言实现简易秒杀"></a>4.After断言实现简易秒杀</h3><ul>
+<li>创建模拟下单接口</li>
+<li>通过After断言设置生效时间</li>
+</ul>
+<h3 id="5-自定义过滤器"><a href="#5-自定义过滤器" class="headerlink" title="5.自定义过滤器"></a>5.自定义过滤器</h3><ul>
+<li>创建 TimerFilter 实现计时功能</li>
+<li>添加TimerFiler 到路由</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.springcloud;<br><br><span class="hljs-keyword">import</span> lombok.extern.slf4j.Slf4j;<br><span class="hljs-keyword">import</span> org.springframework.cloud.gateway.filter.GatewayFilter;<br><span class="hljs-keyword">import</span> org.springframework.cloud.gateway.filter.GatewayFilterChain;<br><span class="hljs-keyword">import</span> org.springframework.cloud.gateway.filter.GlobalFilter;<br><span class="hljs-keyword">import</span> org.springframework.core.Ordered;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Component;<br><span class="hljs-keyword">import</span> org.springframework.util.StopWatch;<br><span class="hljs-keyword">import</span> org.springframework.web.server.ServerWebExchange;<br><span class="hljs-keyword">import</span> reactor.core.publisher.Mono;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span> 2022/2/11/14:57</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ProjectName</span> spring-cloud-netflix-demo</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ClassName</span>: TimerFilter</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Description</span>: TODO</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Slf4j</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-comment">// 实现 GlobalFilter 的filter 是全局filter</span><br><span class="hljs-comment">// 实现 GatewayFilter 的 fileter 需要进行配置,不是全局filter</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TimerFilter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">GatewayFilter</span>, <span class="hljs-title">Ordered</span> </span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Mono&lt;Void&gt; <span class="hljs-title">filter</span><span class="hljs-params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> </span>&#123;<br><br>        StopWatch timer = <span class="hljs-keyword">new</span> StopWatch();<br>        timer.start(exchange.getRequest().getURI().getRawPath());<br>        <span class="hljs-comment">// Zuul Filter before / after</span><br><br>        <span class="hljs-comment">// exchange.getAttributes().put(&quot;requestTimeBegin&quot;, System.currentTimeMillis());</span><br>        <span class="hljs-keyword">return</span> chain.filter(exchange).then(<br>                Mono.fromRunnable(() -&gt; &#123;<br>                    timer.stop();<br>                    log.info(timer.prettyPrint());<br>                &#125;)<br><br>        );<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getOrder</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-源码阅读-Gateway过滤机制解析"><a href="#6-源码阅读-Gateway过滤机制解析" class="headerlink" title="6.源码阅读 - Gateway过滤机制解析"></a>6.源码阅读 - Gateway过滤机制解析</h3><ul>
+<li>接收请求获取路由表 - RoutePredicateHandlerMapping</li>
+<li>执行过滤器 - FilteringWebHandler</li>
+<li>Filter执行顺序排序 - AnnotationAwareOrderComparator</li>
+</ul>
+<h3 id="7-实现JWT鉴权"><a href="#7-实现JWT鉴权" class="headerlink" title="7.实现JWT鉴权"></a>7.实现JWT鉴权</h3><ul>
+<li>创建 auth-service (登录，鉴权等服务)</li>
+<li>添加JwtService 类 实现token创建和验证</li>
+<li>网关层集成 auth-service (添加AuthFilter 到网关层)</li>
+</ul>
+<h3 id="8-其它网关技术-amp-选型"><a href="#8-其它网关技术-amp-选型" class="headerlink" title="8.其它网关技术&amp;选型"></a>8.其它网关技术&amp;选型</h3><ul>
+<li>Nginx &amp; lua 开源免费，软负载，性价比高</li>
+<li>F5 负载均衡，流量控制，高可用 99.999%，全链路监控，BIG-IP压缩流量，编程路由，拓扑路由，攻击防护，网络安全，统计和报告</li>
+</ul>
+<blockquote>
+<p>选型</p>
+<ul>
+<li>F5 贵</li>
+<li>万金油  - nginx</li>
+<li>springcloud 项目 - gateway</li>
+</ul>
+</blockquote>
+<h3 id="9-结合项目"><a href="#9-结合项目" class="headerlink" title="9.结合项目"></a>9.结合项目</h3><ul>
+<li>添加gateway组件</li>
+<li>配置路由规则</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho;<br><br><span class="hljs-keyword">import</span> org.springframework.cloud.gateway.route.RouteLocator;<br><span class="hljs-keyword">import</span> org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Bean;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Configuration;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span> 2022/2/11/22:24</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ProjectName</span> foodie-cloud</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ClassName</span>: RoutesConfiguration</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Description</span>: TODO</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RoutesConfiguration</span> </span>&#123;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> RouteLocator <span class="hljs-title">routes</span><span class="hljs-params">(RouteLocatorBuilder builder)</span> </span>&#123;<br><br>        <span class="hljs-keyword">return</span> builder.routes()<br>                .route(r -&gt; r.path(<span class="hljs-string">&quot;/address/**&quot;</span>, <span class="hljs-string">&quot;/passport/**&quot;</span>, <span class="hljs-string">&quot;/userInfo/**&quot;</span>, <span class="hljs-string">&quot;/center/**&quot;</span>)<br>                        .uri(<span class="hljs-string">&quot;lb://FOODIE-USER-SERVICE&quot;</span>))<br>                .route(r -&gt; r.path(<span class="hljs-string">&quot;/items/**&quot;</span>)<br>                        .uri(<span class="hljs-string">&quot;lb://FOODIE-ITEM-SERVICE&quot;</span>))<br>                .route(r -&gt; r.path(<span class="hljs-string">&quot;/shopcart/**&quot;</span>)<br>                        .uri(<span class="hljs-string">&quot;lb://FOODIE-CART-SERVICE&quot;</span>))<br>                .route(r -&gt; r.path(<span class="hljs-string">&quot;/orders/**&quot;</span>, <span class="hljs-string">&quot;/myOrders/**&quot;</span>, <span class="hljs-string">&quot;/mycommonts/**&quot;</span>)<br>                        .uri(<span class="hljs-string">&quot;lb://FOODIE-ORDER-SERVICE&quot;</span>))<br>                .build();<br><br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>配置网关层Redis限流</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho;<br><br><span class="hljs-keyword">import</span> org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;<br><span class="hljs-keyword">import</span> org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Bean;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Configuration;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Primary;<br><span class="hljs-keyword">import</span> reactor.core.publisher.Mono;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span> tho</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span> 2022/2/11/22:33</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ProjectName</span> foodie-cloud</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@ClassName</span>: RedisLimiterConfiguration</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Description</span>: Redis限流</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedisLimiterConfiguration</span> </span>&#123;<br><br>    <span class="hljs-comment">// ID : KEY</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-comment">// 多个keyResolver 采用这个为主</span><br>    <span class="hljs-meta">@Primary</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> KeyResolver <span class="hljs-title">remoteAddressKeyResolver</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> exchange -&gt; Mono.just(<br>                exchange<br>                        .getRequest()<br>                        .getRemoteAddress()<br>                        .getAddress()<br>                        .getHostAddress()<br>        );<br>    &#125;<br><br>    <span class="hljs-comment">//</span><br>    <span class="hljs-meta">@Bean(&quot;redisLimiterUser&quot;)</span><br>    <span class="hljs-meta">@Primary</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> RedisRateLimiter <span class="hljs-title">redisRateLimiterUser</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RedisRateLimiter(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>);<br>    &#125;<br>    <span class="hljs-meta">@Bean(&quot;redisLimiterItem&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> RedisRateLimiter <span class="hljs-title">redisRateLimiterItem</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RedisRateLimiter(<span class="hljs-number">20</span>, <span class="hljs-number">50</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><ul>
+<li><p>创建网关鉴权服务</p>
+</li>
+<li><p>网关层跨域Filter</p>
+</li>
+<li><p>网关层登录校验</p>
+</li>
+</ul>
+<h2 id="2-8、服务调用链追踪-Sleuth"><a href="#2-8、服务调用链追踪-Sleuth" class="headerlink" title="2.8、服务调用链追踪(Sleuth)"></a>2.8、服务调用链追踪(Sleuth)</h2><ul>
+<li>服务调用链追踪是做什么的</li>
+<li>Sleuth核心功能和体系结构<ul>
+<li>调用链追踪模型 - Trace Span Annotation </li>
+<li>demo</li>
+</ul>
+</li>
+<li>阅读源码 链路追踪原理 </li>
+<li>Zipkin 简介<ul>
+<li>搭建Zipkin服务端</li>
+<li>Sleuth集成Zipkin</li>
+</ul>
+</li>
+<li>Sleuth集成ELK实现日志搜索</li>
+<li>阿里系分布式追踪技术 - 鹰眼系统</li>
+</ul>
+<h3 id="1-链路追踪的作用"><a href="#1-链路追踪的作用" class="headerlink" title="1.链路追踪的作用"></a>1.链路追踪的作用</h3><ul>
+<li>微服务之间调用关系复杂</li>
+<li>得到整条链路的调用关系</li>
+</ul>
+<blockquote>
+<p>链路追踪技术的基本功能</p>
+</blockquote>
+<ul>
+<li>分布式环境下链路追踪</li>
+<li>Timing信息</li>
+<li>定位链路</li>
+<li>信息收集和展示</li>
+</ul>
+<h3 id="2-整合Sleuth追踪调用链路"><a href="#2-整合Sleuth追踪调用链路" class="headerlink" title="2.整合Sleuth追踪调用链路"></a>2.整合Sleuth追踪调用链路</h3><ul>
+<li>创建sleuth-traceA 和 sleuth-traceB ， 添加sleuth依赖</li>
+<li>调用请求链路，查看log中的信息</li>
+<li>采样率设置</li>
+</ul>
+<h3 id="3-源码阅读-Sleuth原理"><a href="#3-源码阅读-Sleuth原理" class="headerlink" title="3.源码阅读 Sleuth原理"></a>3.源码阅读 Sleuth原理</h3><ul>
+<li>Sleuth项目结构和启动类</li>
+<li>以Spring WebFlux调用链举例<ul>
+<li> TraceWebFilter创建Span的过程</li>
+<li>关联上下游Span的过程</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-Zipkin"><a href="#4-Zipkin" class="headerlink" title="4.Zipkin"></a>4.Zipkin</h3><ul>
+<li>搭建Zipkin服务端</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.tho.springcloud;<br><br><span class="hljs-keyword">import</span> org.springframework.boot.WebApplicationType;<br><span class="hljs-keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;<br><span class="hljs-keyword">import</span> org.springframework.boot.builder.SpringApplicationBuilder;<br><span class="hljs-keyword">import</span> zipkin.server.internal.EnableZipkinServer;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * ZipKin服务端: 用于收集客户端Sleuth埋点收集到的信息</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-meta">@EnableZipkinServer</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ZipkinServerApplication</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        <span class="hljs-keyword">new</span> SpringApplicationBuilder(ZipkinServerApplication.class)<br>                .web(WebApplicationType.SERVLET)<br>                .run(args);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>Sleuth集成Zipkin实例<ul>
+<li>sleuth-traceA和sleuth-traceB集成Zipkin</li>
+<li>从Zipkin Dashboard 搜索调用链的时间维度数据</li>
+</ul>
+</li>
+<li>Sleuth集成ELK实现日志检索<ul>
+<li>ELK的作用 <ul>
+<li>日志收集和过滤</li>
+<li>日志信息持久化</li>
+<li>汇总分析重要数据</li>
+<li>根据关键字查找Log</li>
+</ul>
+</li>
+<li>ELK工作流程<ul>
+<li>Logstash Log信息的收集和过滤</li>
+<li>ElasticSearch 存储log信息 提供搜索</li>
+<li>Kibana  Log信息的查询,报表等</li>
+</ul>
+</li>
+<li>Docker启动ELK<ul>
+<li>通过docker安装elk镜像 (耐心) <code>docker pull sebp/elk</code></li>
+<li>创建Docker容器，取名为elk，指定ELK三个组件的端口</li>
+<li>修改logstash 接收日志的方式</li>
+</ul>
+</li>
+<li>ELK集成Sleuth<ul>
+<li>引入Logstash依赖到sleuth项目中</li>
+<li>配置日志文件，输出Json格式日志到Logstash</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-项目集成Sleuth"><a href="#5-项目集成Sleuth" class="headerlink" title="5.项目集成Sleuth"></a>5.项目集成Sleuth</h3><ul>
+<li>搭建Zipkin服务端</li>
+<li>项目集成sleuth 和 zipkin</li>
+<li>sleuth 集成 elk</li>
+</ul>
+<h2 id="2-9、消息驱动-Stream"><a href="#2-9、消息驱动-Stream" class="headerlink" title="2.9、消息驱动(Stream)"></a>2.9、消息驱动(Stream)</h2><ul>
+<li>消息驱动在微服务中的应用</li>
+<li>消息驱动三板斧(理论 - 实践 - 扩展)<ul>
+<li>Stream 体系结构</li>
+<li>Stream快速入门 集成MQ消费</li>
+<li>商品发布销峰策略</li>
+</ul>
+</li>
+<li>源码阅读  <ul>
+<li>Stream Binder 的作用机制</li>
+</ul>
+</li>
+<li>发布订阅相关<ul>
+<li>分布订阅模型详解</li>
+<li>Demo 基于发布订阅实现广播功能</li>
+<li>利用发布订阅实现商品信息的刷新</li>
+</ul>
+</li>
+<li>消费组和消费分区详解<ul>
+<li>demo 基于消费组实现轮询单播功能</li>
+</ul>
+</li>
+<li>经典业务场景<ul>
+<li>延迟消息介绍 + 案例 demo Stream + MQ插件实现延迟消息</li>
+</ul>
+</li>
+<li>Stream中的异常消息处理 (四种方式)</li>
+<li>Stream 的重试机制<ul>
+<li>demo Stream本地重试功能</li>
+<li>Stream + MQ实现 enqueue操作</li>
+</ul>
+</li>
+<li>架构思考<ul>
+<li>异常情况导致消息无法被消费<ul>
+<li>借助死信队列实现异常处理</li>
+<li>定制自定义异常逻辑</li>
+</ul>
+</li>
+<li>如何根据业务场景选择合适的异常处理策略</li>
+</ul>
+</li>
+<li>项目集成消息组件</li>
+</ul>
+<h3 id="1-消息驱动在微服务中的应用"><a href="#1-消息驱动在微服务中的应用" class="headerlink" title="1.消息驱动在微服务中的应用"></a>1.消息驱动在微服务中的应用</h3><ul>
+<li>发布消息 (消息中间件 Kafka RabbitMQ)</li>
+</ul>
+<img src="/img/springCloud.assets/image-20220213131027914.png" srcset="/img/loading.gif" lazyload alt="image-20220213131027914" style="zoom:67%;" />
+
+<blockquote>
+<p>消息驱动的应用场景</p>
+</blockquote>
+<ul>
+<li>跨系统异步通信</li>
+<li>应用解耦</li>
+<li>流量削峰</li>
+</ul>
+<h3 id="2-Stream急速落地"><a href="#2-Stream急速落地" class="headerlink" title="2.Stream急速落地"></a>2.Stream急速落地</h3><ul>
+<li>创建stream-sample项目，引入依赖</li>
+<li>创建监听器(声明和绑定信道)</li>
+<li>从RabbitMQ触发消息</li>
+</ul>
+<h3 id="3-削峰策略"><a href="#3-削峰策略" class="headerlink" title="3.削峰策略"></a>3.削峰策略</h3><blockquote>
+<p>消息组件</p>
+<ul>
+<li>平滑输出(客户端自动拉取)</li>
+<li>不怕Timeout 不受限于API超时</li>
+<li>高吞吐量</li>
+</ul>
+</blockquote>
+<h3 id="4-StreamBinder作用机制"><a href="#4-StreamBinder作用机制" class="headerlink" title="4.StreamBinder作用机制"></a>4.StreamBinder作用机制</h3><h3 id="5-Stream实现消息广播"><a href="#5-Stream实现消息广播" class="headerlink" title="5.Stream实现消息广播"></a>5.Stream实现消息广播</h3><blockquote>
+<p>配置文件</p>
+</blockquote>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-meta">spring.application.name</span>=<span class="hljs-string">stream-sample</span><br><span class="hljs-meta">server.port</span>=<span class="hljs-string">63000</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># Rabbitmq连接字符串</span><br><span class="hljs-meta">spring.rabbitmq.host</span>=<span class="hljs-string">192.168.198.100</span><br><span class="hljs-meta">spring.rabbitmq.port</span>=<span class="hljs-string">5672</span><br><span class="hljs-meta">spring.rabbitmq.username</span>=<span class="hljs-string">tho</span><br><span class="hljs-meta">spring.rabbitmq.password</span>=<span class="hljs-string">123456</span><br><br><span class="hljs-meta">management.endpoints.web.exposure.include</span>=<span class="hljs-string">*</span><br><span class="hljs-meta">management.endpoint.health.show-details</span>=<span class="hljs-string">always</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 配置Stream自定义广播消息Topic: 绑定消费者、生产者信道到broadcastTopic</span><br><span class="hljs-comment">#spring.cloud.stream.bindings.broadcastTopic-consumer.destination=broadcast</span><br><span class="hljs-comment">#spring.cloud.stream.bindings.broadcastTopic-producer.destination=broadcast</span><br><span class="hljs-meta">spring.cloud.stream.bindings.broadcastTopic-consumer.destination</span>=<span class="hljs-string">broadcastTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.broadcastTopic-producer.destination</span>=<span class="hljs-string">broadcastTopic</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 测试单播: 绑定消费者、生产者信道到groupTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.groupTopic-consumer.destination</span>=<span class="hljs-string">groupTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.groupTopic-producer.destination</span>=<span class="hljs-string">groupTopic</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 测试单播: 配置消费者分组 =&gt; 实际上是一个组一个queue, 每个queue有多个Consumer</span><br><span class="hljs-meta">spring.cloud.stream.bindings.groupTopic-consumer.group</span>=<span class="hljs-string">GroupA</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 测试单播: 配置消息分区 =&gt; 经测试可知, 消息分区和消费组可以合起来使用, 消费组可用来实现单播(组内轮训消费), 消息分区可用来隔离消费组(只有满足条件即SpEL匹配的消费组才能消费消息)</span><br><span class="hljs-comment"># 打开消费者的消费分区功能</span><br><span class="hljs-meta">spring.cloud.stream.bindings.groupTopic-consumer.consumer.partitioned</span>=<span class="hljs-string">true</span><br><span class="hljs-comment"># 指定当前消费者实例的总数</span><br><span class="hljs-meta">spring.cloud.stream.instance-count</span>=<span class="hljs-string">2</span><br><span class="hljs-comment"># 指定当前消费者实例的索引号, 最大值为count-1, 用于测试消息分区</span><br><span class="hljs-meta">spring.cloud.stream.instance-index</span>=<span class="hljs-string">1</span><br><span class="hljs-comment"># 指定生产者拥有两个消息分区</span><br><span class="hljs-meta">spring.cloud.stream.bindings.groupTopic-producer.producer.partition-count</span>=<span class="hljs-string">2</span><br><span class="hljs-comment"># SpEL =&gt; Key Resolver解析, 表示只有节点为1的消费者才能消费消息, 即SpEL匹配才能消费</span><br><span class="hljs-meta">spring.cloud.stream.bindings.groupTopic-producer.producer.partition-key-expression</span>=<span class="hljs-string">1</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 测试延迟消息: 绑定消费者、生产者信道到delayedTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.delayedTopic-consumer.destination</span>=<span class="hljs-string">delayedTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.delayedTopic-producer.destination</span>=<span class="hljs-string">delayedTopic</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 测试延迟消息: 生产者允许生成延迟交换机与延迟队列(都只有一个)</span><br><span class="hljs-meta">spring.cloud.stream.rabbit.bindings.delayedTopic-producer.producer.delayed-exchange</span>=<span class="hljs-string">true</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 测试测试异常重试(单机版), 即在Consumer本地重试, 而不会发回给Rabbitm: 绑定消费者、生产者信道到exceptionTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.exceptionTopic-consumer.destination</span>=<span class="hljs-string">exceptionTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.exceptionTopic-producer.destination</span>=<span class="hljs-string">exceptionTopic</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 测试测试异常重试(单机版), 即在Consumer本地重试, 而不会发回给Rabbitm: 配置本机重试次数, 次数为1代表不重试</span><br><span class="hljs-meta">spring.cloud.stream.bindings.exceptionTopic-consumer.consumer.max-attempts</span>=<span class="hljs-string">2</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 测试异常重试(联机版), 消费者会重新生成把消息投递回队列尾部: 绑定消费者、生产者信道到requeueTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.requeueTopic-consumer.destination</span>=<span class="hljs-string">requeueTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.requeueTopic-producer.destination</span>=<span class="hljs-string">requeueTopic</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 测试异常重试(联机版), 消费者会重新生成把消息投递回队列尾部: 对指定Consumer配置重新入队</span><br><span class="hljs-comment">#spring.cloud.stream.rabbit.bindings.requeueTopic-consumer.consumer.requeueRejected=true</span><br><span class="hljs-comment"># 默认全局开启Direct重新入队(不过会被Consumer重试覆盖)</span><br><span class="hljs-comment">#spring.rabbitmq.listener.direct.default-requeue-rejected=true</span><br><span class="hljs-comment"># 所以配置Consumer只能重试1次</span><br><span class="hljs-meta">spring.cloud.stream.bindings.requeueTopic-consumer.consumer.max-attempts</span>=<span class="hljs-string">1</span><br><span class="hljs-comment"># 测试不同分组的消费者消费Requeue消息 =&gt; 实际上Group、Topic的名称最好都用-作为连接, 而不是驼峰标识</span><br><span class="hljs-meta">spring.cloud.stream.bindings.requeueTopic-consumer.group</span>=<span class="hljs-string">requeue-group</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 测试死信队列Topic: 绑定消费者、生产者信道到dlqTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.dlqTopic-consumer.destination</span>=<span class="hljs-string">dlqTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.dlqTopic-producer.destination</span>=<span class="hljs-string">dlqTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.dlqTopic-consumer.consumer.max-attempts</span>=<span class="hljs-string">2</span><br><span class="hljs-meta">spring.cloud.stream.bindings.dlqTopic-consumer.group</span>=<span class="hljs-string">dlq-group</span><br><span class="hljs-comment"># 开启死信队列(默认名称为$&#123;dlqTopic&#125;.dlq, 复杂的需要自己指定DLK), 允许指定Consumer绑定DLQ</span><br><span class="hljs-comment"># =&gt; rabbitmq-plugins enable rabbitmq_shovel rabbitmq_shovel_management, 管理控制台开启重推消息其他队列功能</span><br><span class="hljs-meta">spring.cloud.stream.rabbit.bindings.dlqTopic-consumer.consumer.auto-bind-dlq</span>=<span class="hljs-string">true</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 测试异常降级, 自定义异常逻辑 + 接口升版: 绑定消费者、生产者信道到dlqTopic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.fallbackTopic-consumer.destination</span>=<span class="hljs-string">fallback-Topic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.fallbackTopic-producer.destination</span>=<span class="hljs-string">fallback-Topic</span><br><span class="hljs-meta">spring.cloud.stream.bindings.fallbackTopic-consumer.consumer.max-attempts</span>=<span class="hljs-string">2</span><br><span class="hljs-meta">spring.cloud.stream.bindings.fallbackTopic-consumer.group</span>=<span class="hljs-string">fallback-group</span><br><span class="hljs-comment"># errors 是规定写死的</span><br><span class="hljs-comment"># inputChannel =&gt; fallback-Topic.fallback-group.errors</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>创建消息Producer服务，配置消息主题</li>
+<li>启动多个Consumer节点测试消息广播</li>
+<li>RabbitMQ界面查看广播组(Exchanges )</li>
+</ul>
+<h3 id="6-基于消费组实现轮询单播功能"><a href="#6-基于消费组实现轮询单播功能" class="headerlink" title="6.基于消费组实现轮询单播功能"></a>6.基于消费组实现轮询单播功能</h3><ul>
+<li>创建Producer和Consumer</li>
+<li>配置消费组，启动两个节点</li>
+<li>RabbitMQ界面单播和广播在Exchange中的不同</li>
+<li>消费分区的配置项</li>
+</ul>
+<h3 id="7-Stream-MQ插件实现延迟消息"><a href="#7-Stream-MQ插件实现延迟消息" class="headerlink" title="7.Stream + MQ插件实现延迟消息"></a>7.Stream + MQ插件实现延迟消息</h3><ul>
+<li>配置RabbitMQ延迟插件，重启MQ</li>
+<li>创建producer和consumer，配置 exchange-type</li>
+<li>添加Message Header 传递延迟时间</li>
+<li>启动查看效果</li>
+</ul>
+<blockquote>
+<p>Postman测试时注意 </p>
+<ul>
+<li>@RequestParam 修饰的变量 postman传参时要传入json形式，或者在传值时多加一对双引号,直接传值会报错</li>
+</ul>
+</blockquote>
+<h3 id="8-Stream实现异常重试"><a href="#8-Stream实现异常重试" class="headerlink" title="8.Stream实现异常重试"></a>8.Stream实现异常重试</h3><ul>
+<li>创建Producer和Consumer，在Consumer中抛出异常</li>
+<li>设置重试次数</li>
+<li>重试成功和失败的表现</li>
+</ul>
+<h3 id="9-Stream实现Requeue操作进行重试"><a href="#9-Stream实现Requeue操作进行重试" class="headerlink" title="9.Stream实现Requeue操作进行重试"></a>9.Stream实现Requeue操作进行重试</h3><ul>
+<li>创建Producer和Consumer</li>
+<li>开启 Re-queue功能(和retry配置又冲突)</li>
+<li>测试Re-queue在不同节点的消费情况</li>
+</ul>
+<blockquote>
+<p>如何处理重试不能被解决的异常</p>
+</blockquote>
+<ul>
+<li>消息被拒绝 ， 重试次数达到阈值</li>
+<li>消息过期(TTL)</li>
+<li>队列长度已满</li>
+</ul>
+<blockquote>
+<p>解决方式</p>
+</blockquote>
+<ul>
+<li>死信交换机<ul>
+<li>DLX - 死信交换器，将异常消息路由到死信队列</li>
+<li>DLK - Dead Letter Routing Key</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-借助死信队列实现异常处理"><a href="#10-借助死信队列实现异常处理" class="headerlink" title="10.借助死信队列实现异常处理"></a>10.借助死信队列实现异常处理</h3><ul>
+<li>使用rabbitmq-plugins enable命令开启RabbitMQ插件</li>
+<li>创建producer和consumer，配置死信队列</li>
+<li>查看Rabbitmq 死信队列</li>
+<li>死信队列消息重新消费</li>
+</ul>
+<h3 id="11-自定义异常处理逻辑"><a href="#11-自定义异常处理逻辑" class="headerlink" title="11.自定义异常处理逻辑"></a>11.自定义异常处理逻辑</h3><ul>
+<li>借助Spring-integration实现Fallback降级逻辑</li>
+<li>Consumer升级</li>
+</ul>
+<h2 id="2-10、基于RPC服务治理（Dubbo）"><a href="#2-10、基于RPC服务治理（Dubbo）" class="headerlink" title="2.10、基于RPC服务治理（Dubbo）"></a>2.10、基于RPC服务治理（Dubbo）</h2><ul>
+<li>服务治理 RPC vs Http</li>
+<li>Dubbo介绍<ul>
+<li>Dubbo架构设计</li>
+<li>Dubbo核心功能</li>
+</ul>
+</li>
+<li>Dubbo注册中心介绍<ul>
+<li>基于Zookeeper的注册中心</li>
+</ul>
+</li>
+<li>RPC协议解析流程</li>
+<li>构建服务消费者，发起远程调用</li>
+<li>Dubbo服务容错，负载均衡</li>
+<li>Dubbo-admin的服务治理</li>
+<li>源码阅读 - Dubbo</li>
+<li>HSF 和 Dubbo</li>
+</ul>
+<h3 id="1-RPC-vs-Http"><a href="#1-RPC-vs-Http" class="headerlink" title="1.RPC vs Http"></a>1.RPC vs Http</h3><ul>
+<li>RPC 远程方法调用 (Remote Procedure call)</li>
+<li>服务治理 (分布式环境注册中心)</li>
+<li>RPC协议 (方法寻址，对象序列化/反序列化)</li>
+</ul>
+<blockquote>
+<p>两者对比</p>
+<ul>
+<li>接口风格</li>
+</ul>
+<img src="/img/springCloud.assets/image-20220214152855031.png" srcset="/img/loading.gif" lazyload alt="image-20220214152855031" style="zoom:67%;" />
+
+<img src="/img/springCloud.assets/image-20220214154744795.png" srcset="/img/loading.gif" lazyload alt="image-20220214154744795" style="zoom:67%;" />
+</blockquote>
+<h3 id="2-Dubbo注册中心"><a href="#2-Dubbo注册中心" class="headerlink" title="2.Dubbo注册中心"></a>2.Dubbo注册中心</h3><blockquote>
+<p>可选的注册中心</p>
+</blockquote>
+<ul>
+<li>Multicast</li>
+<li>Zookeeper</li>
+<li>Nacos</li>
+<li>Redis</li>
+<li>Simple</li>
+</ul>
+<blockquote>
+<p>基于Zookeeper的服务注册</p>
+</blockquote>
+<img src="/img/springCloud.assets/image-20220214154920464.png" srcset="/img/loading.gif" lazyload alt="image-20220214154920464" style="zoom:80%;" />
+
+<h3 id="3-创建基于ZK的注册中心生产者服务"><a href="#3-创建基于ZK的注册中心生产者服务" class="headerlink" title="3.创建基于ZK的注册中心生产者服务"></a>3.创建基于ZK的注册中心生产者服务</h3><ul>
+<li>启动ZK作为注册中心</li>
+<li>创建dubbo-api接口层</li>
+<li>创建dubbo-provider，添加service层</li>
+</ul>
+<h3 id="4-构建服务消费者"><a href="#4-构建服务消费者" class="headerlink" title="4.构建服务消费者"></a>4.构建服务消费者</h3><ul>
+<li>创建dubbo-consumer作为服务调用方</li>
+<li>添加Controller 并调用 dubbo-client中的服务</li>
+<li>注意序列化/反序列化的异常</li>
+</ul>
+<h3 id="5-基于-Dubbo-Admin的服务治理"><a href="#5-基于-Dubbo-Admin的服务治理" class="headerlink" title="5.基于 Dubbo-Admin的服务治理"></a>5.基于 Dubbo-Admin的服务治理</h3><ul>
+<li>服务治理可视化<ul>
+<li>条件路由</li>
+<li>标签路由</li>
+<li>黑白名单</li>
+<li>服务权重</li>
+<li>负载均衡</li>
+<li>服务测试</li>
+</ul>
+</li>
+<li>前端工程<ul>
+<li>Vue.js + Vuetify实现</li>
+</ul>
+</li>
+<li>后端工程<ul>
+<li>SpringBoot工程</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>服务治理兼容</p>
+</blockquote>
+<blockquote>
+<p>环境搭建</p>
+<ul>
+<li>修改ookeeper冲突端口</li>
+<li>元数据配置</li>
+<li>启动dubbo-admin的前后端项目</li>
+</ul>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Spirng/">Spirng</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/SpringCloud/">SpringCloud</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章可随意转载
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/12/29/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">
+                        <span class="hidden-mobile">分布式事务</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
